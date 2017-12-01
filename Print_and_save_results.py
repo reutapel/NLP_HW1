@@ -5,11 +5,9 @@ import pandas as pd
 
 class print_save_results:
 
-    def __init__(self, model, model_type, data_file, viterbi_result, write_file_name,
+    def __init__(self, model, data_file, viterbi_result, write_file_name,
                  confusion_file_name, seq_labels_file_name, seq_confusion_file_name):
-        # model will be HMM or MEMM object, model_type in ['hmm','memm']
         self.data_file_name = data_file
-        self.model_type = model_type
         self.viterbi_result = viterbi_result
         self.model = model
         self.write_file_name = write_file_name
@@ -25,13 +23,12 @@ class print_save_results:
         self.confusion_matrix = {}
         self.all_seq_confusion_matrix = {}
         self.eval_res = {}
-
-    def run(self):
         self.word_results_dictionary, self.seq_results_dictionary = self.eval_test_results(self.viterbi_result,
                                                                                            self.data_file_name)
+
+    def run(self):
         self.write_result_doc()
-        self.write_confusion_doc(True)  # write tags confusion matrix
-        self.write_confusion_doc(False)  # write sequence label confusion matrix
+        self.write_confusion_doc()  # write tags confusion matrix
 
         return self.word_results_dictionary, self.seq_results_dictionary
 
@@ -40,8 +37,6 @@ class print_save_results:
         # predicted_values
         miss = 0
         hit = 0
-        seq_miss = 0
-        seq_hit = 0
 
         for tag1 in self.states:
             for tag2 in self.states:
@@ -49,16 +44,9 @@ class print_save_results:
                 if cur_key not in self.confusion_matrix:
                     self.confusion_matrix[cur_key] = 0
 
-        for seq_tag1 in ['1', '-1']:
-            for seq_tag2 in ['1', '-1']:
-                cur_key = seq_tag1 + '_' + seq_tag2
-                if cur_key not in self.all_seq_confusion_matrix:
-                    self.all_seq_confusion_matrix[cur_key] = 0
-
         sequence_index = 0
         with open(data_file_name, 'r') as training:  # real values
-            for sequence in training:
-                include_gen = -1
+            for sequence in training:  # TODO: understand how to parse the sentences and which if I need
                 word_tag_list = sequence.split(',')
                 while ' ' in word_tag_list:
                     word_tag_list.remove(' ')
@@ -76,8 +64,6 @@ class print_save_results:
                     # print('sequence_index is: {}, predict_item is: {}').format(sequence_index, predict_item)
                     predict_word = predict_item[0]
                     predict_tag = predict_item[1]  # our predicted tag
-                    if include_gen == -1 and predict_tag in ['1', '2', '3', '4']:
-                        include_gen = 1
                     if predict_word != word_tag_tuple[0]:
                         print('problem miss between prediction and test word indexes')
                     if predict_tag != word_tag_tuple[1]:  # tag miss
@@ -90,16 +76,6 @@ class print_save_results:
                         confusion_mat_key = str(word_tag_tuple[1]) + '_' + str(predict_tag)  # trace add
                         self.confusion_matrix[confusion_mat_key] += 1
 
-                true_include_gen = self.seq_label[sequence_index][0]
-                if include_gen != true_include_gen:
-                    seq_miss += 1
-                    seq_confusion_mat_key = str(true_include_gen) + '_' + str(include_gen)  # real tag _ prediction tag
-                    self.all_seq_confusion_matrix[seq_confusion_mat_key] += 1
-
-                else:
-                    seq_hit += 1
-                    seq_confusion_mat_key = str(true_include_gen) + '_' + str(include_gen)  # real tag _ prediction tag
-                    self.all_seq_confusion_matrix[seq_confusion_mat_key] += 1
                 sequence_index += 1
 
         print('Miss')
@@ -114,12 +90,6 @@ class print_save_results:
         print(hit)
         print('Accuracy per word')
         print(float(hit)/float(miss+hit))
-        print('Miss per seq')
-        print(seq_miss)
-        print('Hit per seq')
-        print(seq_hit)
-        print('Accuracy per seq')
-        print(float(seq_hit)/float(seq_miss+seq_hit))
 
         return \
             {
@@ -127,12 +97,6 @@ class print_save_results:
                 'Hit per word': hit,
                 'Accuracy per word': float(hit)/float(miss+hit),
                 'confusion_matrix per word': self.confusion_matrix
-             }, \
-            {
-                'Miss per seq': seq_miss,
-                'Hit per seq': seq_hit,
-                'Accuracy per seq': float(seq_hit)/float(seq_miss+seq_hit),
-                'confusion_matrix per seq': self.all_seq_confusion_matrix
              }
 
     def write_result_doc(self):
@@ -148,18 +112,13 @@ class print_save_results:
 
         return
 
-    def write_confusion_doc(self, is_tags_conf):
+    def write_confusion_doc(self):
         # build confusion matrix doc
         # build structure of line and columns
 
-        if is_tags_conf:
-            file_name = self.confusion_file_name
-            column_rows_structure = self.states
-            confusion_matrix_to_write = self.confusion_matrix
-        else:
-            file_name = self.seq_confusion_file_name
-            column_rows_structure = ['1', '-1']
-            confusion_matrix_to_write = self.all_seq_confusion_matrix
+        file_name = self.confusion_file_name
+        column_rows_structure = self.states
+        confusion_matrix_to_write = self.confusion_matrix
 
         book = xlwt.Workbook(encoding="utf-8")
 
