@@ -4,7 +4,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 import csv
 
-directory = 'C:\\gitprojects\\ML_PROJECT\\'
+
 
 
 class MEMM:
@@ -29,7 +29,7 @@ class MEMM:
 
     word_tag_dict = {'A': ['1', '5'], 'C': ['2', '6'], 'G': ['3', '7'], 'T': ['4', '8'], '#':['#']}
 
-    def __init__(self, chrome_train_list, features_combination, history_tag_feature_vector=False):
+    def __init__(self,directory, chrome_train_list, features_combination, history_tag_feature_vector=False):
 
         self.tags_dict = {'1': [0, 'A+'], '2': [0, 'C+'], '3': [0, 'G+'], '4': [0, 'T+'], '5': [0, 'A-'], '6': [0, 'C-'],
                      '7': [0, 'G-'], '8': [0, 'T-']}
@@ -37,6 +37,8 @@ class MEMM:
         self.words_dict = {'A': 0, 'T': 0, 'C': 0, 'G': 0}
 
         self.chrome_list = chrome_train_list
+
+        self.directory = directory
         self.is_create_history_tag_feature_vector = history_tag_feature_vector
 
         # used features
@@ -86,14 +88,14 @@ class MEMM:
         print('{}: starting building features from train'.format(time.asctime(time.localtime(time.time()))))
 
         for chrome in self.chrome_list:
-            training_file = directory + 'labels150_non\\chr' + chrome + '_label.csv'
+            training_file = self.directory + 'train.wtag'
 
             with open(training_file, 'r') as training:
 
                 sequence_index = 1
                 for sequence in training:
 
-                    word_tag_list = sequence.split(',')
+                    word_tag_list = sequence.split(' ')
 
                     if '\n' in word_tag_list[len(word_tag_list) - 1]:
                         word_tag_list[len(word_tag_list) - 1] = word_tag_list[len(word_tag_list) - 1].replace('\n',
