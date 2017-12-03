@@ -43,6 +43,8 @@ def main():
     #for perm in itertools.combinations(features_combination_list_sub, 4):
     #    features_combination_list.append(list(perm))
 
+    directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\data'
+
     logging.info('{}: Train list is: {}, test list is: {}'
                  .format(time.asctime(time.localtime(time.time())), chrome_train_list, chrome_test_list))
     print('{}: Start creating MEMM'.format(time.asctime(time.localtime(time.time()))))
@@ -51,7 +53,7 @@ def main():
 
         logging.info('MEMM for features : {}'.format(features_combination))
 
-        memm_class = MEMM(chrome_train_list, features_combination)
+        memm_class = MEMM(directory, chrome_train_list, features_combination)
 
         gradient_class = Gradient(memm=memm_class, lamda=1)
         gradient_result = gradient_class.gradient_descent()
