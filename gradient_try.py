@@ -23,6 +23,7 @@ class Gradient(object):
         self.index_of_loss = 1
         self.index_gradient = 1
 
+
     def gradient(self, v):
         """
         this methods calculate the gradient of the log-linear problem
