@@ -2,11 +2,14 @@ import math
 import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.optimize import minimize
+import pickle
 
 
-# in this class we implement the tools needed for a known gradient descent of scipy
-# according to the data of MEMM with regularization on the weights
 class Gradient(object):
+    """
+    in this class we implement the tools needed for a known gradient descent of scipy
+    according to the data of MEMM with regularization on the weights
+    """
 
     def __init__(self, memm, lamda):
 
@@ -22,10 +25,14 @@ class Gradient(object):
 
 
     def gradient(self, v):
-
-        first_part = csr_matrix(np.zeros_like(v))
-        second_part = 0
-        third_part = np.copy(v)
+        """
+        this methods calculate the gradient of the log-linear problem
+        :param v: the weight vector
+        :return: the gradient of L(v)
+        """
+        first_part = csr_matrix(np.zeros_like(v))   # empirical counts
+        second_part = 0     # expected counts
+        third_part = np.copy(v)     # weight vector
 
         for history_tag, feature_vector in self.history_tag_feature_vector_train.items():
             first_part = np.add(first_part, feature_vector)
@@ -94,7 +101,8 @@ class Gradient(object):
     def gradient_descent(self):
 
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 1, 'factr': 1e2})
+                          options={'disp': True, 'maxiter': 15, 'factr': 1e2})
         print('finished gradient')
         print(result.x)
+        pickle.dump(result, open('resources\\w_vec.pkl', 'wb'))
         return result
