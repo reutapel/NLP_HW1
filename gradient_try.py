@@ -20,6 +20,7 @@ class Gradient(object):
         self.index_of_loss = 1
         self.index_gradient = 1
 
+
     def gradient(self, v):
 
         first_part = csr_matrix(np.zeros_like(v))

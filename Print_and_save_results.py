@@ -5,20 +5,16 @@ import pandas as pd
 
 class print_save_results:
 
-    def __init__(self, model, data_file, viterbi_result, write_file_name,
-                 confusion_file_name, seq_labels_file_name, seq_confusion_file_name):
+    def __init__(self, model, data_file, viterbi_result, write_file_name, confusion_file_name):
         self.data_file_name = data_file
         self.viterbi_result = viterbi_result
         self.model = model
         self.write_file_name = write_file_name
         self.confusion_file_name = confusion_file_name
-        self.seq_confusion_file_name = seq_confusion_file_name
         self.states = list(itertools.chain.from_iterable(model.word_tag_dict.values()))
         self.states.remove('#')
         self.states.sort()
         # self.word_tag_dict = model.word_tag_dict
-        seq_label = pd.read_excel(seq_labels_file_name, header=None)
-        self.seq_label = seq_label.as_matrix()
 
         self.confusion_matrix = {}
         self.all_seq_confusion_matrix = {}

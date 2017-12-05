@@ -2,11 +2,10 @@ import numpy as np
 import math
 import itertools
 import time
-from Print_and_save_results import print_save_results
 import logging
 
 
-directory = '\\Users\\reutapel\\Documents\\Technion\\Msc\\NLP\\hw1\\wet/NLP_HW1\\'
+directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
 
 
 class viterbi(object):
@@ -31,17 +30,7 @@ class viterbi(object):
                 # print('{}: Start viterbi on sentence index {}'.format(time.asctime(time.localtime(time.time())),
                 #                                                       sequence_index))
                 # parsing of the sequence to word_tag
-                # TODO: check how the word_tag in the sentence are splited
-                word_tag_list = sentence.split(',')
-                # TODO: check which of the following we need
-                if '\n' in word_tag_list[len(word_tag_list) - 1]:
-                    word_tag_list[len(word_tag_list) - 1] = word_tag_list[len(word_tag_list) - 1].replace('\n', '')
-                while ' ' in word_tag_list:
-                    word_tag_list.remove(' ')
-                while '' in word_tag_list:
-                    word_tag_list.remove('')
-                while '\n' in word_tag_list:
-                    word_tag_list.remove('\n')
+                word_tag_list = sentence.split(' ')
 
                 # predict the tags for the specific sentence
                 viterbi_results = self.viterbi_sentence(word_tag_list)
@@ -74,7 +63,7 @@ class viterbi(object):
         bp = np.ones(shape=(number_of_words+1, num_states, num_states), dtype='int32') * -1
 
         # initialization: # will be 0 in the numpy
-        pi[0, 0, 0] = 1.0
+        pi[0, '0', '0'] = 1.0
 
         # algorithm:
         # k = 1,...,n find the pi and bp for the word in position k
@@ -112,7 +101,7 @@ class viterbi(object):
                     calc_max_pi = float("-inf")
                     calc_argmax_pi = -1
                     for w in self.possible_tags(x_k_2):
-                        w_u_pi = pi[k - 1, int(w), int(u)]
+                        w_u_pi = pi[k - 1, w, u]
                         tags_for_matrix = [v, u, w]
                         if '0' in tags_for_matrix:
                             for tag_index, tag in enumerate(tags_for_matrix):
@@ -127,21 +116,17 @@ class viterbi(object):
 
                         if calc_pi > calc_max_pi:
                             calc_max_pi = calc_pi
-                            calc_argmax_pi = int(w)
+                            calc_argmax_pi = w
 
                     # print int(u), int(v)
-                    # TODO: check if I need to delete the int() - depends on the tags type
-                    pi[k, int(u), int(v)] = calc_max_pi  # store the max(pi)
-                    bp[k, int(u), int(v)] = calc_argmax_pi  # store the argmax(pi) (bp)
+                    pi[k, u, v] = calc_max_pi  # store the max(pi)
+                    bp[k, u, v] = calc_argmax_pi  # store the argmax(pi) (bp)
 
         # print pi[n]
         # print bp[n]
 
         u = np.unravel_index(pi[number_of_words].argmax(), pi[number_of_words].shape)[0]  # argmax for u in n-1
         v = np.unravel_index(pi[number_of_words].argmax(), pi[number_of_words].shape)[1]  # argmax for v in n
-
-        if v == -1 or u == -1:
-            print('Error: v or u value is -1')
 
         sen_word_tag_predict[number_of_words - 1] = v
         sen_word_tag_predict[number_of_words - 2] = u
@@ -164,7 +149,7 @@ class viterbi(object):
         e_w_dot_history_tag_dict = {}
 
         # TODO: add the option that the word x_k never seen in the training set
-        # and then it will get the most common tags
+        # and then it will get the most common tags - it won't be in the word_tag_dict
 
         for tag in self.word_tag_dict.get(x_k):  # all possible tags for the word x_k
             # history + tag feature vector
