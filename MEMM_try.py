@@ -21,18 +21,16 @@ class MEMM:
         self.feature_count = {}
         self.most_common_tags = []
         self.directory = directory
-        #self.is_create_history_tag_feature_vector = history_tag_feature_vector
-
-        LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM\\LogFileMEMM_%d_%m_%Y_%H_%M.log')
-        logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
-
+        self.train_file = train_file
+        # self.is_create_history_tag_feature_vector = history_tag_feature_vector
+        # LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM\\LogFileMEMM_%d_%m_%Y_%H_%M.log')
+        # logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
         self.features_path_string = ''
         for feature in features_combination:
             self.features_path_string += feature + '_'
 
-        self.dict_path = os.path.join(directory + 'dict\\'  , self.features_path_string)
-
+        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -69,7 +67,7 @@ class MEMM:
 
         # creates history_tag_feature_vector
         if not history_tag_feature_vector:
-            #self.create_history_tag_feature_vector()
+            # self.create_history_tag_feature_vector()
             self.create_history_tag_feature_vector_train()
             self.create_history_tag_feature_vector_denominator()
 
@@ -82,8 +80,7 @@ class MEMM:
         print('{}: starting building features from train'.format(time.asctime(time.localtime(time.time()))))
         logging.info('{}: starting building features from train'.format(time.asctime(time.localtime(time.time()))))
 
-
-        training_file = self.directory + 'data\\train.wtag'
+        training_file = self.train_file
 
         with open(training_file, 'r') as training:
             sequence_index = 1
@@ -112,7 +109,7 @@ class MEMM:
 
                     word_tag_tuple = word_tag.split('_')
 
-                    #TODO: check if "if" is needed and think if junk like ._. before "_" will be a problem
+                    # TODO: check if "if" is needed and think if junk like ._. before "_" will be a problem
                     # if (word_tag_tuple[0] == '.') & (word_tag_tuple[1] == '.\n'):
                     #     break
 
@@ -169,14 +166,11 @@ class MEMM:
 #                         else:
 #                             self.feature_2['f2' + '_' + feature_2_key] += 1
 
-
-
                     # if word_in_seq_index > 1:
                     #     first_tag = word_tag_list[word_in_seq_index-2][1]
                     #     second_tag = word_tag_list[word_in_seq_index-1][1]
                     feature_103_key = first_tag + '_' + second_tag + '_' + current_tag
                     feature_104_key = second_tag + '_' + current_tag
-
 
                     if 'feature_103' in self.features_combination:
                         # build feature_103 of tag trigram instance
@@ -185,15 +179,12 @@ class MEMM:
                         else:
                             self.feature_103['f103' + '_' + feature_103_key] += 1
 
-
                     if 'feature_104' in self.features_combination:
                         # build feature_104 of tag bigram instance
                         if feature_104_key not in self.feature_104:
                             self.feature_104['f104' + '_' + feature_104_key] = 1
                         else:
                             self.feature_104['f104' + '_' + feature_104_key] += 1
-
-
 
                     # if 'feature_5' in self.features_combination:
                     #     # build feature_5 of stop codon before current word
@@ -298,7 +289,6 @@ class MEMM:
             print('finished saving feature_104')
 
         return
-
 
     def build_features_vector(self):
 
@@ -458,7 +448,7 @@ class MEMM:
         logging.info('{}: starting building history_tag_feature_vector_train'.
               format(time.asctime(time.localtime(time.time()))))
 
-        training_file = self.directory + 'data\\train.wtag'
+        training_file = self.train_file
         with open(training_file, 'r') as training:
             sequence_index = 1
             for sequence in training:
@@ -510,7 +500,7 @@ class MEMM:
                     #     # plus_two_word = word_tag_list[word_in_seq_index + 2][0]
                     #     # plus_three_word = '#'
                     #     more_than_3 = False
-#TODO: why we have =\ indexes_vector
+# TODO: why we have =\ indexes_vector
                     indexes_vector = self.calculate_history_tag_indexes(first_tag, second_tag, second_word, plus_one_word,
                                                                         current_word, current_tag)
                     self.history_tag_feature_vector_train[(first_tag, second_tag,
@@ -546,7 +536,7 @@ class MEMM:
         logging.info('{}: starting building history_tag_feature_vector_denominator'.
               format(time.asctime(time.localtime(time.time()))))
 
-        training_file = self.directory + 'data\\train.wtag'
+        training_file = self.train_file
         with open(training_file, 'r') as training:
             sequence_index = 1
             for sequence in training:
@@ -565,7 +555,6 @@ class MEMM:
                 #plus_two_word = ''
                 #plus_three_word = ''
                 #more_than_3 = True
-
 
                 for word_in_seq_index, word_tag in enumerate(word_tag_list):
 
@@ -647,14 +636,13 @@ class MEMM:
         #         indexes_vector[feature_idx] = 1
 
 
-#TODO: update Reut and Rom that I added '_' in key
+# TODO: update Reut and Rom that I added '_' in key
         if 'feature_100' in self.features_combination:
             # feature_100 of three tags instances
             feature_100_key = 'f100' + '_' + current_word + '_' + current_tag
             if feature_100_key in self.feature_100:
                 feature_idx = self.features_vector[feature_100_key]
                 indexes_vector[feature_idx] = 1
-
 
         if 'feature_103' in self.features_combination:
             # feature_103 of tag trigram instances
@@ -663,14 +651,12 @@ class MEMM:
                 feature_idx = self.features_vector[feature_103_key]
                 indexes_vector[feature_idx] = 1
 
-
         if 'feature_104' in self.features_combination:
             # feature_104 of two tags instances
             feature_104_key = 'f104' + '_' + second_tag + '_' + current_tag
             if feature_104_key in self.feature_104:
                 feature_idx = self.features_vector[feature_104_key]
                 indexes_vector[feature_idx] = 1
-
 
         # if 'feature_4' in self.features_combination:
         #     # feature_4 of amino acids instances

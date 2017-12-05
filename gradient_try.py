@@ -10,7 +10,7 @@ class Gradient(object):
     in this class we implement the tools needed for a known gradient descent of scipy
     according to the data of MEMM with regularization on the weights
     """
-
+    #todo: change the code
     def __init__(self, memm, lamda):
 
         self.memm = memm
@@ -22,6 +22,7 @@ class Gradient(object):
         self.iteration_counter = 0
         self.index_of_loss = 1
         self.index_gradient = 1
+
 
     def gradient(self, v):
         """
