@@ -13,8 +13,7 @@ class MEMM:
     # shared among all instances of the class'
     STOPS = ['._.']
 
-
-    def __init__(self,directory, features_combination, history_tag_feature_vector=False):
+    def __init__(self,directory,train_file,features_combination,history_tag_feature_vector=False):
 
         self.tags_dict = {}
         self.word_tag_dict = {}
@@ -87,7 +86,6 @@ class MEMM:
             for sequence in training:
 
                 sequence = sequence.rstrip('\n')
-                seq_length = len(sequence)
                 word_tag_list = sequence.split(' ')
 
                 print("working on sequence {} :".format(sequence_index))
@@ -142,7 +140,8 @@ class MEMM:
                     current_word = word_tag_tuple[0]
                     current_tag = word_tag_tuple[1]
 
-                    if (word_in_seq_index + 1) == seq_length:
+
+                    if (word_in_seq_index + 1) == len(word_tag_list):
                         plus_one_word = '#'
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
@@ -150,11 +149,11 @@ class MEMM:
                     if 'feature_100' in self.features_combination:
 
                         # build feature_100 of word tag instance
-                        feature_100_key = current_word + '_' + current_tag
+                        feature_100_key = 'f100' + '_' + current_word + '_' + current_tag
                         if feature_100_key not in self.feature_100:
-                            self.feature_100['f100' + '_' + feature_100_key] = 1
+                            self.feature_100[feature_100_key] = 1
                         else:
-                            self.feature_100['f100' + '_' + feature_100_key] += 1
+                            self.feature_100[feature_100_key] += 1
 
 # TODO: features 101-102, 105-107 and new ideas
 
@@ -169,22 +168,22 @@ class MEMM:
                     # if word_in_seq_index > 1:
                     #     first_tag = word_tag_list[word_in_seq_index-2][1]
                     #     second_tag = word_tag_list[word_in_seq_index-1][1]
-                    feature_103_key = first_tag + '_' + second_tag + '_' + current_tag
-                    feature_104_key = second_tag + '_' + current_tag
+                    feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag + '_' + current_tag
+                    feature_104_key = 'f104' + '_' + second_tag + '_' + current_tag
 
                     if 'feature_103' in self.features_combination:
                         # build feature_103 of tag trigram instance
                         if feature_103_key not in self.feature_103:
-                            self.feature_103['f103' + '_' + feature_103_key] = 1
+                            self.feature_103[feature_103_key] = 1
                         else:
-                            self.feature_103['f103' + '_' + feature_103_key] += 1
+                            self.feature_103[feature_103_key] += 1
 
                     if 'feature_104' in self.features_combination:
                         # build feature_104 of tag bigram instance
                         if feature_104_key not in self.feature_104:
-                            self.feature_104['f104' + '_' + feature_104_key] = 1
+                            self.feature_104[feature_104_key] = 1
                         else:
-                            self.feature_104['f104' + '_' + feature_104_key] += 1
+                            self.feature_104[feature_104_key] += 1
 
                     # if 'feature_5' in self.features_combination:
                     #     # build feature_5 of stop codon before current word
@@ -454,7 +453,6 @@ class MEMM:
             for sequence in training:
 
                 sequence = sequence.rstrip('\n')
-                seq_length = len(sequence)
                 word_tag_list = sequence.split(' ')
 
                 # print("working on sequence {} :".format(sequence_index))
@@ -485,7 +483,7 @@ class MEMM:
                     current_tag = word_tag_tuple[1]
 
 
-                    if (word_in_seq_index + 1) == seq_length:
+                    if (word_in_seq_index + 1) == len(word_tag_list):
                         plus_one_word = '#'
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
@@ -542,7 +540,6 @@ class MEMM:
             for sequence in training:
 
                 sequence = sequence.rstrip('\n')
-                seq_length = len(sequence)
                 word_tag_list = sequence.split(' ')
 
                 # define three first word_tags for some features
@@ -562,7 +559,7 @@ class MEMM:
 
                     current_word = word_tag_tuple[0]
 
-                    if (word_in_seq_index + 1) == seq_length:
+                    if (word_in_seq_index + 1) == len(word_tag_list):
                         plus_one_word = '#'
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
@@ -636,7 +633,6 @@ class MEMM:
         #         indexes_vector[feature_idx] = 1
 
 
-# TODO: update Reut and Rom that I added '_' in key
         if 'feature_100' in self.features_combination:
             # feature_100 of three tags instances
             feature_100_key = 'f100' + '_' + current_word + '_' + current_tag

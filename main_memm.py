@@ -1,7 +1,6 @@
 from MEMM_try import MEMM
 from viterbi_ML import viterbi
 import time
-from Print_and_save_results import print_save_results
 import numpy as np
 from gradient_try import Gradient
 import logging
@@ -10,7 +9,7 @@ import itertools
 import sys
 
 # open log connection
-directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
+directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -69,7 +68,8 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
 
 if __name__ == "__main__":
-    train_file = directory + 'data/train.wtag'
+
+    train_file = directory + 'data\\train_small.wtag'
     test_file = directory + 'data/test.wtag'
     comp_file = directory + 'data/comp.words'
 
