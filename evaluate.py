@@ -110,13 +110,15 @@ class Evaluate:
     def write_result_doc(self):
 
         file_name = self.write_file_name
-        len(self.viterbi_result)
+        lines_count = len(self.viterbi_result)
         with open(file_name, 'w') as f:
             for sentence_index, sequence_list in self.viterbi_result.items():
-                for idx_inner, word_tag_string in enumerate(sequence_list):
-                    f.write("{0} ".format(word_tag_string))
-                f.write('\n')                                           # finish sentences
-
+                sentence_len = len(sequence_list)
+                for word_index, word_tag_string in enumerate(sequence_list):
+                    sep = ' '
+                    if word_index+1 == sentence_len and sentence_index+1 < lines_count:  # if EOL but not EOF, add \n
+                        sep = '\n'
+                    f.write("{0}{1} ".format(word_tag_string, sep))
         return
 
     def write_confusion_doc(self):
