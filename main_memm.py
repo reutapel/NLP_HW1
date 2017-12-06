@@ -44,7 +44,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
         print('{}: Start viterbi'.format((time.asctime(time.localtime(time.time())))))
         viterbi_class = viterbi(memm_class, data_file=test_file_to_use, w=weights)
-        viterbi_result = viterbi_class.viterbi_all_data()
+        viterbi_result = viterbi_class.viterbi_all_data
 
         write_file_name = datetime.now().strftime(directory + 'file_results\\result_MEMM_' + test_type +
                                                   '%d_%m_%Y_%H_%M.csv')
