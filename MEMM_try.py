@@ -13,7 +13,7 @@ class MEMM:
     # shared among all instances of the class'
     STOPS = ['._.']
 
-    def __init__(self,directory,train_file,features_combination,history_tag_feature_vector=False):
+    def __init__(self, directory, train_file, features_combination, history_tag_feature_vector=False):
 
         self.tags_dict = {}
         self.word_tag_dict = {}
@@ -29,7 +29,7 @@ class MEMM:
         for feature in features_combination:
             self.features_path_string += feature + '_'
 
-        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
+        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -111,13 +111,11 @@ class MEMM:
                     # if (word_tag_tuple[0] == '.') & (word_tag_tuple[1] == '.\n'):
                     #     break
 
-
                     # # count number of instances for each word in train set
                     # if word_tag_tuple[0] not in self.words_dict:
                     #     self.words_dict[word_tag_tuple[0]] = 1
                     # else:
                     #     self.words_dict[word_tag_tuple[0]] += 1
-
 
                     # count number of instances for each tag in train set
                     if word_tag_tuple[1] not in self.tags_dict:
@@ -128,8 +126,8 @@ class MEMM:
                     # count number of all tags seen in train for each word
                     if word_tag_tuple[0] not in self.word_tag_dict:
                         self.word_tag_dict[word_tag_tuple[0]] = {}
-                        self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] = 1
                         self.word_tag_dict[word_tag_tuple[0]]['COUNT'] = 1
+                        self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] = 1
                     else:
                         if word_tag_tuple[1] not in self.word_tag_dict[word_tag_tuple[0]]:
                             self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] = 1
@@ -139,7 +137,6 @@ class MEMM:
 
                     current_word = word_tag_tuple[0]
                     current_tag = word_tag_tuple[1]
-
 
                     if (word_in_seq_index + 1) == len(word_tag_list):
                         plus_one_word = '#'
@@ -251,7 +248,7 @@ class MEMM:
         logging.info('saving dictionaries')
 
         logging.info('saving tags_dict and most_common_tags')
-        w = csv.writer(open(self.dict_path +  'tags_dict' + '.csv', "w"))
+        w = csv.writer(open(self.dict_path + 'tags_dict' + '.csv', "w"))
         for key, val in self.tags_dict.items():
             w.writerow([key, val])
 
@@ -418,7 +415,6 @@ class MEMM:
         logging.info('{}: finished building features vector in : {}'.format(time.asctime(time.localtime(time.time())),
               time.time() - start_time))
 
-
         print('saving dictionaries')
         print('saving features_vector')
         logging.info('saving features_vector')
@@ -438,14 +434,13 @@ class MEMM:
 
         return
 
-
     def create_history_tag_feature_vector_train(self):
 
         start_time = time.time()
         print('{}: starting building history_tag_feature_vector_train'.
               format(time.asctime(time.localtime(time.time()))))
         logging.info('{}: starting building history_tag_feature_vector_train'.
-              format(time.asctime(time.localtime(time.time()))))
+                     format(time.asctime(time.localtime(time.time()))))
 
         training_file = self.train_file
         with open(training_file, 'r') as training:
@@ -474,14 +469,12 @@ class MEMM:
 
                     word_tag_tuple = word_tag.split('_')
 
-
                     # debug last sentence out of range index of last plus one word
                     # if word_in_seq_index == len(word_tag_list)-1:
                     #     print(word_in_seq_index)
 
                     current_word = word_tag_tuple[0]
                     current_tag = word_tag_tuple[1]
-
 
                     if (word_in_seq_index + 1) == len(word_tag_list):
                         plus_one_word = '#'
@@ -518,7 +511,7 @@ class MEMM:
 
         print('saving history_tag_feature_vector_train')
         logging.info('saving history_tag_feature_vector_train')
-        w = csv.writer(open( self.dict_path + 'history_tag_feature_vector_train' + '.csv', "w"))
+        w = csv.writer(open(self.dict_path + 'history_tag_feature_vector_train' + '.csv', "w"))
         for key, val in self.history_tag_feature_vector_train.items():
             w.writerow([key, val])
         print('finished saving history_tag_feature_vector_train')
@@ -631,7 +624,6 @@ class MEMM:
         #     if 't' + '_' + current_tag in self.features_vector:
         #         feature_idx = self.features_vector['t' + '_' + current_tag]
         #         indexes_vector[feature_idx] = 1
-
 
         if 'feature_100' in self.features_combination:
             # feature_100 of three tags instances

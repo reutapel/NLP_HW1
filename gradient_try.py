@@ -7,6 +7,7 @@ import os
 
 # todo: change code
 
+
 class Gradient(object):
     """
     in this class we implement the tools needed for a known gradient descent of scipy

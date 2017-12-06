@@ -5,7 +5,7 @@ import time
 import logging
 
 
-directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
+# directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
 
 class viterbi(object):
     """ Viterbi algorithm for 2-order MEMM model"""
@@ -13,11 +13,15 @@ class viterbi(object):
         self.model = model
         self.transition_mat = {}
         self.emission_mat = {}
-        self.all_tags = list(itertools.chain.from_iterable(model.word_tag_dict.values()))
+        self.all_tags = model.most_common_tags
+        self.tags_indeces_dict = {tag: tag_index + 1 for (tag_index, tag) in enumerate(self.all_tags)}
+        self.tags_indeces_dict['#'] = 0
+        self.indeces_tags_dict = {tag_index + 1: tag for (tag_index, tag) in enumerate(self.all_tags)}
+        self.indeces_tags_dict[0] = '#'
         self.weight = w
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
-        self.history_tag_feature_vector = model.create_history_tag_feature_vector_denominator
+        self.history_tag_feature_vector = model.history_tag_feature_vector_denominator
         self.most_common_tags = model.most_common_tags[:5]
         # all the words that has not seen in the train, but seen in the test in the format: [sen_index, word_index]
         self.unseen_words = []
@@ -39,7 +43,7 @@ class viterbi(object):
 
                 # create a list of word_tag for the prediction of the Viterbi algorithm
                 seq_word_tag_predict = []
-                for idx_tag, tag in enumerate(viterbi_results):
+                for idx_tag, tag in viterbi_results.items():
                     word = word_tag_list[idx_tag].split('_')[0]
                     prediction = str(word + '_' + str(tag))
                     seq_word_tag_predict.append(prediction)
@@ -52,20 +56,20 @@ class viterbi(object):
             logging.info('{}: prediction for all sentences{}'.format((time.asctime(time.localtime(time.time()))),
                                                                      predict_dict))
 
-        return predict_dict
+        return predict_dict, self.unseen_words
 
     def viterbi_sentence(self, word_tag_list, sentence_index):
         sen_word_tag_predict = {}
 
         number_of_words = len(word_tag_list)
-        number_of_tags = len(self.all_tags)
+        number_of_tags = len(self.all_tags) + 1  # +1 for the tag '#'
 
         # create pi and bp numpy
         pi = np.ones(shape=(number_of_words+1, number_of_tags, number_of_tags), dtype=float) * float("-inf")
         bp = np.ones(shape=(number_of_words+1, number_of_tags, number_of_tags), dtype='int32') * -1
 
         # initialization: # will be 0 in the numpy
-        pi[0, '#', '#'] = 1.0
+        pi[0, self.tags_indeces_dict['#'], self.tags_indeces_dict['#']] = 1.0
 
         # algorithm:
         # k = 1,...,n find the pi and bp for the word in position k
@@ -86,21 +90,16 @@ class viterbi(object):
             else:  # word in position n, no word in k+1
                 plus_one_word = '#'  # word in position k+1
             current_word = word_tag_list[k - 1].split('_')[0]
-            for u in self.possible_tags(second_word):
-                for v, unseen_word in self.possible_tags(current_word):
+            for u in self.possible_tags(second_word)[0]:
+                current_word_possible_tags, unseen_word = self.possible_tags(current_word)
+                if unseen_word:  # never the seen the word in the train set
+                    self.unseen_words.append([sentence_index, k - 1])  # insert the sen_index and the word_index
+                for v in current_word_possible_tags:
                     calc_max_pi = float("-inf")
                     calc_argmax_pi = -1
-                    if unseen_word:  # never the seen the word in the train set
-                        self.unseen_words.append([sentence_index, k - 1])  # insert the sen_index and the word_index
-                    for w in self.possible_tags(first_word):
-                        w_u_pi = pi[k - 1, w, u]
-                        tags_for_calc = [v, u, w]
-                        # if '0' in tags_for_matrix:
-                        #     for tag_index, tag in enumerate(tags_for_matrix):
-                        #         if tag == '0':
-                        #             tags_for_matrix[tag_index] = '#'
-                        q = self.calc_q(tags_for_calc[0], tags_for_calc[1], tags_for_calc[2], second_word,
-                                        plus_one_word, current_word)
+                    for w in self.possible_tags(first_word)[0]:
+                        w_u_pi = pi[k - 1, self.tags_indeces_dict[w], self.tags_indeces_dict[u]]
+                        q = self.calc_q(v, w, u, second_word, plus_one_word, current_word)
                         calc_pi = w_u_pi * q
 
                         if calc_pi > calc_max_pi:
@@ -108,36 +107,40 @@ class viterbi(object):
                             calc_argmax_pi = w
 
                     # print int(u), int(v)
-                    pi[k, u, v] = calc_max_pi  # store the max(pi)
-                    bp[k, u, v] = calc_argmax_pi  # store the argmax(pi) (bp)
+                    calc_argmax_pi = self.tags_indeces_dict[calc_argmax_pi]
+                    pi[k, self.tags_indeces_dict[u], self.tags_indeces_dict[v]] = calc_max_pi  # store the max(pi)
+                    bp[k, self.tags_indeces_dict[u], self.tags_indeces_dict[v]] = calc_argmax_pi  # store the argmax(pi) (bp)
 
         # print pi[n]
         # print bp[n]
 
-        u = np.unravel_index(pi[number_of_words].argmax(), pi[number_of_words].shape)[0]  # argmax for u in n-1
-        v = np.unravel_index(pi[number_of_words].argmax(), pi[number_of_words].shape)[1]  # argmax for v in n
+        u_index = np.unravel_index(pi[number_of_words].argmax(), pi[number_of_words].shape)[0]  # argmax for u in n-1
+        v_index = np.unravel_index(pi[number_of_words].argmax(), pi[number_of_words].shape)[1]  # argmax for v in n
 
-        sen_word_tag_predict[number_of_words - 1] = v
-        sen_word_tag_predict[number_of_words - 2] = u
+        sen_word_tag_predict[number_of_words - 1] = self.indeces_tags_dict[v_index]
+        sen_word_tag_predict[number_of_words - 2] = self.indeces_tags_dict[u_index]
 
         for k in range(number_of_words-2, 0, -1):
-            sen_word_tag_predict[k - 1] = bp[k+2, sen_word_tag_predict[k], sen_word_tag_predict[k+1]]
+            sen_word_tag_predict[k - 1] = self.indeces_tags_dict[bp[k+2,
+                                                                    self.tags_indeces_dict[sen_word_tag_predict[k]],
+                                                                    self.tags_indeces_dict[sen_word_tag_predict[k+1]]]]
 
         return sen_word_tag_predict
 
     def possible_tags(self, word):
         unseen_word = False
         if word == '#':
-            return ['#'], unseen_word
+            return [['#'], unseen_word]
         else:
             # if we never see the current word in the train
             if word not in self.word_tag_dict:
                 tags_list = self.most_common_tags
                 unseen_word = True
             else:
-                tags_list = self.word_tag_dict.get(word)
+                tags_list = list(self.word_tag_dict.get(word).keys())
+                tags_list = tags_list[1:]
 
-            return tags_list, unseen_word
+            return [tags_list, unseen_word]
 
     def calc_q(self, v, second_tag, first_tag, second_word, plus_one_word, current_word):  # calculate q for MEMM model
 
@@ -145,12 +148,11 @@ class viterbi(object):
         e_w_dot_history_tag_dict = {}
 
         # get a list of all possible tags for the current word
-        tags_list = self.possible_tags(current_word)
+        tags_list = self.possible_tags(current_word)[0]
 
         for tag in tags_list:  # all possible tags for the word x_k
             # history + possible tag we want to check
-            if ((first_tag, second_tag, second_word, plus_one_word, current_word), tag)\
-                    in self.history_tag_feature_vector:
+            if ((first_tag, second_tag, second_word, plus_one_word, current_word), tag) in self.history_tag_feature_vector:
                 current_history_tag_feature_vector = self.history_tag_feature_vector[(first_tag, second_tag,
                                                                                       second_word, plus_one_word,
                                                                                       current_word), tag]
