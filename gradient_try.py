@@ -38,21 +38,21 @@ class Gradient(object):
             empirical_counts += feature_vector
 
         for history_tag, feature_vector in self.history_tag_feature_vector_train.items():
-
             tag_exp_dict = {}
             sum_dict_denominator = 0
-            for tag_prime, flag in self.tags_dict.items():
+            for tag_prime, _ in self.tags_dict.items():
                 if (history_tag[0], tag_prime) in self.history_tag_feature_vector_denominator:
                     feature_vector_current = self.history_tag_feature_vector_denominator[history_tag[0], tag_prime]   # history[0] - x vector
                     cur_res = math.exp(feature_vector_current.dot(v))
                     sum_dict_denominator += cur_res
                     tag_exp_dict[tag_prime] = cur_res
+                    # todo: whether we can use feaure_vector_current here instead of next loop
 
             second_part_inner = 0
-            for tag_prime, flag in self.tags_dict.items():
+            for tag_prime, _ in self.tags_dict.items():
                 if (history_tag[0], tag_prime) in self.history_tag_feature_vector_denominator:
                     right_var = tag_exp_dict[tag_prime] / sum_dict_denominator
-                    second_part_inner = second_part_inner + (self.history_tag_feature_vector_denominator[history_tag[0], tag_prime] * right_var)
+                    second_part_inner += (self.history_tag_feature_vector_denominator[history_tag[0], tag_prime] * right_var)
             expected_counts += second_part_inner
 
         print('finished descent step of gradient')
