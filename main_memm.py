@@ -1,7 +1,7 @@
 from MEMM_try import MEMM
 from viterbi_ML import viterbi
+from evaluate import Evaluate
 import time
-from Print_and_save_results import print_save_results
 import numpy as np
 from gradient_try import Gradient
 import logging
@@ -10,7 +10,7 @@ import itertools
 import sys
 
 # open log connection
-directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
+directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -41,7 +41,6 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
         print('finished gradient for features : {}'.format(features_combination))
         logging.info('finished gradient for features : {}'.format(features_combination))
-
         weights = gradient_result.x
         #np.savetxt(gradient_file, weights, delimiter=",")
 
@@ -54,7 +53,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         confusion_file_name = datetime.now().strftime(directory + 'confusion_files\\CM_MEMM_' + test_type +
                               '%d_%m_%Y_%H_%M.xls')
 
-        evaluate_class = print_save_results(memm_class, test_file_to_use, viterbi_result, write_file_name,
+        evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
                                             confusion_file_name)
         word_results_dictionary = evaluate_class.run()
 
@@ -69,7 +68,8 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
 
 if __name__ == "__main__":
-    train_file = directory + 'data/train.wtag'
+
+    train_file = directory + 'data\\train_small.wtag'
     test_file = directory + 'data/test.wtag'
     comp_file = directory + 'data/comp.words'
 
