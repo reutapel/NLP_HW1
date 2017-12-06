@@ -10,7 +10,7 @@ import itertools
 import sys
 
 # open log connection
-directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
+directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -51,7 +51,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         write_file_name = datetime.now().strftime(directory + 'file_results\\result_MEMM_' + test_type +
                                                   '%d_%m_%Y_%H_%M.csv')
         confusion_file_name = datetime.now().strftime(directory + 'confusion_files\\CM_MEMM_' + test_type +
-                              '%d_%m_%Y_%H_%M.xls')
+                                                      '%d_%m_%Y_%H_%M.xls')
 
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
                                             confusion_file_name)
@@ -69,8 +69,11 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
 if __name__ == "__main__":
 
-    train_file = directory + 'data\\train_small.wtag'
-    test_file = directory + 'data/test.wtag'
+    start_time = time.time()
+    logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
+    print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
+    train_file = directory + 'data/train_small.wtag'
+    test_file = directory + 'data/test_small.wtag'
     comp_file = directory + 'data/comp.words'
 
     feature_type_dict = {'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
@@ -80,3 +83,7 @@ if __name__ == "__main__":
 
     for feature_type_name, feature_type_list in feature_type_dict.items():
         main(train_file, test_file, 'test', feature_type_list)
+
+    run_time = time.time() - start_time
+    print("{}: Finish running. Run time is: {} seconds".format(time.asctime(time.localtime(time.time())), run_time))
+    logging.info('{}: Finish running. Run time is: {}'.format(time.asctime(time.localtime(time.time())), run_time))
