@@ -91,10 +91,10 @@ class viterbi(object):
             else:  # word in position n, no word in k+1
                 plus_one_word = '#'  # word in position k+1
             current_word = word_tag_list[k - 1].split('_')[0]
+            current_word_possible_tags, unseen_word = self.possible_tags(current_word)
+            if unseen_word:  # never the seen the word in the train set
+                self.unseen_words.append([sentence_index, k - 1])  # insert the sen_index and the word_index
             for u in self.possible_tags(second_word)[0]:
-                current_word_possible_tags, unseen_word = self.possible_tags(current_word)
-                if unseen_word:  # never the seen the word in the train set
-                    self.unseen_words.append([sentence_index, k - 1])  # insert the sen_index and the word_index
                 for v in current_word_possible_tags:
                     calc_max_pi = float("-inf")
                     calc_argmax_pi = -1
