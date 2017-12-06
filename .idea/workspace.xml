@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="dd71efb0-110a-413c-8b64-a9ca7bd3a4e0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main_memm.py" afterPath="$PROJECT_DIR$/main_memm.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viterbi_ML.py" afterPath="$PROJECT_DIR$/viterbi_ML.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/MEMM_try.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="22">
-              <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+              <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -40,8 +39,8 @@
       <file leaf-file-name="viterbi_ML.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/viterbi_ML.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+            <state relative-caret-position="254">
+              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -54,7 +53,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1130">
               <caret line="107" column="48" lean-forward="false" selection-start-line="107" selection-start-column="47" selection-end-line="107" selection-end-column="48" />
-              <folding />
+              <folding>
+                <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+                <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -159,6 +169,117 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/evaluate.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/gradient_try.py</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -271,7 +392,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512575191730</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixed in Viterbi: return results in the correct order">
+      <created>1512589654947</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1512589654947</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -316,7 +444,8 @@
     <MESSAGE value="Add to Viterbi: &#10;1. if a word never seen in the train data - take 5 most common tags&#10;2. Save the unseen word in unseen_words list" />
     <MESSAGE value="Fixed in Viterbi: bp and pi numpy &#10;Change in MEMM: insert COUNT first to word_tag_dict so it will be the first key in the dict" />
     <MESSAGE value="Fixed in Viterbi: return unseen words" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed in Viterbi: return unseen words" />
+    <MESSAGE value="Fixed in Viterbi: return results in the correct order" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed in Viterbi: return results in the correct order" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -325,11 +454,6 @@
           <url>file://$PROJECT_DIR$/viterbi_ML.py</url>
           <line>59</line>
           <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/viterbi_ML.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="33" />
@@ -367,7 +491,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1530">
           <caret line="107" column="43" lean-forward="false" selection-start-line="107" selection-start-column="34" selection-end-line="107" selection-end-column="43" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -404,7 +539,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -451,7 +597,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -488,7 +645,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -525,7 +693,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -561,7 +740,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -598,7 +788,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -649,7 +850,7 @@
     <entry file="file://$PROJECT_DIR$/MEMM_try.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
-          <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+          <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -660,14 +861,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1130">
           <caret line="107" column="48" lean-forward="false" selection-start-line="107" selection-start-column="47" selection-end-line="107" selection-end-column="48" />
-          <folding />
+          <folding>
+            <marker date="1512589660000" expanded="true" signature="173:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="858:2838" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="1444:2515" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2862:4148" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="2871:3042" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1512589660000" expanded="true" signature="3291:3981" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3541:3923" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="3631:3859" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4193:4943" ph="..." />
+            <marker date="1512589660000" expanded="true" signature="4202:4474" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/viterbi_ML.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+        <state relative-caret-position="254">
+          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
