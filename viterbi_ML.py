@@ -7,7 +7,6 @@ import logging
 
 directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
 
-
 class viterbi(object):
     """ Viterbi algorithm for 2-order MEMM model"""
     def __init__(self, model, data_file, w):
@@ -19,7 +18,9 @@ class viterbi(object):
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
         self.history_tag_feature_vector = model.create_history_tag_feature_vector_denominator
-        self.most_common_tags = model.most_common_tags
+        self.most_common_tags = model.most_common_tags[:5]
+        # all the words that has not seen in the train, but seen in the test in the format: [sen_index, word_index]
+        self.unseen_words = []
 
     def viterbi_all_data(self):
         predict_dict = {}
@@ -34,7 +35,7 @@ class viterbi(object):
                 word_tag_list = sentence.split(' ')
 
                 # predict the tags for the specific sentence
-                viterbi_results = self.viterbi_sentence(word_tag_list)
+                viterbi_results = self.viterbi_sentence(word_tag_list, sentence_index)
 
                 # create a list of word_tag for the prediction of the Viterbi algorithm
                 seq_word_tag_predict = []
@@ -53,7 +54,7 @@ class viterbi(object):
 
         return predict_dict
 
-    def viterbi_sentence(self, word_tag_list):
+    def viterbi_sentence(self, word_tag_list, sentence_index):
         sen_word_tag_predict = {}
 
         number_of_words = len(word_tag_list)
@@ -84,11 +85,13 @@ class viterbi(object):
                 plus_one_word = word_tag_list[k].split('_')[0]      # word k+1
             else:  # word in position n, no word in k+1
                 plus_one_word = '#'  # word in position k+1
-            current_word = word_tag_list[k-1].split('_')[0]
+            current_word = word_tag_list[k - 1].split('_')[0]
             for u in self.possible_tags(second_word):
-                for v in self.possible_tags(current_word):
+                for v, unseen_word in self.possible_tags(current_word):
                     calc_max_pi = float("-inf")
                     calc_argmax_pi = -1
+                    if unseen_word:  # never the seen the word in the train set
+                        self.unseen_words.append([sentence_index, k - 1])  # insert the sen_index and the word_index
                     for w in self.possible_tags(first_word):
                         w_u_pi = pi[k - 1, w, u]
                         tags_for_calc = [v, u, w]
@@ -123,22 +126,26 @@ class viterbi(object):
         return sen_word_tag_predict
 
     def possible_tags(self, word):
+        unseen_word = False
         if word == '#':
-            return ['#']
+            return ['#'], unseen_word
         else:
-            # get all relevant tags for word
-            return self.word_tag_dict.get(word)
+            # if we never see the current word in the train
+            if word not in self.word_tag_dict:
+                tags_list = self.most_common_tags
+                unseen_word = True
+            else:
+                tags_list = self.word_tag_dict.get(word)
+
+            return tags_list, unseen_word
 
     def calc_q(self, v, second_tag, first_tag, second_word, plus_one_word, current_word):  # calculate q for MEMM model
 
         sum_denominator = 0
         e_w_dot_history_tag_dict = {}
 
-        # if we never see the current word in the train
-        if current_word not in self.word_tag_dict:
-            tags_list = self.most_common_tags
-        else:
-            tags_list = self.word_tag_dict.get(current_word)
+        # get a list of all possible tags for the current word
+        tags_list = self.possible_tags(current_word)
 
         for tag in tags_list:  # all possible tags for the word x_k
             # history + possible tag we want to check
