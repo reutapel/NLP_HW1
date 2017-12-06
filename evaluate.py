@@ -29,8 +29,7 @@ class Evaluate:
         self.model = model
         self.write_file_name = write_file_name
         self.confusion_file_name = confusion_file_name
-        self.tags = list(itertools.chain.from_iterable(model.tags_dict))
-        self.tags.remove('COUNT')
+        self.tags = list(model.tags_dict.keys())
         self.tags.sort()
         self.unseen_confusion_matrix = {}
         self.confusion_matrix = {}
@@ -59,7 +58,7 @@ class Evaluate:
                 self.confusion_matrix.setdefault(tag_key, 0)
                 self.misses_matrix.setdefault(tag_key, 0)
 
-        word_tag_tuples_dict = {}
+        word_tag_tuples_dict = []
         # with open(data_file_name, 'r') as training:  # real values
         #     for sequence in training:
         # todo: consider make the test tagging one time
@@ -67,7 +66,7 @@ class Evaluate:
             for index, seq in enumerate(train):
                 seq = seq.rstrip('\n')
                 d = seq.split(' ')
-                word_tag_tuples_dict[index] = []
+                word_tag_tuples_dict.append([])
                 for i, val in enumerate(d):
                     word_tag_tuples_dict[index].append(val.split('_'))
                     predict_tuple = self.predict_dict[index][i].split('_')
@@ -152,7 +151,8 @@ class Evaluate:
         # top-K confusion matrix
         self.create_confusion_sheet(book, top_k_tags_set, confusion_matrix_to_write, "Confusion Matrix")
         # unseen confusion matrix
-        self.create_confusion_sheet(book, self.unseen_tags_set,self.unseen_confusion_matrix, "Unseen Confusion Matrix")
+        unseen_tags_list = sorted(self.unseen_tags_set)
+        self.create_confusion_sheet(book, unseen_tags_list, self.unseen_confusion_matrix, "Unseen Confusion Matrix")
         book.save(file_name)
 
     def create_confusion_sheet(self, book, tag_list, confusion_matrix_to_write, sheet_name):
@@ -213,7 +213,7 @@ class Evaluate:
         for key in tags_keys:
             value = self.confusion_matrix[key]
             top_k_confusion_matrix.update({key: value})
-        return tag_set, top_k_confusion_matrix
+        return sorted(tag_set), top_k_confusion_matrix
 
     def get_all_possible_tags(self, gold, predict):
         """
