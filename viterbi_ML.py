@@ -56,7 +56,7 @@ class viterbi(object):
             logging.info('{}: prediction for all sentences{}'.format((time.asctime(time.localtime(time.time()))),
                                                                      predict_dict))
 
-        return predict_dict
+        return predict_dict, self.unseen_words
 
     def viterbi_sentence(self, word_tag_list, sentence_index):
         sen_word_tag_predict = {}
