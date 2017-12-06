@@ -581,7 +581,7 @@ class MEMM:
                         indexes_vector = self.calculate_history_tag_indexes(first_tag, second_tag, second_word,
                                                                             plus_one_word,
                                                                             current_word, possible_tag_of_current_word)
-                        self.history_tag_feature_vector_train[(first_tag, second_tag,
+                        self.history_tag_feature_vector_denominator[(first_tag, second_tag,
                                                                second_word, plus_one_word,
                                                                current_word), possible_tag_of_current_word] = indexes_vector
                     first_tag = second_tag

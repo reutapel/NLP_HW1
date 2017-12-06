@@ -5,6 +5,7 @@ from scipy.optimize import minimize
 import pickle
 import os
 
+# todo: change code
 
 class Gradient(object):
     """
@@ -12,7 +13,6 @@ class Gradient(object):
     according to the data of MEMM with regularization on the weights
     """
     def __init__(self, memm, lamda):
-
         self.memm = memm
         self.w_init = np.zeros(shape=len(memm.features_vector), dtype=int)
         self.lamda = lamda
@@ -88,8 +88,6 @@ class Gradient(object):
                 if (history_tag[0], tag) in self.history_tag_feature_vector_denominator:
                     feature_vector_current = self.history_tag_feature_vector_denominator[history_tag[0], tag]
                     cur_res = feature_vector_current.dot(v)
-                    if cur_res != 0:
-                        stop = 5
                     first_part_inner += math.exp(cur_res)
                 else:
                     counter_miss_tag += 1
