@@ -26,6 +26,7 @@ class viterbi(object):
         # all the words that has not seen in the train, but seen in the test in the format: [sen_index, word_index]
         self.unseen_words = []
 
+    @property
     def viterbi_all_data(self):
         predict_dict = {}
 
@@ -42,11 +43,11 @@ class viterbi(object):
                 viterbi_results = self.viterbi_sentence(word_tag_list, sentence_index)
 
                 # create a list of word_tag for the prediction of the Viterbi algorithm
-                seq_word_tag_predict = []
+                seq_word_tag_predict = [None] * len(word_tag_list)
                 for idx_tag, tag in viterbi_results.items():
                     word = word_tag_list[idx_tag].split('_')[0]
                     prediction = str(word + '_' + str(tag))
-                    seq_word_tag_predict.append(prediction)
+                    seq_word_tag_predict[idx_tag] = prediction
 
                 predict_dict[sentence_index] = seq_word_tag_predict
 
