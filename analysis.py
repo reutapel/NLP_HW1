@@ -1,5 +1,6 @@
 import pickle
 import numpy as np
+import os
 
 
 class Analysis:
@@ -17,8 +18,8 @@ class Analysis:
         this method gets the weight vector, and checking which entries smaller than epsilon
         :return: redundant features
         """
-        weight = pickle.load(open('resources\\w_vec.pkl', 'rb'))
-        features_vector_mapping = pickle.load(open('resources\\feature_vector_mapping.pkl', 'rb'))
+        weight = pickle.load(open(os.path.join('resources', 'w_vec.pkl'), 'rb'))
+        features_vector_mapping = pickle.load(open(os.path.join('resources', 'feature_vector_mapping.pkl'), 'rb'))
         candidate_for_drop = []
         for index, value in enumerate(weight):
             if value <= self.epsilon:

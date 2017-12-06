@@ -26,6 +26,7 @@ class Evaluate:
         """
         self.data_file_name = data_file
         self.predict_dict, self.viterbi_unseen_words = viterbi_result
+        self.viterbi_unseen_words = [list(cord) for cord in set(tuple(cord) for cord in self.viterbi_unseen_words)]
         self.model = model
         self.write_file_name = write_file_name
         self.confusion_file_name = confusion_file_name
@@ -36,8 +37,8 @@ class Evaluate:
         self.misses_matrix = {}
         self.eval_res = {}
         self.k = 10  # number of words in the confusion matrix
-        self.word_results_dictionary = self.eval_test_results()
         self.unseen_tags_set = set()
+        self.word_results_dictionary = self.eval_test_results()
 
     def run(self):
         self.write_result_doc()
@@ -79,6 +80,8 @@ class Evaluate:
                         print('problem between prediction word: {0} and test word {1} indexes : {2}'
                               .format(predict_word, gold_word, str((index, i))))
                     confusion_matrix_key = "{0}_{1}".format(gold_tag, predict_tag)
+                    if gold_tag not in self.tags:
+                        self.add_missing_tags(gold_tag, predict_tag)
                     self.confusion_matrix[confusion_matrix_key] += 1
                     if predict_tag != gold_tag:  # tag miss
                         miss += 1
@@ -91,12 +94,12 @@ class Evaluate:
         
         for unseen_word in self.viterbi_unseen_words:
             sentence_idx, word_idx = unseen_word
-            gold_word, gold_tag = word_tag_tuples_dict[sentence_idx][word_idx].split('_')
+            gold_word, gold_tag = word_tag_tuples_dict[sentence_idx][word_idx]
             predict_word, predict_tag = self.predict_dict[sentence_idx][word_idx].split('_')
             if gold_word != predict_word:
                 print('problem between prediction word: {0} and test word {1} indexes : {2}'
                       .format(predict_word, gold_word, str((sentence_idx, word_idx))))
-            self.unseen_tags_set.update(gold_tag, predict_tag)
+            self.unseen_tags_set.update((gold_tag, predict_tag))
             keys = self.get_all_possible_tags(gold_tag, predict_tag)
             for key in keys:
                 self.unseen_confusion_matrix.setdefault(key, 0)
@@ -109,12 +112,16 @@ class Evaluate:
         print('Unseen Confusion')
         print('Misses: {0}, Hits: {1}'.format(miss_unseen, hit_unseen))
         print('Model Accuracy: {0}'.format(float(hit_unseen) / float(miss_unseen + hit_unseen)))
-        # print('Miss per word')
-        # print(miss)
-        # print('Hit per word')
-        # print(hit)
-        # print('Accuracy per word')
-        # print(float(hit)/float(miss+hit))
+
+        unseen_tag_list = sorted(self.unseen_tags_set)
+
+        keys_set = set()
+        for i in range(len(unseen_tag_list)):
+            for j in range(i, len(unseen_tag_list)):
+                keys = self.get_all_possible_tags(unseen_tag_list[i], unseen_tag_list[j])
+                keys_set.update(keys)
+        for key in keys_set:
+            self.unseen_confusion_matrix.setdefault(key, 0)
 
         return \
             {
@@ -135,7 +142,7 @@ class Evaluate:
                     sep = ' '
                     if word_index+1 == sentence_len and sentence_index+1 < lines_count:  # if EOL but not EOF, add \n
                         sep = '\n'
-                    f.write("{0}{1} ".format(word_tag_string, sep))
+                    f.write("{0}{1}".format(word_tag_string, sep))
         return
 
     def write_confusion_doc(self):
@@ -207,13 +214,17 @@ class Evaluate:
         tags_keys = set()
         for key, val in top_tags_list:
             gold, predict = key.split('_')
-            tag_set.update(gold, predict)
-            keys = self.get_all_possible_tags(gold, predict)
-            tags_keys.update(keys)
+            tag_set.update((gold, predict))
+        tag_set = sorted(tag_set)
+        # todo: check whether we can cut the loops
+        for i in range(len(tag_set)):
+            for j in range(i, len(tag_set)):
+                keys = self.get_all_possible_tags(tag_set[i], tag_set[j])
+                tags_keys.update(keys)
         for key in tags_keys:
-            value = self.confusion_matrix[key]
+            value = self.confusion_matrix.get(key, 0)
             top_k_confusion_matrix.update({key: value})
-        return sorted(tag_set), top_k_confusion_matrix
+        return tag_set, top_k_confusion_matrix
 
     def get_all_possible_tags(self, gold, predict):
         """
@@ -225,3 +236,10 @@ class Evaluate:
         keys = eval("{{'{tag_1}_{tag_1}','{tag_1}_{tag_2}','{tag_2}_{tag_1}','{tag_2}_{tag_2}'}}"
                     .format(tag_1=gold, tag_2=predict))
         return keys
+
+    def add_missing_tags(self, gold_tag, predict_tag):
+        res = self.get_all_possible_tags(gold_tag, predict_tag)
+        for confusion_matrix_key in res:
+            self.confusion_matrix.setdefault(confusion_matrix_key, 0)
+            self.misses_matrix.setdefault(confusion_matrix_key, 0)
+        return
