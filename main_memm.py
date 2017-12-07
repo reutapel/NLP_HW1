@@ -15,7 +15,7 @@ LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
 
-def main(train_file_to_use, test_file_to_use, test_type, features_combination_list):
+def main(train_file_to_use, test_file_to_use, test_type, features_combination_list, lamda):
     print('{}: Start creating MEMM'.format(time.asctime(time.localtime(time.time()))))
     logging.info('{}: Start creating MEMM'.format(time.asctime(time.localtime(time.time()))))
     # for perm in itertools.combinations(features_combination_list_sub, 4):
@@ -33,8 +33,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
         print('started gradient for features : {}'.format(features_combination))
         logging.info('started gradient for features : {}'.format(features_combination))
-
-        gradient_class = Gradient(memm=memm_class, lamda=1)
+        gradient_class = Gradient(memm=memm_class, lamda=lamda)
         gradient_result = gradient_class.gradient_descent()
 
         print('finished gradient for features : {}'.format(features_combination))
@@ -54,7 +53,8 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
                                   confusion_file_name)
         word_results_dictionary = evaluate_class.run()
-
+        logging.info('the model hyper parameters: \n lambda:{} \n test file: {} \n train file: {}'
+                     .format(lamda, test_file_to_use, train_file_to_use))
         logging.info('{}: Related results files are: \n {} \n {}'.
                      format(time.asctime(time.localtime(time.time())), write_file_name, confusion_file_name))
 
@@ -73,14 +73,14 @@ if __name__ == "__main__":
     train_file = directory + 'data/train.wtag'
     test_file = directory + 'data/train.wtag'
     comp_file = directory + 'data/comp.words'
-
+    lamda_value = 1
     feature_type_dict = {#'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
                          #                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
                          #                  'feature_110']],
                          'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
     for feature_type_name, feature_type_list in feature_type_dict.items():
-        main(train_file, test_file, 'test', feature_type_list)
+        main(train_file, test_file, 'test', feature_type_list, lamda_value)
 
     run_time = time.time() - start_time
     print("{}: Finish running. Run time is: {} seconds".format(time.asctime(time.localtime(time.time())), run_time))
