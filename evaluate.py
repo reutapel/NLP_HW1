@@ -90,7 +90,7 @@ class Evaluate:
                         hit += 1
 
         print('Misses: {0}, Hits: {1}'.format(miss, hit))
-        print('Model Accuracy: {0}'.format(float(hit)/float(miss+hit)))
+        print('Model Accuracy: {0}%'.format(100*float(hit)/float(miss+hit)))
         
         for unseen_word in self.viterbi_unseen_words:
             sentence_idx, word_idx = unseen_word
@@ -111,7 +111,10 @@ class Evaluate:
                 hit_unseen += 1
         print('Unseen Confusion')
         print('Misses: {0}, Hits: {1}'.format(miss_unseen, hit_unseen))
-        print('Model Accuracy: {0}'.format(float(hit_unseen) / float(miss_unseen + hit_unseen)))
+        accuracy = 0
+        if miss_unseen + hit_unseen > 0:
+            accuracy = float(hit_unseen) / float(miss_unseen + hit_unseen)
+        print('Model Accuracy: {0}%'.format(accuracy*100))
 
         unseen_tag_list = sorted(self.unseen_tags_set)
 
@@ -127,8 +130,8 @@ class Evaluate:
             {
                 'Miss per word': miss,
                 'Hit per word': hit,
-                'Accuracy per word': float(hit)/float(miss+hit),
-                'confusion_matrix per word': self.confusion_matrix
+                'Accuracy per word': float(hit)/float(miss+hit)
+                # ,'confusion_matrix per word': self.confusion_matrix
              }
 
     def write_result_doc(self):
@@ -152,14 +155,21 @@ class Evaluate:
         """
 
         file_name = self.confusion_file_name
-        top_k_tags_set, confusion_matrix_to_write = self.get_most_missed_tags()
-        
+        confusion_matrix_to_write = self.confusion_matrix
+
         book = xlwt.Workbook(encoding="utf-8")
+
+        # confusion matrix
+        self.create_confusion_sheet(book, self.tags, confusion_matrix_to_write, "Confusion Matrix")
+
+        top_k_tags_set, confusion_matrix_to_write = self.get_most_missed_tags()
         # top-K confusion matrix
-        self.create_confusion_sheet(book, top_k_tags_set, confusion_matrix_to_write, "Confusion Matrix")
+        self.create_confusion_sheet(book, top_k_tags_set, confusion_matrix_to_write, "Top-{} Confusion Matrix"
+                                    .format(self.k))
         # unseen confusion matrix
         unseen_tags_list = sorted(self.unseen_tags_set)
-        self.create_confusion_sheet(book, unseen_tags_list, self.unseen_confusion_matrix, "Unseen Confusion Matrix")
+        confusion_matrix_to_write = self.unseen_confusion_matrix
+        self.create_confusion_sheet(book, unseen_tags_list, confusion_matrix_to_write, "Unseen Confusion Matrix")
         book.save(file_name)
 
     def create_confusion_sheet(self, book, tag_list, confusion_matrix_to_write, sheet_name):

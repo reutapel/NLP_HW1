@@ -1,3 +1,4 @@
+from datetime import datetime
 import math
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -106,8 +107,13 @@ class Gradient(object):
         :return: weight vector
         """
         file_name = os.path.join('resources', 'w_vec.pkl')
-        if flag and os.path.isfile(file_name):
-            return pickle.load(open(file_name, 'rb'))
+        if os.path.isfile(file_name):
+            if not flag:
+                old_weight_vec = pickle.load(open(file_name, 'rb'))
+                old_file_name = "{1}_{0.day}_{0.month}_{0.year}_{0.hour}_{0.minute}".format(datetime.now(), file_name)
+                pickle.dump(old_weight_vec, open(old_file_name, 'wb'))
+            else:
+                return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
                           options={'disp': True, 'maxiter': 15, 'factr': 1e2})
         print('finished gradient. res: {0}'.format(result.x))
