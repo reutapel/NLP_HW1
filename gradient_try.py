@@ -50,7 +50,6 @@ class Gradient(object):
                     cur_res = (math.exp(feature_vector_current.dot(v)) * feature_freq)
                     sum_dict_denominator += cur_res
                     tag_exp_dict[tag_prime] = cur_res * feature_vector_current
-                    # todo: whether we can use feaure_vector_current here instead of next loop
 
             expected_counts_inner = 0
             for tag_prime, _ in self.tags_dict.items():

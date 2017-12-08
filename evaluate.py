@@ -7,11 +7,6 @@ class Evaluate:
     """
     this class evaluates the results and creates the confusion matrix
     """
-    # todo: print the Viterbi results - to see the difference from the test
-    # todo: calculate the misses and hits of tags and words
-    # todo: calculate the accuracy of the model
-    # todo: create the confusion matrix - and create the file for it
-    # todo: evaluate and present the worst 10 tags errors
 
     def __init__(self, model, data_file, viterbi_result, write_file_name,
                  confusion_file_name):
