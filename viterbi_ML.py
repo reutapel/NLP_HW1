@@ -22,8 +22,11 @@ class viterbi(object):
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
         self.history_tag_feature_vector = model.history_tag_feature_vector_denominator
-        most_common_tags_to_use = model.most_common_tags.remove('DT')
-        most_common_tags_to_use.remove('IN')
+        most_common_tags_to_use = model.most_common_tags
+        if 'DT' in most_common_tags_to_use:
+            most_common_tags_to_use.remove('DT')
+        if 'IN' in most_common_tags_to_use:
+            most_common_tags_to_use.remove('IN')
         self.most_common_tags = most_common_tags_to_use[:5]
         # all the words that has not seen in the train, but seen in the test in the format: [sen_index, word_index]
         self.unseen_words = []

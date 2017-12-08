@@ -46,8 +46,8 @@ class Gradient(object):
                 if (history_tag[0], tag_prime) in self.feature_vector_denominator:
                     # history[0] - x vector
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag_prime]
-                    feature_vector_current *= feature_freq  # multiple in the freq of the history vector X
-                    cur_res = math.exp(feature_vector_current.dot(v))
+                    # multiple in the freq of the history vector X
+                    cur_res = (math.exp(feature_vector_current.dot(v)) * feature_freq)
                     sum_dict_denominator += cur_res
                     tag_exp_dict[tag_prime] = cur_res * feature_vector_current
                     # todo: whether we can use feaure_vector_current here instead of next loop
@@ -93,9 +93,9 @@ class Gradient(object):
 
                 if (history_tag[0], tag) in self.feature_vector_denominator:
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
-                    feature_vector_current *= feature_freq      # multiple in freq of history
                     cur_res = feature_vector_current.dot(v)
-                    first_part_inner += math.exp(cur_res)
+                    first_part_inner += (math.exp(cur_res)*feature_freq)    # multiple in freq of history
+
                 else:
                     counter_miss_tag += 1
             normalizer_term += math.log(first_part_inner)
@@ -120,7 +120,7 @@ class Gradient(object):
             else:
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 15, 'factr': 1e2})
+                          options={'disp': True, 'maxiter': 500, 'ftol': 1e2})
 
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))

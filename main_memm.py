@@ -131,10 +131,10 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + 'data\\train_small.wtag'
-    test_file = directory + 'data\\test_small.wtag'
+    train_file = directory + 'data\\train.wtag'
+    test_file = directory + 'data\\test.wtag'
     comp_file = directory + 'data\\comp.words'
-    cv = True
+    cv = False
     if cv:
         cross_validation(train_file)
     else:
