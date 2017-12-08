@@ -132,9 +132,12 @@ class Evaluate:
 
         return \
             {
-                'Miss per word': miss,
-                'Hit per word': hit,
-                'Accuracy per word': float(hit)/float(miss+hit)
+                'Missse': miss,
+                'Hits': hit,
+                'Accuracy': float(hit)/float(miss+hit),
+                'Unseen words Misses': miss_unseen,
+                'Unseen words Hits': hit_unseen,
+                'Unseen words Accuracy': float(hit_unseen) / float(miss_unseen + hit_unseen)
                 # ,'confusion_matrix per word': self.confusion_matrix
              }
 

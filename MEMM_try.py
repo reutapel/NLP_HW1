@@ -89,10 +89,10 @@ class MEMM:
                 sequence = sequence.rstrip('\n')
                 word_tag_list = sequence.split(' ')
 
-                print("working on sequence {} :".format(sequence_index))
-                logging.info("working on sequence {} :".format(sequence_index))
-                print(word_tag_list)
-                logging.info(word_tag_list)
+                # print("working on sequence {} :".format(sequence_index))
+                # logging.info("working on sequence {} :".format(sequence_index))
+                # print(word_tag_list)
+                # logging.info(word_tag_list)
 
                 # define two first and three last word_tags for some features
                 first_tag = '#'
@@ -245,10 +245,10 @@ class MEMM:
 
         self.most_common_tags = list(reversed(sorted(self.tags_dict, key=self.tags_dict.get)))
 
-        print('saving dictionaries')
-        logging.info('saving dictionaries')
+        print('{}: saving dictionaries'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: saving dictionaries'.format(time.asctime(time.localtime(time.time()))))
 
-        logging.info('saving tags_dict and most_common_tags')
+        logging.info('{}: saving tags_dict and most_common_tags'.format(time.asctime(time.localtime(time.time()))))
         w = csv.writer(open(self.dict_path + 'tags_dict' + '.csv', "w"))
         for key, val in self.tags_dict.items():
             w.writerow([key, val])
@@ -256,34 +256,34 @@ class MEMM:
         w = csv.writer(open(self.dict_path + 'most_common_tags' + '.csv', "w"))
         w.writerow(self.most_common_tags)
 
-        print('finished saving tags_dict and most_common_tags')
+        print('{}: finished saving tags_dict and most_common_tags'.format(time.asctime(time.localtime(time.time()))))
 
         logging.info('saving words_tags_dict')
         w = csv.writer(open( self.dict_path + ' words_tags_dict' + '.csv', "w"))
         for key, val in self.word_tag_dict.items():
             w.writerow([key, val])
-        print('finished saving words_tags_dict')
+        print('{}: finished saving words_tags_dict'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_100' in self.features_combination:
             logging.info('saving feature_100')
             w = csv.writer(open( self.dict_path + 'feature_100' + '.csv', "w"))
             for key, val in self.feature_100.items():
                 w.writerow([key, val])
-            print('finished saving feature_100')
+            print('{}: finished saving feature_100'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_103' in self.features_combination:
             logging.info('saving feature_103')
             w = csv.writer(open( self.dict_path + 'feature_103' + '.csv', "w"))
             for key, val in self.feature_103.items():
                 w.writerow([key, val])
-            print('finished saving feature_103')
+            print('{}: finished saving feature_103'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_104' in self.features_combination:
             logging.info('saving feature_104')
             w = csv.writer(open( self.dict_path + 'feature_104' + '.csv', "w"))
             for key, val in self.feature_104.items():
                 w.writerow([key, val])
-            print('finished saving feature_104')
+            print('{}: finished saving feature_104'.format(time.asctime(time.localtime(time.time()))))
 
         return
 
@@ -335,8 +335,10 @@ class MEMM:
                 self.features_vector_mapping[features_vector_idx] = word_tag
                 features_vector_idx += 1
                 feature_instances += 1
-            print('size of feature_100 - word+tag instances is: {}'.format(feature_instances))
-            logging.info('size of feature_100 - word+tag instances is: {}'.format(feature_instances))
+            print('{}: size of feature_100 - word+tag instances is: {}'.format(time.asctime(time.localtime(time.time())),
+                  feature_instances))
+            logging.info('size of feature_100 - word+tag instances is: {}'.
+                         format(time.asctime(time.localtime(time.time())), feature_instances))
             feature_instances = 0
 
         # if 'feature_2' in self.features_combination:
@@ -356,8 +358,10 @@ class MEMM:
                 self.features_vector_mapping[features_vector_idx] = tags_trigram
                 features_vector_idx += 1
                 feature_instances += 1
-            print('size of feature_103 - tags trigram instances is: {}'.format(feature_instances))
-            logging.info('size of feature_103 - tags trigram instances is: {}'.format(feature_instances))
+            print('{}: size of feature_103 - tags trigram instances is: {}'.
+                  format(time.asctime(time.localtime(time.time())), feature_instances))
+            logging.info('{}: size of feature_103 - tags trigram instances is: {}'.
+                         format(time.asctime(time.localtime(time.time())), feature_instances))
             feature_instances = 0
 
         if 'feature_104' in self.features_combination:
@@ -367,8 +371,11 @@ class MEMM:
                 self.features_vector_mapping[features_vector_idx] = tags_bigram
                 features_vector_idx += 1
                 feature_instances += 1
-            print('size of feature_104 - tags bigram is: {}'.format(feature_instances))
-            logging.info('size of feature_104 - tags bigram is: {}'.format(feature_instances))
+            print('{}: size of feature_104 - tags bigram is: {}'.format(time.asctime(time.localtime(time.time())),
+                                                                        feature_instances))
+            logging.info('{}: size of feature_104 - tags bigram is: {}'.format(time.asctime(time.localtime(time.time())),
+                                                                           feature_instances))
+
             feature_instances = 0
 
         # if 'feature_5' in self.features_combination:
@@ -416,22 +423,22 @@ class MEMM:
         logging.info('{}: finished building features vector in : {}'.format(time.asctime(time.localtime(time.time())),
               time.time() - start_time))
 
-        print('saving dictionaries')
-        print('saving features_vector')
-        logging.info('saving features_vector')
-        w = csv.writer(open( self.dict_path + 'features_vector' + '.csv', "w"))
+        print('{}: saving dictionaries'.format(time.asctime(time.localtime(time.time()))))
+        print('{}: saving features_vector'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: saving features_vector'.format(time.asctime(time.localtime(time.time()))))
+        w = csv.writer(open(self.dict_path + 'features_vector' + '.csv', "w"))
         for key, val in self.features_vector.items():
             w.writerow([key, val])
-        print('finished saving features_vector')
-        logging.info('finished saving features_vector')
+        print('{}: finished saving features_vector'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: finished saving features_vector'.format(time.asctime(time.localtime(time.time()))))
 
-        print('saving features_vector_mapping')
-        logging.info('saving features_vector_mapping')
-        w = csv.writer(open( self.dict_path + 'features_vector_mapping' + '.csv', "w"))
+        print('{}: saving features_vector_mapping'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: saving features_vector_mapping'.format(time.asctime(time.localtime(time.time()))))
+        w = csv.writer(open(self.dict_path + 'features_vector_mapping' + '.csv', "w"))
         for key, val in self.features_vector_mapping.items():
             w.writerow([key, val])
-        print('finished saving features_vector_mapping')
-        logging.info('finished saving features_vector_mapping')
+        print('{}: finished saving features_vector_mapping'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: finished saving features_vector_mapping'.format(time.asctime(time.localtime(time.time()))))
 
         return
 
@@ -517,16 +524,18 @@ class MEMM:
                     #     plus_one_word = plus_two_word
                     #     plus_two_word = plus_three_word
                 sequence_index += 1
-        print('finished building history_tag_feature_vector_train in : {}'.format(time.time() - start_time))
-        logging.info('finished building history_tag_feature_vector_train in : {}'.format(time.time() - start_time))
+        print('{}: finished building history_tag_feature_vector_train in : {}'.
+              format(time.asctime(time.localtime(time.time())), time.time() - start_time))
+        logging.info('{}: finished building history_tag_feature_vector_train in : {}'.
+                     format(time.asctime(time.localtime(time.time())), time.time() - start_time))
 
-        print('saving history_tag_feature_vector_train')
-        logging.info('saving history_tag_feature_vector_train')
+        print('{}: saving history_tag_feature_vector_train'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: saving history_tag_feature_vector_train'.format(time.asctime(time.localtime(time.time()))))
         w = csv.writer(open(self.dict_path + 'history_tag_feature_vector_train' + '.csv', "w"))
         for key, val in self.history_tag_feature_vector_train.items():
             w.writerow([key, val])
-        print('finished saving history_tag_feature_vector_train')
-        logging.info('finished saving history_tag_feature_vector_train')
+        print('{}: finished saving history_tag_feature_vector_train'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: finished saving history_tag_feature_vector_train'.format(time.asctime(time.localtime(time.time()))))
 
         return
 
@@ -536,7 +545,7 @@ class MEMM:
         print('{}: starting building history_tag_feature_vector_denominator'.
               format(time.asctime(time.localtime(time.time()))))
         logging.info('{}: starting building history_tag_feature_vector_denominator'.
-              format(time.asctime(time.localtime(time.time()))))
+                     format(time.asctime(time.localtime(time.time()))))
 
         training_file = self.train_file
         with open(training_file, 'r') as training:
@@ -616,15 +625,15 @@ class MEMM:
         print('{}: finished building history_tag_feature_vector_denominator in : {}'
               .format(time.asctime(time.localtime(time.time())), time.time() - start_time))
         logging.info('{}: finished building history_tag_feature_vector_denominator in : {}'
-              .format(time.asctime(time.localtime(time.time())), time.time() - start_time))
+                     .format(time.asctime(time.localtime(time.time())), time.time() - start_time))
 
-        print('saving history_tag_feature_vector_denominator')
-        logging.info('saving history_tag_feature_vector_denominator')
+        print('{}: saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))
         w = csv.writer(open(self.dict_path + 'history_tag_feature_vector_denominator' + '.csv', "w"))
         for key, val in self.history_tag_feature_vector_denominator.items():
             w.writerow([key, val])
-        print('finished saving history_tag_feature_vector_denominator')
-        logging.info('finished saving history_tag_feature_vector_denominator')
+        print('{}: finished saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))
+        logging.info('{}: finished saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))
 
         return
 
