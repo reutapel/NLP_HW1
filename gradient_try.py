@@ -18,8 +18,8 @@ class Gradient(object):
         self.memm = memm
         self.w_init = np.zeros(shape=len(memm.features_vector), dtype=int)
         self.lamda = lamda
-        self.history_tag_feature_vector_train = memm.history_tag_feature_vector_train
-        self.history_tag_feature_vector_denominator = memm.history_tag_feature_vector_denominator
+        self.feature_vector_train = memm.history_tag_feature_vector_train
+        self.feature_vector_denominator = memm.history_tag_feature_vector_denominator
         self.tags_dict = memm.tags_dict
         self.iteration_counter = 0
         self.index_of_loss = 1
@@ -35,26 +35,29 @@ class Gradient(object):
         expected_counts = 0     # expected counts
         weight_vector = np.copy(v)     # weight vector
 
-        for _, feature_vector in self.history_tag_feature_vector_train.items():
-            empirical_counts += feature_vector
+        for _, feature_vector in self.feature_vector_train.items():
+            # multiple in the freq [0] of the history vector (X) with the actual feature vector [1]
+            empirical_counts += feature_vector[1]*feature_vector[0]
 
-        for history_tag, feature_vector in self.history_tag_feature_vector_train.items():
+        for history_tag, feature_vector in self.feature_vector_train.items():
             tag_exp_dict = {}
             sum_dict_denominator = 0
             for tag_prime, _ in self.tags_dict.items():
-                if (history_tag[0], tag_prime) in self.history_tag_feature_vector_denominator:
-                    feature_vector_current = self.history_tag_feature_vector_denominator[history_tag[0], tag_prime]   # history[0] - x vector
+                if (history_tag[0], tag_prime) in self.feature_vector_denominator:
+                    # history[0] - x vector
+                    feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag_prime]
+                    feature_vector_current *= feature_freq  # multiple in the freq of the history vector X
                     cur_res = math.exp(feature_vector_current.dot(v))
                     sum_dict_denominator += cur_res
-                    tag_exp_dict[tag_prime] = cur_res
+                    tag_exp_dict[tag_prime] = cur_res * feature_vector_current
                     # todo: whether we can use feaure_vector_current here instead of next loop
 
-            second_part_inner = 0
+            expected_counts_inner = 0
             for tag_prime, _ in self.tags_dict.items():
-                if (history_tag[0], tag_prime) in self.history_tag_feature_vector_denominator:
-                    right_var = tag_exp_dict[tag_prime] / sum_dict_denominator
-                    second_part_inner += (self.history_tag_feature_vector_denominator[history_tag[0], tag_prime] * right_var)
-            expected_counts += second_part_inner
+                if (history_tag[0], tag_prime) in self.feature_vector_denominator:
+                    expected_counts_inner = tag_exp_dict[tag_prime] / sum_dict_denominator
+                    # second_part_inner += (self.feature_vector_denominator[history_tag[0], tag_prime] * right_var)
+            expected_counts += expected_counts_inner
 
         print('finished descent step of gradient')
         print(self.index_gradient)
@@ -78,8 +81,9 @@ class Gradient(object):
 
         norm_l2 += 0.5 * pow(np.linalg.norm(v), 2)  # norm L2 of the feature vector
 
-        for history_tag, feature_vector in self.history_tag_feature_vector_train.items():
-
+        for history_tag, feature_vector_list in self.feature_vector_train.items():
+            feature_freq, feature_vector = feature_vector_list
+            feature_vector *= feature_freq      # multiple in freq of history
             linear_term += float(feature_vector.dot(v))  # linear term
 
             # 2: 1-to-n log of sum of exp. of v*f(x,y') for all y' in Y
@@ -87,8 +91,9 @@ class Gradient(object):
             counter_miss_tag = 0
             for tag in self.tags_dict:
 
-                if (history_tag[0], tag) in self.history_tag_feature_vector_denominator:
-                    feature_vector_current = self.history_tag_feature_vector_denominator[history_tag[0], tag]
+                if (history_tag[0], tag) in self.feature_vector_denominator:
+                    feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
+                    feature_vector_current *= feature_freq      # multiple in freq of history
                     cur_res = feature_vector_current.dot(v)
                     first_part_inner += math.exp(cur_res)
                 else:
@@ -116,6 +121,7 @@ class Gradient(object):
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
                           options={'disp': True, 'maxiter': 15, 'factr': 1e2})
+
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))
         return result

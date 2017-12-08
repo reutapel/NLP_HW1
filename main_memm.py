@@ -10,7 +10,7 @@ import itertools
 import sys
 
 # open log connection
-directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
+directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -59,6 +59,10 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
                      format(time.asctime(time.localtime(time.time())), write_file_name, confusion_file_name))
 
         print(word_results_dictionary)
+        summary_file_name = '{0}analysis\\summary_{1}_{2.day}_{2.month}_{2.year}_{2.hour}_{2.minute}.csv'\
+            .format(directory, test_type, datetime.now())
+        evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use, summary_file_name)
+
         logging.info('Following Evaluation results for features {}'.format(features_combination))
         logging.info('{}: Evaluation results are: \n {} \n'.format(time.asctime(time.localtime(time.time())),
                                                                    word_results_dictionary))
@@ -71,7 +75,7 @@ if __name__ == "__main__":
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     train_file = directory + 'data\\train_small.wtag'
-    test_file = directory + 'data\\train.wtag'
+    test_file = directory + 'data\\test_small.wtag'
     comp_file = directory + 'data\\comp.words'
     lamda_value = 1
     feature_type_dict = {#'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',

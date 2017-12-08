@@ -1,7 +1,7 @@
-import xlwt
-import itertools
-import pandas as pd
+import csv
 
+import xlwt
+from datetime import datetime
 
 class Evaluate:
     """
@@ -36,6 +36,7 @@ class Evaluate:
         self.confusion_matrix = {}
         self.misses_matrix = {}
         self.eval_res = {}
+        self.eval_res.update()
         self.k = 10  # number of words in the confusion matrix
         self.unseen_tags_set = set()
         self.word_results_dictionary = self.eval_test_results()
@@ -90,7 +91,9 @@ class Evaluate:
                         hit += 1
 
         print('Misses: {0}, Hits: {1}'.format(miss, hit))
-        print('Model Accuracy: {0}%'.format(100*float(hit)/float(miss+hit)))
+        accuracy = 100 * float(hit) / float(miss + hit)
+        print('Model Accuracy: {:.2f}%'.format(accuracy))
+        self.eval_res.update({'Full': {'miss': miss, 'hit': hit, 'accuracy': accuracy}})
         
         for unseen_word in self.viterbi_unseen_words:
             sentence_idx, word_idx = unseen_word
@@ -113,8 +116,9 @@ class Evaluate:
         print('Misses: {0}, Hits: {1}'.format(miss_unseen, hit_unseen))
         accuracy = 0
         if miss_unseen + hit_unseen > 0:
-            accuracy = float(hit_unseen) / float(miss_unseen + hit_unseen)
-        print('Model Accuracy: {0}%'.format(accuracy*100))
+            accuracy = 100 * float(hit_unseen) / float(miss_unseen + hit_unseen)
+        print('Model Accuracy: {:.2f}%'.format(accuracy))
+        self.eval_res.update({'unseen words': {'miss': miss_unseen, 'hit': hit_unseen, 'accuracy': accuracy}})
 
         unseen_tag_list = sorted(self.unseen_tags_set)
 
@@ -182,39 +186,123 @@ class Evaluate:
         :return: None
         """
         sheet1 = book.add_sheet(sheet_name)
-        # regular pattern
-        pattern = xlwt.Pattern()
-        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern.pattern_fore_colour = 22
+
+        # Header pattern
+        header_pattern = xlwt.Pattern()
+        header_pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        header_pattern.pattern_fore_colour = 9
+        bold_font = xlwt.Font()
+        bold_font.bold = True
+        align = xlwt.Alignment()
+        align.horz = xlwt.Alignment.HORZ_CENTER
+        thick_border = xlwt.Borders()
+        thick_border.right = xlwt.Borders.THICK
+        thick_border.left = xlwt.Borders.THICK
+        thick_border.top = xlwt.Borders.THICK
+        thick_border.bottom = xlwt.Borders.THICK
+        header_style = xlwt.XFStyle()
+        header_style.pattern = header_pattern
+        header_style.borders = thick_border
+        header_style.font = bold_font
+        header_style.alignment = align
+
+        # Regualr pattern
+        reg_border = xlwt.Borders()
+        reg_border.right = xlwt.Borders.DASHED
+        reg_border.left = xlwt.Borders.DASHED
+        reg_border.top = xlwt.Borders.DASHED
+        reg_border.bottom = xlwt.Borders.DASHED
         style = xlwt.XFStyle()
-        style.pattern = pattern
+        style.borders = reg_border
+        style.num_format_str = '0'
+        style.alignment = align
+
         # mistakes pattern
         pattern_mistake = xlwt.Pattern()
         pattern_mistake.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern_mistake.pattern_fore_colour = 2
+        pattern_mistake.pattern_fore_colour = 29
         style_mistake = xlwt.XFStyle()
         style_mistake.pattern = pattern_mistake
+        style_mistake.num_format_str = '0'
+        style_mistake.borders = reg_border
+        style_mistake.alignment = align
+
         # correct pattern
         pattern_hit = xlwt.Pattern()
         pattern_hit.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern_hit.pattern_fore_colour = 3
+        pattern_hit.pattern_fore_colour = 42
         style_hit = xlwt.XFStyle()
         style_hit.pattern = pattern_hit
+        style_hit.num_format_str = '0'
+        style_hit.borders = reg_border
+        style_hit.alignment = align
 
-        sheet1.write(0, 0, ' ', style)
+        # sum pattern
+        pattern_sum = xlwt.Pattern()
+        pattern_sum.pattern = xlwt.Pattern.SOLID_PATTERN
+        pattern_sum.pattern_fore_colour = 22
+        style_sum = xlwt.XFStyle()
+        style_sum.pattern = pattern_sum
+        style_sum.num_format_str = '0'
+        style_sum.borders = thick_border
+        style_sum.font = bold_font
+        style_sum.alignment = align
+
+        # FP pattern
+        style_fp = xlwt.XFStyle()
+        style_fp.pattern = pattern_sum
+        style_fp.num_format_str = '0.00%'
+        style_fp.borders = thick_border
+        style_fp.font = bold_font
+        style_fp.alignment = align
+
+        last_pos = len(tag_list) + 1
+        sheet1.write(0, 0, ' ', header_style)
+
         for idx_tag, cur_tag in enumerate(tag_list):
-            sheet1.write(0, idx_tag + 1, cur_tag, style)
+            sheet1.write(0, idx_tag + 1, cur_tag, header_style)
+        sheet1.write(0, last_pos, 'Recall', header_style)
+        sheet1.write(0, last_pos+1, 'Total', header_style)
+        row_count_hit = 0
+        row_count_miss = 0
+        col_count_hit = [0] * len(tag_list)
+        col_count_miss = [0] * len(tag_list)
         for row_tag_idx, row_tag in enumerate(tag_list):
-            sheet1.write(row_tag_idx + 1, 0, row_tag, style)
+            sheet1.write(row_tag_idx + 1, 0, row_tag, header_style)
             for col_tag_idx, col_tag in enumerate(tag_list):
                 cur_value = confusion_matrix_to_write["{0}_{1}".format(row_tag, col_tag)]
                 if cur_value == 0:
-                    sheet1.write(row_tag_idx + 1, col_tag_idx + 1, str(cur_value))
+                    sheet1.write(row_tag_idx + 1, col_tag_idx + 1, cur_value, style)
                 else:
                     if row_tag_idx == col_tag_idx:
-                        sheet1.write(row_tag_idx + 1, col_tag_idx + 1, str(cur_value), style_hit)
+                        sheet1.write(row_tag_idx + 1, col_tag_idx + 1, cur_value, style_hit)
+                        row_count_hit += cur_value
+                        col_count_hit[col_tag_idx] += cur_value
                     else:
-                        sheet1.write(row_tag_idx + 1, col_tag_idx + 1, str(cur_value), style_mistake)
+                        sheet1.write(row_tag_idx + 1, col_tag_idx + 1, cur_value, style_mistake)
+                        row_count_miss += cur_value
+                        col_count_miss[col_tag_idx] += cur_value
+            row_count = row_count_hit + row_count_miss
+            if row_count == 0:
+                sheet1.write(row_tag_idx + 1, last_pos, row_count, style_fp)  # recall
+            else:
+                sheet1.write(row_tag_idx + 1, last_pos, row_count_hit/row_count, style_fp)  # recall
+            sheet1.write(row_tag_idx + 1, last_pos + 1, row_count, style_sum)   # total
+        sheet1.write(last_pos, 0, 'Precision', header_style)
+        sheet1.write(last_pos+1, 0, 'Total', header_style)
+        total_count = 0
+        total_hit = 0
+        for col_idx, col_hit in enumerate(col_count_hit):
+            col_count = col_hit + col_count_miss[col_idx]
+            if col_count == 0:
+                sheet1.write(last_pos, col_idx + 1, col_count, style_fp)  # recall
+            else:
+                sheet1.write(last_pos, col_idx + 1, col_hit/col_count, style_fp)  # recall
+            total_count += col_count
+            total_hit += col_hit
+            sheet1.write(last_pos+1, col_idx + 1, col_count, style_sum)
+        sheet1.write(last_pos, last_pos, total_hit/total_count, style_fp)
+        sheet1.write(last_pos, last_pos + 1, ':Accuracy', style)
         return
 
     def get_most_missed_tags(self):
@@ -253,3 +341,31 @@ class Evaluate:
             self.confusion_matrix.setdefault(confusion_matrix_key, 0)
             self.misses_matrix.setdefault(confusion_matrix_key, 0)
         return
+
+    def create_summary_file(self, lamda, model_features, test_file, train_file, summary_file_name):
+        """
+        this method is creating a summary file of the run
+        :param model_features: the features that where used in this model
+        :param lamda: lambda value
+        :param test_file: test data location
+        :param train_file: train data location
+        :param summary_file_name: where to save the summary
+        :return: None
+        """
+        with open(summary_file_name, "w") as summary_file:
+            summary = csv.writer(summary_file)
+            summary.writerow(['Running time:', datetime.now().ctime()])
+            summary.writerow(['Model features:'])
+            summary.writerow(model_features)
+            summary.writerow(['Model test file:', test_file])
+            summary.writerow(['Model train file:', train_file])
+            summary.writerow(['Model lambda:', lamda])
+            summary.writerow(['Predicted doc:', self.write_file_name])
+            summary.writerow(['Confusion matrix:', self.confusion_file_name])
+            for eval_type, eval_res in self.eval_res.items():
+                summary.writerow(['{} Results:'.format(eval_type)])
+                summary.writerow(['Misses: {} '.format(eval_res['miss']), 'Hits: {}'.format(eval_res['hit'])])
+                summary.writerow(['Model Accuracy: {:.2f}%'.format(eval_res['accuracy'])])
+        return
+
+
