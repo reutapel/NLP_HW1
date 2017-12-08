@@ -5,6 +5,7 @@ import csv
 from datetime import datetime
 import logging
 import os.path
+from collections import defaultdict
 
 
 class MEMM:
@@ -53,10 +54,10 @@ class MEMM:
         self.features_vector_mapping = {}
 
         # final vector for Gradient dominator
-        self.history_tag_feature_vector_train = {}
+        self.history_tag_feature_vector_train = defaultdict(list)
 
         # final vector for Gradient denominator
-        self.history_tag_feature_vector_denominator = {}
+        self.history_tag_feature_vector_denominator = defaultdict(list)
 
         # build the type of features
         self.build_features_from_train()
@@ -491,11 +492,21 @@ class MEMM:
                     #     # plus_two_word = word_tag_list[word_in_seq_index + 2][0]
                     #     # plus_three_word = '#'
                     #     more_than_3 = False
-# TODO: why we have =\ indexes_vector
-                    indexes_vector = self.calculate_history_tag_indexes(first_tag, second_tag, second_word, plus_one_word,
-                                                                        current_word, current_tag)
-                    self.history_tag_feature_vector_train[(first_tag, second_tag,
-                                                           second_word, plus_one_word, current_word), current_tag] = indexes_vector
+
+
+                    current_history_tag = (first_tag, second_tag, second_word, plus_one_word, current_word), current_tag
+                    if current_history_tag in self.history_tag_feature_vector_train:
+                        self.history_tag_feature_vector_train[(first_tag, second_tag,
+                                                           second_word, plus_one_word, current_word), current_tag][0] += 1
+                    else:
+                        indexes_vector = self.calculate_history_tag_indexes(first_tag, second_tag, second_word,
+                                                                            plus_one_word,
+                                                                            current_word, current_tag)
+                        self.history_tag_feature_vector_train[(first_tag, second_tag,
+                                                           second_word, plus_one_word, current_word), current_tag].append(1)
+                        self.history_tag_feature_vector_train[(first_tag, second_tag,
+                                                           second_word, plus_one_word, current_word), current_tag].append(indexes_vector)
+
 
                     first_tag = second_tag
                     second_tag = current_tag
@@ -569,14 +580,29 @@ class MEMM:
                     #     more_than_3 = False
 
                     for possible_tag_of_current_word in self.word_tag_dict[current_word]:
+
                         if possible_tag_of_current_word == 'COUNT':
                             continue
-                        indexes_vector = self.calculate_history_tag_indexes(first_tag, second_tag, second_word,
-                                                                            plus_one_word,
-                                                                            current_word, possible_tag_of_current_word)
-                        self.history_tag_feature_vector_denominator[(first_tag, second_tag,
-                                                               second_word, plus_one_word,
-                                                               current_word), possible_tag_of_current_word] = indexes_vector
+
+                        current_history_tag = (first_tag, second_tag, second_word, plus_one_word,
+                                               current_word), possible_tag_of_current_word
+
+                        if current_history_tag in self.history_tag_feature_vector_denominator:
+                            self.history_tag_feature_vector_denominator[(first_tag, second_tag,
+                                                                   second_word, plus_one_word,
+                                                                   current_word), possible_tag_of_current_word][0] += 1
+                        else:
+
+                            indexes_vector = self.calculate_history_tag_indexes(first_tag, second_tag, second_word,
+                                                                                plus_one_word,
+                                                                                current_word,
+                                                                                possible_tag_of_current_word)
+                            self.history_tag_feature_vector_denominator[(first_tag, second_tag,
+                                                                   second_word, plus_one_word,
+                                                                   current_word), possible_tag_of_current_word].append(1)
+                            self.history_tag_feature_vector_denominator[(first_tag, second_tag,
+                                                                   second_word, plus_one_word,
+                                                                   current_word), possible_tag_of_current_word].append(indexes_vector)
                     first_tag = second_tag
                     second_tag = word_tag_tuple[1]
                     #zero_word = first_word

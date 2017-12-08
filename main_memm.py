@@ -10,7 +10,7 @@ import itertools
 import sys
 
 # open log connection
-directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
+directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -70,9 +70,9 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + 'data/train.wtag'
-    test_file = directory + 'data/train.wtag'
-    comp_file = directory + 'data/comp.words'
+    train_file = directory + 'data\\train_small.wtag'
+    test_file = directory + 'data\\train.wtag'
+    comp_file = directory + 'data\\comp.words'
     lamda_value = 1
     feature_type_dict = {#'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
                          #                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
