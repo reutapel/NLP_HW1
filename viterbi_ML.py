@@ -3,6 +3,7 @@ import math
 import itertools
 import time
 import logging
+import copy
 
 
 # directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
@@ -13,19 +14,16 @@ class viterbi(object):
         self.model = model
         self.transition_mat = {}
         self.emission_mat = {}
-        self.all_tags = model.most_common_tags
+        self.all_tags = copy.copy(model.most_common_tags)
         self.tags_indeces_dict = {tag: tag_index + 1 for (tag_index, tag) in enumerate(self.all_tags)}
-        self.tags_indeces_dict['#'] = 0
+        self.tags_indeces_dict['*'] = 0
         self.indeces_tags_dict = {tag_index + 1: tag for (tag_index, tag) in enumerate(self.all_tags)}
-        self.indeces_tags_dict[0] = '#'
+        self.indeces_tags_dict[0] = '*'
         self.weight = w
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
         self.history_tag_feature_vector = model.history_tag_feature_vector_denominator
-        # FIXME: this is what i've changed - if you do remove and than assignment (As it originly was),
-        # FIXME: the "most_common_tags_to_use" == NULL.
-        most_common_tags_to_use = model.most_common_tags
-        # FIXME: I've added the IFs for completeness, and as I got errors when I've trained on small data
+        most_common_tags_to_use = copy.copy(model.most_common_tags)
         if 'DT' in most_common_tags_to_use:
             most_common_tags_to_use.remove('DT')
         if 'IN' in most_common_tags_to_use:
@@ -71,23 +69,23 @@ class viterbi(object):
         sen_word_tag_predict = {}
 
         number_of_words = len(word_tag_list)
-        number_of_tags = len(self.all_tags) + 1  # +1 for the tag '#'
+        number_of_tags = len(self.all_tags) + 1  # +1 for the tag '*'
 
         # create pi and bp numpy
         pi = np.ones(shape=(number_of_words+1, number_of_tags, number_of_tags), dtype=float) * float("-inf")
         bp = np.ones(shape=(number_of_words+1, number_of_tags, number_of_tags), dtype='int32') * -1
 
         # initialization: # will be 0 in the numpy
-        pi[0, self.tags_indeces_dict['#'], self.tags_indeces_dict['#']] = 1.0
+        pi[0, self.tags_indeces_dict['*'], self.tags_indeces_dict['*']] = 1.0
 
         # algorithm:
         # k = 1,...,n find the pi and bp for the word in position k
         for k in range(1, number_of_words+1):
             if k == 1:  # the word in position 1
-                first_word, second_word = '#', '#'  # words in k-2 and in k-1
+                first_word, second_word = '*', '*'  # words in k-2 and in k-1
             elif k == 2:  # the word in position 2
                 second_word = word_tag_list[k - 2].split('_')[0]  # word in k-1
-                first_word = '#'  # word in k-2
+                first_word = '*'  # word in k-2
             elif k == 3:  # the word in position 3
                 second_word = word_tag_list[k - 2].split('_')[0]  # word in k-1
                 first_word = word_tag_list[k - 3].split('_')[0]  # word in k-2
@@ -97,7 +95,7 @@ class viterbi(object):
             if k in range(1, number_of_words):
                 plus_one_word = word_tag_list[k].split('_')[0]      # word k+1
             else:  # word in position n, no word in k+1
-                plus_one_word = '#'  # word in position k+1
+                plus_one_word = '*'  # word in position k+1
             current_word = word_tag_list[k - 1].split('_')[0]
             current_word_possible_tags, unseen_word = self.possible_tags(current_word)
             if unseen_word:  # never the seen the word in the train set
@@ -117,6 +115,9 @@ class viterbi(object):
 
                     # print int(u), int(v)
                     calc_argmax_pi = self.tags_indeces_dict[calc_argmax_pi]
+                    # TODO: debug Shimon - why fails in list limits
+                    if self.tags_indeces_dict[u] >= 42 or self.tags_indeces_dict[v] >= 42:
+                        print("tags_indeces_dict[u] is : {} ".format(self.tags_indeces_dict[u] + " tags_indeces_dict[v] is : {}".format(self.tags_indeces_dict[v]) ))
                     pi[k, self.tags_indeces_dict[u], self.tags_indeces_dict[v]] = calc_max_pi  # store the max(pi)
                     bp[k, self.tags_indeces_dict[u], self.tags_indeces_dict[v]] = calc_argmax_pi  # store the argmax(pi) (bp)
 
@@ -138,8 +139,8 @@ class viterbi(object):
 
     def possible_tags(self, word):
         unseen_word = False
-        if word == '#':
-            return [['#'], unseen_word]
+        if word == '*':
+            return [['*'], unseen_word]
         else:
             # if we never see the current word in the train
             if word not in self.word_tag_dict:
@@ -164,14 +165,13 @@ class viterbi(object):
             if ((first_tag, second_tag, second_word, plus_one_word, current_word), tag) in self.history_tag_feature_vector:
                 current_history_tag_feature_vector = self.history_tag_feature_vector[(first_tag, second_tag,
                                                                                       second_word, plus_one_word,
-                                                                                      current_word), tag]
+                                                                                      current_word), tag][1]
             # if the history and the tag do not exists in the history_tag_feature_vector from the MEMM
             else:
                 current_history_tag_feature_vector = self.model.calculate_history_tag_indexes(first_tag, second_tag,
                                                                                               second_word, plus_one_word,
                                                                                               current_word, tag)
             # calculate e^(weight*f(history, tag))
-            # FIXME: this where the bug occurs - you should use current_history_tag_feature_vector[1]
             numerators = math.exp(current_history_tag_feature_vector.dot(self.weight))
             sum_denominator += numerators  # sum for the denominator
             e_w_dot_history_tag_dict[tag] = numerators  # save in order to get e_w_dot_history_tag_dict[v]
