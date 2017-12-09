@@ -70,24 +70,22 @@ class MEMM:
             self.create_history_tag_feature_vector_train()
             # build the feature vector for all history tuples of words in train and their seen tags
             self.create_history_tag_feature_vector_denominator()
-        else:
-            self.feature_106 = self.read_dict_from_csv('feature_106')
-            # self.tags_dict = 
-            # self.word_tag_dict = self.read_dict_from_csv('words_tags_dict')
-            # self.tags_dict = self.read_dict_from_csv('tags_dict')
-            # self.feature_count =
-            # self.most_common_tags =
-            # self.features_vector = self.read_dict_from_csv('features_vector')
-            # self.features_vector_mapping = 2
-            # self.history_tag_feature_vector_train =
-            # self.history_tag_feature_vector_denominator =
-
+        # else:
+        #     self.feature_103 = self.read_dict_from_csv('feature_103')
+        #     self.word_tag_dict = self.read_dict_from_csv('words_tags_dict')
+        #     self.tags_dict = self.read_dict_from_csv('tags_dict')
+        #     self.feature_count =
+        #     self.most_common_tags =
+        #     self.features_vector = self.read_dict_from_csv('features_vector')
+        #     self.features_vector_mapping = 2
+        #     self.history_tag_feature_vector_train =
+        #     self.history_tag_feature_vector_denominator =
 
     def read_dict_from_csv(self, dict_name):
-        with open(self.dict_path + dict_name + '.csv', mode='rb') as infile:
+        with open(self.dict_path + dict_name + '.csv', mode='r') as infile:
             reader = csv.reader(infile)
-            with open(self.dict_path + dict_name + '.csv', mode='w') as outfile:
-                writer = csv.writer(outfile)
+            with open(self.dict_path + dict_name + '.csv', mode='a') as outfile:
+                #writer = csv.writer(outfile)
                 dict = {rows[0]: rows[1] for rows in reader}
         return dict
 
@@ -339,7 +337,7 @@ class MEMM:
                 feature_instances += 1
             print('{}: size of feature_100 - word+tag instances is: {}'.format(time.asctime(time.localtime(time.time())),
                   feature_instances))
-            logging.info('size of feature_100 - word+tag instances is: {}'.
+            logging.info('{}: size of feature_100 - word+tag instances is: {}'.
                          format(time.asctime(time.localtime(time.time())), feature_instances))
             feature_instances = 0
 
@@ -352,7 +350,7 @@ class MEMM:
                 feature_instances += 1
             print('{}: size of feature_101 - word suffix + tag instances is: {}'.format(time.asctime(time.localtime(time.time())),
                   feature_instances))
-            logging.info('size of feature_101 - word suffix + tag instances is: {}'.
+            logging.info('{}: size of feature_101 - word suffix + tag instances is: {}'.
                          format(time.asctime(time.localtime(time.time())), feature_instances))
             feature_instances = 0
 
@@ -365,7 +363,7 @@ class MEMM:
                 feature_instances += 1
             print('{}: size of feature_102 - word prefix +tag instances is: {}'.format(time.asctime(time.localtime(time.time())),
                   feature_instances))
-            logging.info('size of feature_102 - word prefix +tag instances is: {}'.
+            logging.info('{}: size of feature_102 - word prefix +tag instances is: {}'.
                          format(time.asctime(time.localtime(time.time())), feature_instances))
             feature_instances = 0
 
