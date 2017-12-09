@@ -4,6 +4,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.optimize import minimize
 import pickle
+import time
 import os
 
 # todo: change code
@@ -58,8 +59,8 @@ class Gradient(object):
                     # second_part_inner += (self.feature_vector_denominator[history_tag[0], tag_prime] * right_var)
             expected_counts += expected_counts_inner
 
-        print('finished descent step of gradient')
-        print(self.index_gradient)
+        print('{}: finished descent step of gradient #{}'.format(time.asctime(time.localtime(time.time())),
+                                                                 self.index_gradient))
         self.index_gradient += 1
 
         empirical_counts = empirical_counts.toarray()
@@ -93,13 +94,15 @@ class Gradient(object):
                 if (history_tag[0], tag) in self.feature_vector_denominator:
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
                     cur_res = feature_vector_current.dot(v)
-                    first_part_inner += (math.exp(cur_res)*feature_freq)    # multiple in freq of history
+                    print('cur_res = {}'.format(cur_res))
+                    print('e^cur_res = {}'.format(math.exp(cur_res)))
+                    first_part_inner += (math.exp(cur_res)*feature_freq)  # multiple in freq of history
 
                 else:
                     counter_miss_tag += 1
             normalizer_term += math.log(first_part_inner)
 
-        print('finished loss step #{0}'.format(self.index_of_loss))
+        print('{}: finished loss step #{}'.format(time.asctime(time.localtime(time.time())), self.index_of_loss))
         self.index_of_loss += 1
         return normalizer_term + self.lamda*norm_l2 - linear_term
 

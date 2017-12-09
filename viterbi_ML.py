@@ -22,10 +22,7 @@ class viterbi(object):
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
         self.history_tag_feature_vector = model.history_tag_feature_vector_denominator
-        # FIXME: this is what i've changed - if you do remove and than assignment (As it originly was),
-        # FIXME: the "most_common_tags_to_use" == NULL.
         most_common_tags_to_use = model.most_common_tags
-        # FIXME: I've added the IFs for completeness, and as I got errors when I've trained on small data
         if 'DT' in most_common_tags_to_use:
             most_common_tags_to_use.remove('DT')
         if 'IN' in most_common_tags_to_use:
@@ -164,14 +161,13 @@ class viterbi(object):
             if ((first_tag, second_tag, second_word, plus_one_word, current_word), tag) in self.history_tag_feature_vector:
                 current_history_tag_feature_vector = self.history_tag_feature_vector[(first_tag, second_tag,
                                                                                       second_word, plus_one_word,
-                                                                                      current_word), tag]
+                                                                                      current_word), tag][1]
             # if the history and the tag do not exists in the history_tag_feature_vector from the MEMM
             else:
                 current_history_tag_feature_vector = self.model.calculate_history_tag_indexes(first_tag, second_tag,
                                                                                               second_word, plus_one_word,
                                                                                               current_word, tag)
             # calculate e^(weight*f(history, tag))
-            # FIXME: this where the bug occurs - you should use current_history_tag_feature_vector[1]
             numerators = math.exp(current_history_tag_feature_vector.dot(self.weight))
             sum_denominator += numerators  # sum for the denominator
             e_w_dot_history_tag_dict[tag] = numerators  # save in order to get e_w_dot_history_tag_dict[v]
