@@ -2,15 +2,10 @@ from MEMM_try import MEMM
 from viterbi_ML import viterbi
 from evaluate import Evaluate
 import time
-import csv
-import pandas as pd
 from sklearn.model_selection import KFold
-from sklearn.model_selection import train_test_split
 from gradient_try import Gradient
 import logging
 from datetime import datetime
-import itertools
-import sys
 
 # open log connection
 # C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
@@ -19,9 +14,9 @@ LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
 
-def cross_validation(train_file):
+def cross_validation(train_file_for_cv):
     # Cross validation part 1: split the data to folds
-    text_file = open(train_file, 'r')
+    text_file = open(train_file_for_cv, 'r')
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=10, shuffle=True)
 
@@ -103,9 +98,9 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         viterbi_class = viterbi(memm_class, data_file=test_file_to_use, w=weights)
         viterbi_result = viterbi_class.viterbi_all_data
 
-        write_file_name = datetime.now().strftime(directory + 'file_results\\result_MEMM_' + test_type +
+        write_file_name = datetime.now().strftime(directory + 'file_results/result_MEMM_' + test_type +
                                                   '%d_%m_%Y_%H_%M.csv')
-        confusion_file_name = datetime.now().strftime(directory + 'confusion_files\\CM_MEMM_' + test_type +
+        confusion_file_name = datetime.now().strftime(directory + 'confusion_files/CM_MEMM_' + test_type +
                                                       '%d_%m_%Y_%H_%M.xls')
 
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
@@ -117,7 +112,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
                      format(time.asctime(time.localtime(time.time())), write_file_name, confusion_file_name))
 
         print(word_results_dictionary)
-        summary_file_name = '{0}analysis\\summary_{1}_{2.day}_{2.month}_{2.year}_{2.hour}_{2.minute}.csv'\
+        summary_file_name = '{0}analysis/summary_{1}_{2.day}_{2.month}_{2.year}_{2.hour}_{2.minute}.csv'\
             .format(directory, test_type, datetime.now())
         evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use, summary_file_name)
 
