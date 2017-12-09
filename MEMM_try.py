@@ -11,6 +11,7 @@ from collections import defaultdict
 class MEMM:
     """ Base class of modeling MEMM logic on the data"""
 
+#TODO: Add special characters handling
     # shared among all instances of the class'
     STOPS = ['._.']
 

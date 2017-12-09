@@ -13,7 +13,8 @@ import itertools
 import sys
 
 # open log connection
-directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
+# C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
+directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
