@@ -54,7 +54,7 @@ class Gradient(object):
             expected_counts_inner = 0
             for tag_prime, _ in self.tags_dict.items():
                 if (history_tag[0], tag_prime) in self.feature_vector_denominator:
-                    expected_counts_inner = tag_exp_dict[tag_prime] / sum_dict_denominator
+                    expected_counts_inner += tag_exp_dict[tag_prime] / sum_dict_denominator
                     # second_part_inner += (self.feature_vector_denominator[history_tag[0], tag_prime] * right_var)
             expected_counts += expected_counts_inner
 
