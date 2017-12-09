@@ -42,10 +42,10 @@ def cross_validation(train_file_for_cv):
             train_file_cv = directory + 'data/train_cv_file.wtag'
             test_file_cv = directory + 'data/test_cv_file.wtag'
             feature_type_dict_cv = {
-                # 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                #                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                #                  'feature_110']],
-                'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+                'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                 'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                 'feature_110']]}
+                #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
                 logging.info('{}: Start running fold number {} for lambda: {}'.
@@ -130,14 +130,14 @@ if __name__ == "__main__":
     train_file = directory + 'data\\train.wtag'
     test_file = directory + 'data\\test.wtag'
     comp_file = directory + 'data\\comp.words'
-    cv = False
+    cv = True
     if cv:
         cross_validation(train_file)
     else:
-        feature_type_dict = {# 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                             #                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                             #                  'feature_110']],
-                             'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+        feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                               'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                               'feature_110']]}
+                             #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda = 1
         for feature_type_name, feature_type_list in feature_type_dict.items():
