@@ -3,6 +3,7 @@ import math
 import itertools
 import time
 import logging
+import copy
 
 
 # directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
@@ -13,7 +14,7 @@ class viterbi(object):
         self.model = model
         self.transition_mat = {}
         self.emission_mat = {}
-        self.all_tags = model.most_common_tags
+        self.all_tags = copy.copy(model.most_common_tags)
         self.tags_indeces_dict = {tag: tag_index + 1 for (tag_index, tag) in enumerate(self.all_tags)}
         self.tags_indeces_dict['*'] = 0
         self.indeces_tags_dict = {tag_index + 1: tag for (tag_index, tag) in enumerate(self.all_tags)}
@@ -22,7 +23,7 @@ class viterbi(object):
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
         self.history_tag_feature_vector = model.history_tag_feature_vector_denominator
-        most_common_tags_to_use = model.most_common_tags
+        most_common_tags_to_use = copy.copy(model.most_common_tags)
         if 'DT' in most_common_tags_to_use:
             most_common_tags_to_use.remove('DT')
         if 'IN' in most_common_tags_to_use:

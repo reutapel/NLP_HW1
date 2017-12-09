@@ -94,7 +94,7 @@ class Gradient(object):
                 if (history_tag[0], tag) in self.feature_vector_denominator:
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
                     cur_res = feature_vector_current.dot(v)
-                    if cur_res > 1000:
+                    if self.index_of_loss == 6:
                         reut = 1
                     # print('cur_res = {}'.format(cur_res))
                     # print('e^cur_res = {}'.format(math.exp(cur_res)))

@@ -680,7 +680,7 @@ class MEMM:
 
         if 'feature_103' in self.features_combination:
             # feature_103 of tag trigram instances
-            feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag+ '_' + current_tag
+            feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag + '_' + current_tag
             if feature_103_key in self.feature_103:
                 feature_idx = self.features_vector[feature_103_key]
                 indexes_vector[feature_idx] = 1
