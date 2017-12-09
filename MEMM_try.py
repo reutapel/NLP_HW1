@@ -11,8 +11,9 @@ from collections import defaultdict
 class MEMM:
     """ Base class of modeling MEMM logic on the data"""
 
+#TODO: Add special characters handling
     # shared among all instances of the class'
-    STOPS = ['._.']
+    STOPS = ['._.','._. "_"']
 
     def __init__(self, directory, train_file, features_combination, history_tag_feature_vector=False):
 
@@ -30,7 +31,7 @@ class MEMM:
         for feature in features_combination:
             self.features_path_string += feature + '_'
 
-        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
+        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -59,17 +60,36 @@ class MEMM:
         # final vector for Gradient denominator
         self.history_tag_feature_vector_denominator = defaultdict(list)
 
-        # build the type of features
-        self.build_features_from_train()
-
-        # build the features_vector
-        self.build_features_vector()
-
         # creates history_tag_feature_vector
         if not history_tag_feature_vector:
-            # self.create_history_tag_feature_vector()
+            # build the type of features
+            self.build_features_from_train()
+            # build the features_vector
+            self.build_features_vector()
+            # build the feature vector for all history tuples of seen words and tags
             self.create_history_tag_feature_vector_train()
+            # build the feature vector for all history tuples of words in train and their seen tags
             self.create_history_tag_feature_vector_denominator()
+        else:
+            self.feature_106 = self.read_dict_from_csv('feature_106')
+            # self.tags_dict = 
+            # self.word_tag_dict = self.read_dict_from_csv('words_tags_dict')
+            # self.tags_dict = self.read_dict_from_csv('tags_dict')
+            # self.feature_count =
+            # self.most_common_tags =
+            # self.features_vector = self.read_dict_from_csv('features_vector')
+            # self.features_vector_mapping = 2
+            # self.history_tag_feature_vector_train =
+            # self.history_tag_feature_vector_denominator =
+
+
+    def read_dict_from_csv(self, dict_name):
+        with open(self.dict_path + dict_name + '.csv', mode='rb') as infile:
+            reader = csv.reader(infile)
+            with open(self.dict_path + dict_name + '.csv', mode='w') as outfile:
+                writer = csv.writer(outfile)
+                dict = {rows[0]: rows[1] for rows in reader}
+        return dict
 
     def build_features_from_train(self):
 
@@ -119,22 +139,22 @@ class MEMM:
                     #     self.words_dict[word_tag_tuple[0]] += 1
 
                     # count number of instances for each tag in train set
-                    if word_tag_tuple[1] not in self.tags_dict:
-                        self.tags_dict[word_tag_tuple[1]] = 1
-                    else:
+                    if word_tag_tuple[1] in self.tags_dict:
                         self.tags_dict[word_tag_tuple[1]] += 1
+                    else:
+                        self.tags_dict[word_tag_tuple[1]] = 1
 
                     # count number of all tags seen in train for each word
-                    if word_tag_tuple[0] not in self.word_tag_dict:
+                    if word_tag_tuple[0] in self.word_tag_dict:
+                        if word_tag_tuple[1] in self.word_tag_dict[word_tag_tuple[0]]:
+                            self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] += 1
+                        else:
+                            self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] = 1
+                        self.word_tag_dict[word_tag_tuple[0]]['COUNT'] += 1
+                    else:
                         self.word_tag_dict[word_tag_tuple[0]] = {}
                         self.word_tag_dict[word_tag_tuple[0]]['COUNT'] = 1
                         self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] = 1
-                    else:
-                        if word_tag_tuple[1] not in self.word_tag_dict[word_tag_tuple[0]]:
-                            self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] = 1
-                        else:
-                            self.word_tag_dict[word_tag_tuple[0]][word_tag_tuple[1]] += 1
-                        self.word_tag_dict[word_tag_tuple[0]]['COUNT'] += 1
 
                     current_word = word_tag_tuple[0]
                     current_tag = word_tag_tuple[1]
@@ -145,92 +165,70 @@ class MEMM:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
 
                     if 'feature_100' in self.features_combination:
-
                         # build feature_100 of word tag instance
                         feature_100_key = 'f100' + '_' + current_word + '_' + current_tag
-                        if feature_100_key not in self.feature_100:
-                            self.feature_100[feature_100_key] = 1
-                        else:
+                        if feature_100_key in self.feature_100:
                             self.feature_100[feature_100_key] += 1
+                        else:
+                            self.feature_100[feature_100_key] = 1
 
-# TODO: features 101-102, 105-107 and new ideas
+                    if 'feature_101' in self.features_combination:
+                        # build feature_101 of word suffix and current tag instance
+                        if len(current_word) > 3:
+                            feature_101_key = 'f101' + '_' + current_word[-3:] + '_' + current_tag
+                            if feature_101_key in self.feature_101:
+                                self.feature_101[feature_101_key] += 1
+                            else:
+                                self.feature_101[feature_101_key] = 1
 
-#                     if 'feature_101' in self.features_combination:
-#                         # build feature_101 of two tags instances
-#                         feature_101_key = second_tag + current_tag
-#                         if feature_101_key not in self.feature_101:
-#                             self.feature_2['f2' + '_' + feature_2_key] = 1
-#                         else:
-#                             self.feature_2['f2' + '_' + feature_2_key] += 1
-
-                    # if word_in_seq_index > 1:
-                    #     first_tag = word_tag_list[word_in_seq_index-2][1]
-                    #     second_tag = word_tag_list[word_in_seq_index-1][1]
-                    feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag + '_' + current_tag
-                    feature_104_key = 'f104' + '_' + second_tag + '_' + current_tag
+                    if 'feature_102' in self.features_combination:
+                        # build feature_102 of word prefix and current tag instance
+                        if len(current_word) > 3:
+                            feature_102_key = 'f102' + '_' + current_word[:3] + '_' + current_tag
+                            if feature_102_key in self.feature_102:
+                                self.feature_102[feature_102_key] += 1
+                            else:
+                                self.feature_102[feature_102_key] = 1
 
                     if 'feature_103' in self.features_combination:
                         # build feature_103 of tag trigram instance
-                        if feature_103_key not in self.feature_103:
-                            self.feature_103[feature_103_key] = 1
-                        else:
+                        feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag + '_' + current_tag
+                        if feature_103_key in self.feature_103:
                             self.feature_103[feature_103_key] += 1
+                        else:
+                            self.feature_103[feature_103_key] = 1
 
                     if 'feature_104' in self.features_combination:
                         # build feature_104 of tag bigram instance
-                        if feature_104_key not in self.feature_104:
-                            self.feature_104[feature_104_key] = 1
-                        else:
+                        feature_104_key = 'f104' + '_' + second_tag + '_' + current_tag
+                        if feature_104_key in self.feature_104:
                             self.feature_104[feature_104_key] += 1
+                        else:
+                            self.feature_104[feature_104_key] = 1
 
-                    # if 'feature_5' in self.features_combination:
-                    #     # build feature_5 of stop codon before current word
-                    #     if word_in_seq_index > 2:
-                    #         zero_word = word_tag_list[word_in_seq_index-3][0]
-                    #         # first_word = word_tag_list[word_in_seq_index-2][0]
-                    #         # second_word = word_tag_list[word_in_seq_index-1][0]
-                    #         feature_5_key = zero_word + first_word + second_word
-                    #         if feature_5_key in self.stop_keys:
-                    #             if feature_5_key not in self.feature_5:
-                    #                 self.feature_5['f5' + '_' + feature_5_key] = 1
-                    #             else:
-                    #                 self.feature_5['f5' + '_' + feature_5_key] += 1
-                    # if 'feature_6' in self.features_combination:
-                    #     # build feature_6 of stop codon after current word
-                    #     if len(word_tag_list)-word_in_seq_index > 3:
-                    #         plus_one_word = word_tag_list[word_in_seq_index + 1][0]
-                    #         plus_two_word = word_tag_list[word_in_seq_index + 2][0]
-                    #         plus_three_word = word_tag_list[word_in_seq_index + 3][0]
-                    #         feature_6_key = plus_one_word + plus_two_word + plus_three_word
-                    #         if feature_6_key in self.stop_keys:
-                    #             if feature_6_key not in self.feature_6:
-                    #                 self.feature_6['f6' + '_' + feature_6_key] = 1
-                    #             else:
-                    #                 self.feature_6['f6' + '_' + feature_6_key] += 1
-                    # if 'feature_7' in self.features_combination:
-                    #     # build feature_7 of start codon before current word
-                    #     if word_in_seq_index > 2:
-                    #         # zero_word = word_tag_list[word_in_seq_index - 3][0]
-                    #         # first_word = word_tag_list[word_in_seq_index-2][0]
-                    #         # second_word = word_tag_list[word_in_seq_index-1][0]
-                    #         feature_7_key = zero_word + first_word + second_word
-                    #         if feature_7_key in self.start_keys:
-                    #             if feature_7_key not in self.feature_7:
-                    #                 self.feature_7['f7' + '_' + feature_7_key] = 1
-                    #             else:
-                    #                 self.feature_7['f7' + '_' + feature_7_key] += 1
-                    # if 'feature_8' in self.features_combination:
-                    #     # build feature_8 of start codon after current word
-                    #     if len(word_tag_list) - word_in_seq_index > 3:
-                    #         # plus_one_word = word_tag_list[word_in_seq_index + 1][0]
-                    #         # plus_two_word = word_tag_list[word_in_seq_index + 2][0]
-                    #         # plus_three_word = word_tag_list[word_in_seq_index + 3][0]
-                    #         feature_8_key = plus_one_word + plus_two_word + plus_three_word
-                    #         if feature_8_key in self.start_keys:
-                    #             if feature_8_key not in self.feature_8:
-                    #                 self.feature_8['f8' + '_' + feature_8_key] = 1
-                    #             else:
-                    #                 self.feature_8['f8' + '_' + feature_8_key] += 1
+                    if 'feature_105' in self.features_combination:
+                        # build feature_105 of tag unigram
+                        feature_105_key = 'f105' + '_' + current_tag
+                        if feature_105_key in self.feature_105:
+                            self.feature_105[feature_105_key] += 1
+                        else:
+                            self.feature_105[feature_105_key] = 1
+
+                    if 'feature_106' in self.features_combination:
+                        # build feature_106 of previous word and current tag
+                        feature_106_key = 'f106' + '_' + second_word + '_' + current_tag
+                        if feature_106_key in self.feature_106:
+                            self.feature_106[feature_106_key] += 1
+                        else:
+                            self.feature_106[feature_106_key] = 1
+
+                    if 'feature_107' in self.features_combination:
+                        # build feature_107 of next word and current tag
+                        feature_107_key = 'f107' + '_' + plus_one_word + '_' + current_tag
+                        if feature_107_key in self.feature_107:
+                            self.feature_107[feature_107_key] += 1
+                        else:
+                            self.feature_107[feature_107_key] = 1
 
                     # update tags and word
                     first_tag = second_tag
@@ -271,6 +269,20 @@ class MEMM:
                 w.writerow([key, val])
             print('{}: finished saving feature_100'.format(time.asctime(time.localtime(time.time()))))
 
+        if 'feature_101' in self.features_combination:
+            logging.info('saving feature_101')
+            w = csv.writer(open( self.dict_path + 'feature_101' + '.csv', "w"))
+            for key, val in self.feature_101.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_101'.format(time.asctime(time.localtime(time.time()))))
+
+        if 'feature_102' in self.features_combination:
+            logging.info('saving feature_102')
+            w = csv.writer(open( self.dict_path + 'feature_102' + '.csv', "w"))
+            for key, val in self.feature_102.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_102'.format(time.asctime(time.localtime(time.time()))))
+
         if 'feature_103' in self.features_combination:
             logging.info('saving feature_103')
             w = csv.writer(open( self.dict_path + 'feature_103' + '.csv', "w"))
@@ -285,6 +297,28 @@ class MEMM:
                 w.writerow([key, val])
             print('{}: finished saving feature_104'.format(time.asctime(time.localtime(time.time()))))
 
+        if 'feature_105' in self.features_combination:
+            logging.info('saving feature_105')
+            w = csv.writer(open( self.dict_path + 'feature_105' + '.csv', "w"))
+            for key, val in self.feature_105.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_105'.format(time.asctime(time.localtime(time.time()))))
+
+        if 'feature_106' in self.features_combination:
+            logging.info('saving feature_106')
+            w = csv.writer(open( self.dict_path + 'feature_106' + '.csv', "w"))
+            for key, val in self.feature_106.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_106'.format(time.asctime(time.localtime(time.time()))))
+
+        if 'feature_107' in self.features_combination:
+            logging.info('saving feature_107')
+            w = csv.writer(open( self.dict_path + 'feature_107' + '.csv', "w"))
+            for key, val in self.feature_107.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_107'.format(time.asctime(time.localtime(time.time()))))
+
+
         return
 
     def build_features_vector(self):
@@ -295,38 +329,6 @@ class MEMM:
 
         features_vector_idx = 0
         feature_instances = 0
-
-        # if 'feature_word_tag' in self.features_combination:
-        #     # create first type of feature in features_vector which is word and tag instances
-        #     for word, tag_list in self.word_tag_dict.items():
-        #         for tag in tag_list:
-        #             key = word + '_' + tag
-        #             self.features_vector['wt' + '_' + key] = features_vector_idx
-        #             self.features_vector_mapping[features_vector_idx] = key
-        #             features_vector_idx += 1
-        #             feature_instances += 1
-        #     print('size of feature word and tag instances is: {}'.format(feature_instances))
-        #     feature_instances = 0
-        #
-        # if 'feature_word' in self.features_combination:
-        #     # create second type of feature in features_vector which is instances of words
-        #     for word in self.words_dict.keys():
-        #         self.features_vector['w' + '_' + word] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = word
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature instances of words is: {}'.format(feature_instances))
-        #     feature_instances = 0
-        #
-        # if 'feature_tag' in self.features_combination:
-        #     # create third type of feature in features_vector which is instances of tags
-        #     for tag in self.tags_dict.keys():
-        #         self.features_vector['t' + '_' + tag] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = tag
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature instances of tags instances is: {}'.format(feature_instances))
-        #     feature_instances = 0
 
         if 'feature_100' in self.features_combination:
             # create first type of feature in features_vector which is word tag instances
@@ -341,15 +343,31 @@ class MEMM:
                          format(time.asctime(time.localtime(time.time())), feature_instances))
             feature_instances = 0
 
-        # if 'feature_2' in self.features_combination:
-        #     # create fifth type of feature in features_vector which is two tags instances
-        #     for two_tags in self.feature_2.keys():
-        #         self.features_vector[two_tags] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = two_tags
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature two tags instances is: {}'.format(feature_instances))
-        #     feature_instances = 0
+        if 'feature_101' in self.features_combination:
+            # create second type of feature in features_vector which is word suffix and tag instances
+            for word_suffix_tag in self.feature_101.keys():
+                self.features_vector[word_suffix_tag] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = word_suffix_tag
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_101 - word suffix + tag instances is: {}'.format(time.asctime(time.localtime(time.time())),
+                  feature_instances))
+            logging.info('size of feature_101 - word suffix + tag instances is: {}'.
+                         format(time.asctime(time.localtime(time.time())), feature_instances))
+            feature_instances = 0
+
+        if 'feature_102' in self.features_combination:
+            # create third type of feature in features_vector which is word prefix tag instances
+            for word_prefix_tag in self.feature_102.keys():
+                self.features_vector[word_prefix_tag] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = word_prefix_tag
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_102 - word prefix +tag instances is: {}'.format(time.asctime(time.localtime(time.time())),
+                  feature_instances))
+            logging.info('size of feature_102 - word prefix +tag instances is: {}'.
+                         format(time.asctime(time.localtime(time.time())), feature_instances))
+            feature_instances = 0
 
         if 'feature_103' in self.features_combination:
             # create forth type of feature in features_vector which is tag trigram instances
@@ -365,7 +383,7 @@ class MEMM:
             feature_instances = 0
 
         if 'feature_104' in self.features_combination:
-            # create seventh type of feature in features_vector which is amino instances
+            # create fifth type of feature in features_vector which is tag bigram instances
             for tags_bigram in self.feature_104.keys():
                 self.features_vector[tags_bigram] = features_vector_idx
                 self.features_vector_mapping[features_vector_idx] = tags_bigram
@@ -375,48 +393,48 @@ class MEMM:
                                                                         feature_instances))
             logging.info('{}: size of feature_104 - tags bigram is: {}'.format(time.asctime(time.localtime(time.time())),
                                                                            feature_instances))
-
             feature_instances = 0
 
-        # if 'feature_5' in self.features_combination:
-        #     # create eight type of feature in features_vector which is stop codon before
-        #     for stop_before in self.feature_5.keys():
-        #         self.features_vector[stop_before] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = stop_before
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature stop codon before is: {}'.format(feature_instances))
-        #     feature_instances = 0
-        #
-        # if 'feature_6' in self.features_combination:
-        #     # create ninth type of feature in features_vector which is stop codon after
-        #     for stop_after in self.feature_6.keys():
-        #         self.features_vector[stop_after] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = stop_after
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature stop codon after is: {}'.format(feature_instances))
-        #     feature_instances = 0
-        #
-        # if 'feature_7' in self.features_combination:
-        #     # create tenth type of feature in features_vector which is start codon before
-        #     for start_before in self.feature_7.keys():
-        #         self.features_vector[start_before] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = start_before
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature start codon before is: {}'.format(feature_instances))
-        #     feature_instances = 0
-        #
-        # if 'feature_8' in self.features_combination:
-        #     # create eleventh type of feature in features_vector which is start codon after
-        #     for start_after in self.feature_8.keys():
-        #         self.features_vector[start_after] = features_vector_idx
-        #         self.features_vector_mapping[features_vector_idx] = start_after
-        #         features_vector_idx += 1
-        #         feature_instances += 1
-        #     print('size of feature start codon after is: {}'.format(feature_instances))
-        #     feature_instances = 0
+        if 'feature_105' in self.features_combination:
+            # create sixth type of feature in features_vector which is tag unigram instances
+            for tags_unigram in self.feature_105.keys():
+                self.features_vector[tags_unigram] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = tags_unigram
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_105 - tags unigram is: {}'.format(time.asctime(time.localtime(time.time())),
+                                                                        feature_instances))
+            logging.info('{}: size of feature_105 - tags unigram is: {}'.format(time.asctime(time.localtime(time.time())),
+                                                                           feature_instances))
+            feature_instances = 0
+
+        if 'feature_106' in self.features_combination:
+            # create seventh type of feature in features_vector which is previous word and current tag instances
+            for prev_word_cur_tag in self.feature_106.keys():
+                self.features_vector[prev_word_cur_tag] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = prev_word_cur_tag
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_106 - previous word and current tag is: {}'.format(time.asctime(time.localtime(time.time())),
+                                                                        feature_instances))
+            logging.info('{}: size of feature_106 - previous word and current tag is: {}'.format(time.asctime(time.localtime(time.time())),
+                                                                           feature_instances))
+            feature_instances = 0
+
+        if 'feature_107' in self.features_combination:
+            # create eight type of feature in features_vector which is next word and current tag instances
+            for next_word_cur_tag in self.feature_107.keys():
+                self.features_vector[next_word_cur_tag] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = next_word_cur_tag
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_107 - next word and current tag is: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            logging.info('{}: size of feature_107 - next word and current tag is: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            feature_instances = 0
 
         print('{}: finished building features vector in : {}'.format(time.asctime(time.localtime(time.time())),
               time.time() - start_time))
@@ -489,7 +507,6 @@ class MEMM:
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
 
-
                     # if len(word_tag_list) - word_in_seq_index > 3:
                     #     plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
                     #     #plus_two_word = word_tag_list[word_in_seq_index + 2][0]
@@ -499,7 +516,6 @@ class MEMM:
                     #     # plus_two_word = word_tag_list[word_in_seq_index + 2][0]
                     #     # plus_three_word = '*'
                     #     more_than_3 = False
-
 
                     current_history_tag = (first_tag, second_tag, second_word, plus_one_word, current_word), current_tag
                     if current_history_tag in self.history_tag_feature_vector_train:
@@ -641,31 +657,28 @@ class MEMM:
 
         indexes_vector = np.zeros(shape=len(self.features_vector), dtype=int)
 
-        # if 'feature_word_tag' in self.features_combination:
-        #     # first type of feature is word and tag instances
-        #     word_tag = 'wt' + '_' + current_word + '_' + current_tag
-        #     if word_tag in self.features_vector:
-        #         feature_idx = self.features_vector[word_tag]
-        #         indexes_vector[feature_idx] = 1
-        #
-        # if 'feature_word' in self.features_combination:
-        #     # second type of feature is word instances
-        #     if 'w' + '_' + current_word in self.features_vector:
-        #         feature_idx = self.features_vector['w' + '_' + current_word]
-        #         indexes_vector[feature_idx] = 1
-        #
-        # if 'feature_tag' in self.features_combination:
-        #     # third type of feature is tag instances
-        #     if 't' + '_' + current_tag in self.features_vector:
-        #         feature_idx = self.features_vector['t' + '_' + current_tag]
-        #         indexes_vector[feature_idx] = 1
-
         if 'feature_100' in self.features_combination:
             # feature_100 of three tags instances
             feature_100_key = 'f100' + '_' + current_word + '_' + current_tag
             if feature_100_key in self.feature_100:
                 feature_idx = self.features_vector[feature_100_key]
                 indexes_vector[feature_idx] = 1
+
+        if 'feature_101' in self.features_combination:
+            # feature_101 of word suffix and tag instances
+            if len(current_word) > 3:
+                feature_101_key = 'f101' + '_' + current_word[-3:] + '_' + current_tag
+                if feature_101_key in self.feature_101:
+                    feature_idx = self.features_vector[feature_101_key]
+                    indexes_vector[feature_idx] = 1
+
+        if 'feature_102' in self.features_combination:
+            # feature_102 of word prefix and tag instances
+            if len(current_word) > 3:
+                feature_102_key = 'f102' + '_' + current_word[:3] + '_' + current_tag
+                if feature_102_key in self.feature_102:
+                    feature_idx = self.features_vector[feature_102_key]
+                    indexes_vector[feature_idx] = 1
 
         if 'feature_103' in self.features_combination:
             # feature_103 of tag trigram instances
@@ -681,43 +694,27 @@ class MEMM:
                 feature_idx = self.features_vector[feature_104_key]
                 indexes_vector[feature_idx] = 1
 
-        # if 'feature_4' in self.features_combination:
-        #     # feature_4 of amino acids instances
-        #     three_words = first_word + second_word + current_word
-        #     if three_words in self.amino_mapping.keys():
-        #         feature_4_key = 'f4' + '_' + self.amino_mapping[three_words]
-        #         if feature_4_key in self.feature_4:
-        #             feature_idx = self.features_vector[feature_4_key]
-        #             indexes_vector[feature_idx] = 1
-        #
-        # if 'feature_5' in self.features_combination:
-        #     # feature_5 of stop codon before current word
-        #     feature_5_key = 'f5' + '_' + zero_word + first_word + second_word
-        #     if feature_5_key in self.feature_5:
-        #         feature_idx = self.features_vector[feature_5_key]
-        #         indexes_vector[feature_idx] = 1
-        #
-        # if 'feature_6' in self.features_combination:
-        #     # feature_6 of stop codon after current word
-        #     feature_6_key = 'f6' + '_' + plus_one_word + plus_two_word + plus_three_word
-        #     if feature_6_key in self.feature_6:
-        #         feature_idx = self.features_vector[feature_6_key]
-        #         indexes_vector[feature_idx] = 1
-        #
-        # if 'feature_7' in self.features_combination:
-        #     # feature_7 of start codon before current word
-        #     feature_7_key = 'f7' + '_' + zero_word + first_word + second_word
-        #     if feature_7_key in self.feature_7:
-        #         feature_idx = self.features_vector[feature_7_key]
-        #         indexes_vector[feature_idx] = 1
-        #
-        # if 'feature_8' in self.features_combination:
-        #     # feature_8 of start codon after current word
-        #     feature_8_key = 'f8' + '_' + plus_one_word + plus_two_word + plus_three_word
-        #     if feature_8_key in self.feature_8:
-        #         feature_idx = self.features_vector[feature_8_key]
-        #         indexes_vector[feature_idx] = 1
+        if 'feature_105' in self.features_combination:
+            # feature_105 of tag instances
+            feature_105_key = 'f105' + '_' + current_tag
+            if feature_105_key in self.feature_105:
+                feature_idx = self.features_vector[feature_105_key]
+                indexes_vector[feature_idx] = 1
 
-        # efficient representation
+        if 'feature_106' in self.features_combination:
+            # feature_106 of previous word and current tag instances
+            feature_106_key = 'f106' + '_' + second_word + '_' + current_tag
+            if feature_106_key in self.feature_106:
+                feature_idx = self.features_vector[feature_106_key]
+                indexes_vector[feature_idx] = 1
+
+        if 'feature_107' in self.features_combination:
+            # feature_107 of next word and current tag instances
+            feature_107_key = 'f107' + '_' + plus_one_word + '_' + current_tag
+            if feature_107_key in self.feature_107:
+                feature_idx = self.features_vector[feature_107_key]
+                indexes_vector[feature_idx] = 1
+
+        # efficient representation for sparse vectors that main entrances are zero
         indexes_vector_zip = csr_matrix(indexes_vector)
         return indexes_vector_zip

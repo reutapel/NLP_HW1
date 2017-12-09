@@ -115,6 +115,9 @@ class viterbi(object):
 
                     # print int(u), int(v)
                     calc_argmax_pi = self.tags_indeces_dict[calc_argmax_pi]
+                    # TODO: debug Shimon - why fails in list limits
+                    if self.tags_indeces_dict[u] >= 42 or self.tags_indeces_dict[v] >= 42:
+                        print("tags_indeces_dict[u] is : {} ".format(self.tags_indeces_dict[u] + " tags_indeces_dict[v] is : {}".format(self.tags_indeces_dict[v]) ))
                     pi[k, self.tags_indeces_dict[u], self.tags_indeces_dict[v]] = calc_max_pi  # store the max(pi)
                     bp[k, self.tags_indeces_dict[u], self.tags_indeces_dict[v]] = calc_argmax_pi  # store the argmax(pi) (bp)
 
