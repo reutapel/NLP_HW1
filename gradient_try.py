@@ -94,11 +94,7 @@ class Gradient(object):
                 if (history_tag[0], tag) in self.feature_vector_denominator:
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
                     cur_res = feature_vector_current.dot(v)
-                    if self.index_of_loss == 6:
-                        reut = 1
-                    # print('cur_res = {}'.format(cur_res))
-                    # print('e^cur_res = {}'.format(math.exp(cur_res)))
-                    first_part_inner += (math.exp(cur_res) * feature_freq)  # multiple in freq of history
+                    first_part_inner += (math.exp(cur_res)*feature_freq)    # multiple in freq of history
 
                 else:
                     counter_miss_tag += 1
@@ -124,7 +120,7 @@ class Gradient(object):
             else:
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 1, 'factr': 1e2})
+                          options={'disp': True, 'maxiter': 500, 'ftol': 1e2})
 
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))
