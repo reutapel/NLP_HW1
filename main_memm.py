@@ -126,7 +126,7 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + 'data/train.wtag'
+    train_file = directory + 'data/train_small.wtag'
     test_file = directory + 'data/test.wtag'
     comp_file = directory + 'data/comp.words'
     cv = False
@@ -138,7 +138,7 @@ if __name__ == "__main__":
                              #                  'feature_110']],
                              'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
-        lamda = 10.0
+        lamda = 1
         for feature_type_name, feature_type_list in feature_type_dict.items():
             main(train_file, test_file, 'test', feature_type_list, lamda)
 

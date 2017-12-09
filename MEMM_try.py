@@ -95,11 +95,11 @@ class MEMM:
                 # logging.info(word_tag_list)
 
                 # define two first and three last word_tags for some features
-                first_tag = '#'
-                second_tag = '#'
+                first_tag = '*'
+                second_tag = '*'
                 #zero_word = ''
                 #first_word = ''
-                second_word = '#'
+                second_word = '*'
                 plus_one_word = ''
                 #plus_two_word = ''
                 #plus_three_word = ''
@@ -140,7 +140,7 @@ class MEMM:
                     current_tag = word_tag_tuple[1]
 
                     if (word_in_seq_index + 1) == len(word_tag_list):
-                        plus_one_word = '#'
+                        plus_one_word = '*'
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
 
@@ -462,11 +462,11 @@ class MEMM:
                 # print(word_tag_list)
                 # define three first word_tags for some features
 
-                first_tag = '#'
-                second_tag = '#'
-                #zero_word = '#'
-                #first_word = '#'
-                second_word = '#'
+                first_tag = '*'
+                second_tag = '*'
+                #zero_word = '*'
+                #first_word = '*'
+                second_word = '*'
                 plus_one_word = ''
                 #plus_two_word = ''
                 #plus_three_word = ''
@@ -485,7 +485,7 @@ class MEMM:
                     current_tag = word_tag_tuple[1]
 
                     if (word_in_seq_index + 1) == len(word_tag_list):
-                        plus_one_word = '#'
+                        plus_one_word = '*'
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
 
@@ -497,7 +497,7 @@ class MEMM:
                     # elif more_than_3:
                     #     # plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
                     #     # plus_two_word = word_tag_list[word_in_seq_index + 2][0]
-                    #     # plus_three_word = '#'
+                    #     # plus_three_word = '*'
                     #     more_than_3 = False
 
 
@@ -556,11 +556,11 @@ class MEMM:
                 word_tag_list = sequence.split(' ')
 
                 # define three first word_tags for some features
-                first_tag = '#'
-                second_tag = '#'
-                #zero_word = '#'
-                #first_word = '#'
-                second_word = '#'
+                first_tag = '*'
+                second_tag = '*'
+                #zero_word = '*'
+                #first_word = '*'
+                second_word = '*'
                 plus_one_word = ''
                 #plus_two_word = ''
                 #plus_three_word = ''
@@ -573,7 +573,7 @@ class MEMM:
                     current_word = word_tag_tuple[0]
 
                     if (word_in_seq_index + 1) == len(word_tag_list):
-                        plus_one_word = '#'
+                        plus_one_word = '*'
                     else:
                         plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
 
@@ -585,7 +585,7 @@ class MEMM:
                     # elif more_than_3:
                     #     plus_one_word = word_tag_list[word_in_seq_index + 1].split('_')[0]
                     #     plus_two_word = word_tag_list[word_in_seq_index + 2][0]
-                    #     plus_three_word = '#'
+                    #     plus_three_word = '*'
                     #     more_than_3 = False
 
                     for possible_tag_of_current_word in self.word_tag_dict[current_word]:
@@ -669,7 +669,7 @@ class MEMM:
 
         if 'feature_103' in self.features_combination:
             # feature_103 of tag trigram instances
-            feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag+ '_' + current_tag
+            feature_103_key = 'f103' + '_' + first_tag + '_' + second_tag + '_' + current_tag
             if feature_103_key in self.feature_103:
                 feature_idx = self.features_vector[feature_103_key]
                 indexes_vector[feature_idx] = 1
