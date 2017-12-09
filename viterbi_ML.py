@@ -15,9 +15,9 @@ class viterbi(object):
         self.emission_mat = {}
         self.all_tags = model.most_common_tags
         self.tags_indeces_dict = {tag: tag_index + 1 for (tag_index, tag) in enumerate(self.all_tags)}
-        self.tags_indeces_dict['#'] = 0
+        self.tags_indeces_dict['*'] = 0
         self.indeces_tags_dict = {tag_index + 1: tag for (tag_index, tag) in enumerate(self.all_tags)}
-        self.indeces_tags_dict[0] = '#'
+        self.indeces_tags_dict[0] = '*'
         self.weight = w
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
@@ -68,23 +68,23 @@ class viterbi(object):
         sen_word_tag_predict = {}
 
         number_of_words = len(word_tag_list)
-        number_of_tags = len(self.all_tags) + 1  # +1 for the tag '#'
+        number_of_tags = len(self.all_tags) + 1  # +1 for the tag '*'
 
         # create pi and bp numpy
         pi = np.ones(shape=(number_of_words+1, number_of_tags, number_of_tags), dtype=float) * float("-inf")
         bp = np.ones(shape=(number_of_words+1, number_of_tags, number_of_tags), dtype='int32') * -1
 
         # initialization: # will be 0 in the numpy
-        pi[0, self.tags_indeces_dict['#'], self.tags_indeces_dict['#']] = 1.0
+        pi[0, self.tags_indeces_dict['*'], self.tags_indeces_dict['*']] = 1.0
 
         # algorithm:
         # k = 1,...,n find the pi and bp for the word in position k
         for k in range(1, number_of_words+1):
             if k == 1:  # the word in position 1
-                first_word, second_word = '#', '#'  # words in k-2 and in k-1
+                first_word, second_word = '*', '*'  # words in k-2 and in k-1
             elif k == 2:  # the word in position 2
                 second_word = word_tag_list[k - 2].split('_')[0]  # word in k-1
-                first_word = '#'  # word in k-2
+                first_word = '*'  # word in k-2
             elif k == 3:  # the word in position 3
                 second_word = word_tag_list[k - 2].split('_')[0]  # word in k-1
                 first_word = word_tag_list[k - 3].split('_')[0]  # word in k-2
@@ -94,7 +94,7 @@ class viterbi(object):
             if k in range(1, number_of_words):
                 plus_one_word = word_tag_list[k].split('_')[0]      # word k+1
             else:  # word in position n, no word in k+1
-                plus_one_word = '#'  # word in position k+1
+                plus_one_word = '*'  # word in position k+1
             current_word = word_tag_list[k - 1].split('_')[0]
             current_word_possible_tags, unseen_word = self.possible_tags(current_word)
             if unseen_word:  # never the seen the word in the train set
@@ -138,8 +138,8 @@ class viterbi(object):
 
     def possible_tags(self, word):
         unseen_word = False
-        if word == '#':
-            return [['#'], unseen_word]
+        if word == '*':
+            return [['*'], unseen_word]
         else:
             # if we never see the current word in the train
             if word not in self.word_tag_dict:

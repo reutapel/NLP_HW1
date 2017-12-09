@@ -87,16 +87,18 @@ class Gradient(object):
             linear_term += float(feature_vector.dot(v))  # linear term
 
             # 2: 1-to-n log of sum of exp. of v*f(x,y') for all y' in Y
-            first_part_inner = 0
-            counter_miss_tag = 0
+            first_part_inner = 0.0
+            counter_miss_tag = 0.0
             for tag in self.tags_dict:
 
                 if (history_tag[0], tag) in self.feature_vector_denominator:
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
                     cur_res = feature_vector_current.dot(v)
-                    print('cur_res = {}'.format(cur_res))
-                    print('e^cur_res = {}'.format(math.exp(cur_res)))
-                    first_part_inner += (math.exp(cur_res)*feature_freq)  # multiple in freq of history
+                    if cur_res > 1000:
+                        reut = 1
+                    # print('cur_res = {}'.format(cur_res))
+                    # print('e^cur_res = {}'.format(math.exp(cur_res)))
+                    first_part_inner += (math.exp(cur_res) * feature_freq)  # multiple in freq of history
 
                 else:
                     counter_miss_tag += 1
@@ -122,7 +124,7 @@ class Gradient(object):
             else:
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 500, 'ftol': 1e2})
+                          options={'disp': True, 'maxiter': 1, 'factr': 1e2})
 
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))

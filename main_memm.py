@@ -139,7 +139,7 @@ if __name__ == "__main__":
                                                'feature_110']]}
                              #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
-        lamda = 1
+        lamda = 10.0
         for feature_type_name, feature_type_list in feature_type_dict.items():
             main(train_file, test_file, 'test', feature_type_list, lamda)
 
