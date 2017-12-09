@@ -164,7 +164,7 @@ class viterbi(object):
             if ((first_tag, second_tag, second_word, plus_one_word, current_word), tag) in self.history_tag_feature_vector:
                 current_history_tag_feature_vector = self.history_tag_feature_vector[(first_tag, second_tag,
                                                                                       second_word, plus_one_word,
-                                                                                      current_word), tag]
+                                                                                      current_word), tag][1]
             # if the history and the tag do not exists in the history_tag_feature_vector from the MEMM
             else:
                 current_history_tag_feature_vector = self.model.calculate_history_tag_indexes(first_tag, second_tag,

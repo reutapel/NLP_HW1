@@ -93,6 +93,8 @@ class Gradient(object):
                 if (history_tag[0], tag) in self.feature_vector_denominator:
                     feature_freq, feature_vector_current = self.feature_vector_denominator[history_tag[0], tag]
                     cur_res = feature_vector_current.dot(v)
+                    print('cur_res = {}'.format(cur_res))
+                    print('e^cur_res = {}'.format(math.exp(cur_res)))
                     first_part_inner += (math.exp(cur_res)*feature_freq)    # multiple in freq of history
 
                 else:
