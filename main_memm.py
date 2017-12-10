@@ -20,33 +20,39 @@ def cross_validation(train_file_for_cv):
     # Cross validation part 1: split the data to folds
     text_file = open(train_file_for_cv, 'r')
     train_data = text_file.read().split('\n')
-    kf = KFold(n_splits=10, shuffle=True)
+    kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [0.5, 1.0, 2.0, 10.0]
+    lambda_list = [10.0,100.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
-        logging.info('{}: Start running 10-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
+        logging.info('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
                                                                           lamda))
-        print('{}: Start running 10-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())), lamda))
+        print('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())), lamda))
         k = 0
 
         for train_index, test_index in kf.split(train_data):
             # Create the train and test data according to the folds, and save the new data
             train_k_fold = list(train_data[i] for i in train_index)
             test_k_fold = list(train_data[i] for i in test_index)
-            with open('data/train_cv_file.wtag', 'w', newline='\n') as file:
+            train_file_cv = datetime.now().strftime(directory + 'data/train_cv_file_%d_%m_%Y_%H_%M.wtag')
+            test_file_cv = datetime.now().strftime(directory + 'data/test_cv_file_%d_%m_%Y_%H_%M.wtag')
+            with open(train_file_cv, 'w', newline='\n') as file:
                 for sentence in train_k_fold:
                     file.write(str(sentence) + '\n')
-            with open('data/test_cv_file.wtag', 'w', newline='\n') as file:
+            with open(test_file_cv, 'w', newline='\n') as file:
                 for sentence in test_k_fold:
                     file.write(str(sentence) + '\n')
 
-            train_file_cv = directory + 'data/train_cv_file.wtag'
-            test_file_cv = directory + 'data/test_cv_file.wtag'
             feature_type_dict_cv = {
                 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                 'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                 'feature_110','feature_111']]}
+                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                  'feature_110', 'feature_111'],
+                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                  'feature_105', 'feature_106', 'feature_107'],
+                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109'],
+                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                  'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111']]}
                 #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
@@ -140,7 +146,13 @@ if __name__ == "__main__":
     else:
         feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
                                               'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                              'feature_110','feature_111']]}
+                                              'feature_110','feature_111'],
+                                               ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                              'feature_105', 'feature_106', 'feature_107'],
+                                               ['feature_100', 'feature_101','feature_102', 'feature_103','feature_104',
+                                                'feature_105', 'feature_106', 'feature_107','feature_108', 'feature_109'],
+                                               ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                              'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
                              #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda = 1.0

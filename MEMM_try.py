@@ -6,6 +6,7 @@ from datetime import datetime
 import logging
 import os.path
 from collections import defaultdict
+import string
 
 
 class MEMM:
@@ -23,6 +24,7 @@ class MEMM:
         self.most_common_tags = []
         self.directory = directory
         self.train_file = train_file
+        self.invalidChars = set(string.punctuation)
         # self.is_create_history_tag_feature_vector = history_tag_feature_vector
         # LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM\\LogFileMEMM_%d_%m_%Y_%H_%M.log')
         # logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
@@ -31,7 +33,7 @@ class MEMM:
         for feature in features_combination:
             self.features_path_string += feature + '_'
 
-        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
+        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -246,11 +248,12 @@ class MEMM:
                         # build feature_109 of all word contains upper case save it's tag as candidate for upper case words
                         # (excluding chars like . , etc.)
                         if not current_word.islower() and not current_word.isupper():
-                            feature_109_key = 'f109' + '_' + current_tag
-                            if feature_109_key in self.feature_109:
-                                self.feature_109[feature_109_key] += 1
-                            else:
-                                self.feature_109[feature_109_key] = 1
+                            if current_word not in self.invalidChars and not current_word.isdigit():
+                                feature_109_key = 'f109' + '_' + current_tag
+                                if feature_109_key in self.feature_109:
+                                    self.feature_109[feature_109_key] += 1
+                                else:
+                                    self.feature_109[feature_109_key] = 1
 
                     if 'feature_110' in self.features_combination:
                         # build feature_110 of all word which are all numbers
@@ -852,10 +855,11 @@ class MEMM:
         if 'feature_109' in self.features_combination:
             # feature_109 of current word contains upper instances
             if not current_word.islower() and not current_word.isupper():
-                feature_109_key = 'f109' + '_' + current_tag
-                if feature_109_key in self.feature_109:
-                    feature_idx = self.features_vector[feature_109_key]
-                    indexes_vector[feature_idx] = 1
+                if current_word not in self.invalidChars and not current_word.isdigit():
+                    feature_109_key = 'f109' + '_' + current_tag
+                    if feature_109_key in self.feature_109:
+                        feature_idx = self.features_vector[feature_109_key]
+                        indexes_vector[feature_idx] = 1
 
         if 'feature_110' in self.features_combination:
             # feature_110 of current word is number instances
