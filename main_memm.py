@@ -22,7 +22,7 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=10, shuffle=True)
 
-    lambda_list = [0.5, 1.0, 2.0, 10.0]
+    lambda_list = [100.0,10.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
         logging.info('{}: Start running 10-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
