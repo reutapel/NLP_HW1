@@ -11,7 +11,7 @@ from datetime import datetime
 
 # open log connection
 # C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
-directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
+directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -92,7 +92,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
                                                             features_combination))
         logging.info('{}: Start gradient for features : {}'.format(time.asctime(time.localtime(time.time())),
                                                                    features_combination))
-        gradient_class = Gradient(memm=memm_class, lamda=lamda)
+        gradient_class = Gradient(model=memm_class, lambda_value=lamda)
         gradient_result = gradient_class.gradient_descent()
 
         print('{}: Finish gradient for features : {} and lambda: {}'.format(time.asctime(time.localtime(time.time())),
@@ -137,10 +137,10 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + 'data\\train.wtag'
-    test_file = directory + 'data\\test.wtag'
-    comp_file = directory + 'data\\comp.words'
-    cv = True
+    train_file = directory + os.path.join('data', 'train.wtag')
+    test_file = directory + os.path.join('data', 'test.wtag')
+    comp_file = directory + os.path.join('data', 'comp.words')
+    cv = False
     if cv:
         cross_validation(train_file)
     else:
