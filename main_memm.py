@@ -22,7 +22,7 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [1.0,0.5]
+    lambda_list = [10.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
         logging.info('{}: Start running 10-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
@@ -34,8 +34,8 @@ def cross_validation(train_file_for_cv):
             # Create the train and test data according to the folds, and save the new data
             train_k_fold = list(train_data[i] for i in train_index)
             test_k_fold = list(train_data[i] for i in test_index)
-            train_file_cv = 'data/train_cv_file' + time.asctime(time.localtime(time.time())) + '.wtag'
-            test_file_cv = 'data/test_cv_file' + time.asctime(time.localtime(time.time())) + '.wtag'
+            train_file_cv = datetime.now().strftime(directory + 'data/train_cv_file_%d_%m_%Y_%H_%M.wtag')
+            test_file_cv = datetime.now().strftime(directory + 'data/test_cv_file_%d_%m_%Y_%H_%M.wtag')
             with open(train_file_cv, 'w', newline='\n') as file:
                 for sentence in train_k_fold:
                     file.write(str(sentence) + '\n')
@@ -139,14 +139,14 @@ if __name__ == "__main__":
         cross_validation(train_file)
     else:
         feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                              'feature_110','feature_111'],
+                                               ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
                                               'feature_105', 'feature_106', 'feature_107'],
                                                ['feature_100', 'feature_101','feature_102', 'feature_103','feature_104',
                                                 'feature_105', 'feature_106', 'feature_107','feature_108', 'feature_109'],
                                                ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107','feature_110','feature_111'],
-                                               ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                              'feature_110','feature_111']]}
+                                              'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
                              #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda = 1.0
