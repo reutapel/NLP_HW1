@@ -10,7 +10,8 @@ import logging
 from datetime import datetime
 
 # open log connection
-directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
+# C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
+directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -33,20 +34,20 @@ def cross_validation(train_file_for_cv):
             # Create the train and test data according to the folds, and save the new data
             train_k_fold = list(train_data[i] for i in train_index)
             test_k_fold = list(train_data[i] for i in test_index)
-            with open('data\\train_cv_file.wtag', 'w', newline='\n') as file:
+            with open('data/train_cv_file.wtag', 'w', newline='\n') as file:
                 for sentence in train_k_fold:
                     file.write(str(sentence) + '\n')
-            with open('data\\test_cv_file.wtag', 'w', newline='\n') as file:
+            with open('data/test_cv_file.wtag', 'w', newline='\n') as file:
                 for sentence in test_k_fold:
                     file.write(str(sentence) + '\n')
 
-            train_file_cv = directory + 'data\\train_cv_file.wtag'
-            test_file_cv = directory + 'data\\test_cv_file.wtag'
+            train_file_cv = directory + 'data/train_cv_file.wtag'
+            test_file_cv = directory + 'data/test_cv_file.wtag'
             feature_type_dict_cv = {
-                # 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                #                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                #                  'feature_110']],
-                'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+                'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                 'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                 'feature_110','feature_111']]}
+                #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
                 logging.info('{}: Start running fold number {} for lambda: {}'.
@@ -99,9 +100,9 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         viterbi_class = viterbi(memm_class, data_file=test_file_to_use, w=weights)
         viterbi_result = viterbi_class.viterbi_all_data
 
-        write_file_name = datetime.now().strftime(directory + 'file_results/result_MEMM_' + test_type +
+        write_file_name = datetime.now().strftime(directory + 'file_results\\result_MEMM_' + test_type +
                                                   '%d_%m_%Y_%H_%M.csv')
-        confusion_file_name = datetime.now().strftime(directory + 'confusion_files/CM_MEMM_' + test_type +
+        confusion_file_name = datetime.now().strftime(directory + 'confusion_files\\CM_MEMM_' + test_type +
                                                       '%d_%m_%Y_%H_%M.xls')
 
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
@@ -130,20 +131,19 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + os.path.join('data', 'train.wtag')
-    test_file = directory + os.path.join('data', 'test.wtag')
-    comp_file = directory + os.path.join('data', 'comp.words')
-    cv = False
+    train_file = directory + 'data\\train.wtag'
+    test_file = directory + 'data\\test.wtag'
+    comp_file = directory + 'data\\comp.words'
+    cv = True
     if cv:
         cross_validation(train_file)
     else:
-        feature_type_dict = {
-            'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                              'feature_110']],
-            'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+        feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                              'feature_110','feature_111']]}
+                             #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
-        lamda = 1
+        lamda = 1.0
         for feature_type_name, feature_type_list in feature_type_dict.items():
             main(train_file, test_file, 'test', feature_type_list, lamda)
 
