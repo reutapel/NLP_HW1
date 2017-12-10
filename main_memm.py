@@ -22,12 +22,12 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [10.0]
+    lambda_list = [10.0,100.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
-        logging.info('{}: Start running 10-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
+        logging.info('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
                                                                           lamda))
-        print('{}: Start running 10-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())), lamda))
+        print('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())), lamda))
         k = 0
 
         for train_index, test_index in kf.split(train_data):
@@ -45,8 +45,14 @@ def cross_validation(train_file_for_cv):
 
             feature_type_dict_cv = {
                 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                 'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                 'feature_110','feature_111']]}
+                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                                  'feature_110', 'feature_111'],
+                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                  'feature_105', 'feature_106', 'feature_107'],
+                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109'],
+                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                                  'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111']]}
                 #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():

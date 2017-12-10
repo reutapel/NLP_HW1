@@ -6,6 +6,7 @@ from scipy.optimize import minimize
 import pickle
 import time
 import os
+import copy
 
 # todo: change code
 
@@ -83,8 +84,9 @@ class Gradient(object):
 
         for history_tag, feature_vector_list in self.feature_vector_train.items():
             feature_freq, feature_vector = feature_vector_list
-            feature_vector *= feature_freq      # multiple in freq of history
-            linear_term += float(feature_vector.dot(v))  # linear term
+            feature_vector1 = copy.copy(feature_vector*feature_freq)
+            #feature_vector *= feature_freq      # multiple in freq of history
+            linear_term += float(feature_vector1.dot(v))  # linear term
 
             # 2: 1-to-n log of sum of exp. of v*f(x,y') for all y' in Y
             first_part_inner = 0.0
@@ -120,7 +122,7 @@ class Gradient(object):
             else:
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 500, 'factr': 1e2})
+                          options={'disp': True, 'maxiter': 500, 'ftol': 2.2204460492503131e-14})
 
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))
