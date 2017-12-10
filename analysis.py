@@ -33,7 +33,9 @@ class Analysis:
         print("Features to drop:")
         for feature in candidate_for_drop:
             print(feature)
-        return candidate_for_drop
+
+        large_weights = [(features_vector_mapping[index], value) for index, value in enumerate(weight.x) if value > 1]
+        return candidate_for_drop, large_weights
 
 
 if __name__ == '__main__':

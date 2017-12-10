@@ -3,6 +3,7 @@ import csv
 import xlwt
 from datetime import datetime
 
+
 class Evaluate:
     """
     this class evaluates the results and creates the confusion matrix
@@ -261,11 +262,11 @@ class Evaluate:
             sheet1.write(0, idx_tag + 1, cur_tag, header_style)
         sheet1.write(0, last_pos, 'Recall', header_style)
         sheet1.write(0, last_pos+1, 'Total', header_style)
-        row_count_hit = 0
-        row_count_miss = 0
         col_count_hit = [0] * len(tag_list)
         col_count_miss = [0] * len(tag_list)
         for row_tag_idx, row_tag in enumerate(tag_list):
+            row_count_hit = 0
+            row_count_miss = 0
             sheet1.write(row_tag_idx + 1, 0, row_tag, header_style)
             for col_tag_idx, col_tag in enumerate(tag_list):
                 cur_value = confusion_matrix_to_write["{0}_{1}".format(row_tag, col_tag)]
