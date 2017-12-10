@@ -38,7 +38,7 @@ class Gradient(object):
 
         for _, feature_vector in self.feature_vector_train.items():
             # multiple in the freq [0] of the history vector (X) with the actual feature vector [1]
-            empirical_counts += feature_vector[1]*1     # feature_vector[0]
+            empirical_counts += feature_vector[1] * feature_vector[0]
 
         for history_tag, feature_vector in self.feature_vector_train.items():
             nominator_dict = {}
