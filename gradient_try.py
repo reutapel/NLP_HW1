@@ -55,7 +55,7 @@ class Gradient(object):
             expected_counts_inner = 0
             for tag_prime, _ in self.tags_dict.items():
                 if (history_tag[0], tag_prime) in self.feature_vector_denominator:
-                    expected_counts_inner = tag_exp_dict[tag_prime] / sum_dict_denominator
+                    expected_counts_inner += tag_exp_dict[tag_prime] / sum_dict_denominator
                     # second_part_inner += (self.feature_vector_denominator[history_tag[0], tag_prime] * right_var)
             expected_counts += expected_counts_inner
 
@@ -124,7 +124,7 @@ class Gradient(object):
             else:
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 1, 'factr': 1e2})
+                          options={'disp': True, 'maxiter': 100, 'factr': 1e2})
 
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))
