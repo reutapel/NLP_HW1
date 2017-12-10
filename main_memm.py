@@ -1,3 +1,5 @@
+import os
+
 from MEMM_try import MEMM
 from viterbi_ML import viterbi
 from evaluate import Evaluate
@@ -52,7 +54,7 @@ def cross_validation(train_file_for_cv):
                              format(time.asctime(time.localtime(time.time())), k, lamda))
                 print('{}: Start running fold number {} for lambda: {}'
                       .format(time.asctime(time.localtime(time.time())), k, lamda))
-                main(train_file_cv, test_file_cv, 'test_cv_fold_'+ str(k), feature_type_list_cv, lamda)
+                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda)
 
             run_time_cv = (time.time() - CV_start_time) / 60.0
             print("{}: Finish running iteration {} of 10-fold CV for lambda: {}. Run time is: {} minutes".
@@ -112,12 +114,14 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
                      format(time.asctime(time.localtime(time.time())), write_file_name, confusion_file_name))
 
         print(word_results_dictionary)
-        summary_file_name = '{0}analysis/summary_{1}_{2.day}_{2.month}_{2.year}_{2.hour}_{2.minute}.csv'\
+        summary_file_name = '{0}analysis/summary_{1}_{2.day}_{2.month}_{2.year}_{2.hour}_{2.minute}.csv' \
             .format(directory, test_type, datetime.now())
-        evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use, summary_file_name)
+        evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use,
+                                           summary_file_name)
 
-        logging.info('{}: Following Evaluation results for features {}'.format(time.asctime(time.localtime(time.time())),
-                                                                               features_combination))
+        logging.info(
+            '{}: Following Evaluation results for features {}'.format(time.asctime(time.localtime(time.time())),
+                                                                      features_combination))
         logging.info('{}: Evaluation results are: \n {} \n'.format(time.asctime(time.localtime(time.time())),
                                                                    word_results_dictionary))
         logging.info('-----------------------------------------------------------------------------------')
@@ -143,7 +147,7 @@ if __name__ == "__main__":
         for feature_type_name, feature_type_list in feature_type_dict.items():
             main(train_file, test_file, 'test', feature_type_list, lamda)
 
-        run_time = (time.time() - start_time)/60.0
+        run_time = (time.time() - start_time) / 60.0
         print("{}: Finish running with lamda: {}. Run time is: {} minutes".
               format(time.asctime(time.localtime(time.time())), lamda, run_time))
         logging.info('{}: Finish running with lambda:{} . Run time is: {} minutes'.
