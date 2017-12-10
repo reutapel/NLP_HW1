@@ -33,7 +33,7 @@ class MEMM:
         for feature in features_combination:
             self.features_path_string += feature + '_'
 
-        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
+        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
 
         # used features
         self.features_combination = features_combination

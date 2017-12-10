@@ -58,7 +58,7 @@ class Gradient(object):
                 if (history_tag[0], tag_prime) in self.feature_vector_denominator:
                     expected_counts_inner += nominator_dict[tag_prime] / denominator_dict
                     # second_part_inner += (self.feature_vector_denominator[history_tag[0], tag_prime] * right_var)
-            expected_counts += expected_counts_inner * feature_freq # multiple in the freq of the history vector X
+            expected_counts += expected_counts_inner * feature_freq  # multiple in the freq of the history vector X
 
         print('{}: finished descent step of gradient #{}'.format(time.asctime(time.localtime(time.time())),
                                                                  self.index_gradient))
@@ -100,11 +100,11 @@ class Gradient(object):
 
                 else:
                     counter_miss_tag += 1
-            normalizer_term += math.log(first_part_inner)*feature_freq  # multiple in freq of history
+            normalizer_term += math.log(first_part_inner) * feature_freq  # multiple in freq of history
 
         print('{}: finished loss step #{}'.format(time.asctime(time.localtime(time.time())), self.index_of_loss))
         self.index_of_loss += 1
-        return normalizer_term + self.lamda*norm_l2 - linear_term
+        return normalizer_term + self.lamda * norm_l2 - linear_term
 
     def gradient_descent(self, flag=False):
         """
