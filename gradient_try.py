@@ -6,6 +6,7 @@ from scipy.optimize import minimize
 import pickle
 import time
 import os
+import copy
 
 # todo: change code
 
@@ -17,7 +18,7 @@ class Gradient(object):
     """
     def __init__(self, memm, lamda):
         self.memm = memm
-        self.w_init = np.zeros(shape=len(memm.features_vector), dtype=int)
+        self.w_init = np.zeros_like(np.arange(len(memm.features_vector)))
         self.lamda = lamda
         self.feature_vector_train = memm.history_tag_feature_vector_train
         self.feature_vector_denominator = memm.history_tag_feature_vector_denominator
@@ -32,7 +33,7 @@ class Gradient(object):
         :param v: the weight vector
         :return: the gradient of L(v)
         """
-        empirical_counts = csr_matrix(np.zeros(shape=len(v), dtype=int))   # empirical counts
+        empirical_counts = csr_matrix(np.zeros_like(v))  # csr_matrix(np.zeros(shape=len(v), dtype=int))   # empirical counts
         expected_counts = 0     # expected counts
         weight_vector = np.copy(v)     # weight vector
 
@@ -57,7 +58,7 @@ class Gradient(object):
                 if (history_tag[0], tag_prime) in self.feature_vector_denominator:
                     expected_counts_inner += nominator_dict[tag_prime] / denominator_dict
                     # second_part_inner += (self.feature_vector_denominator[history_tag[0], tag_prime] * right_var)
-            expected_counts += expected_counts_inner * feature_freq # multiple in the freq of the history vector X
+            expected_counts += expected_counts_inner * feature_freq  # multiple in the freq of the history vector X
 
         print('{}: finished descent step of gradient #{}'.format(time.asctime(time.localtime(time.time())),
                                                                  self.index_gradient))
@@ -83,8 +84,9 @@ class Gradient(object):
 
         for history_tag, feature_vector_list in self.feature_vector_train.items():
             feature_freq, feature_vector = feature_vector_list
-            feature_vector *= feature_freq      # multiple in freq of history
-            linear_term += float(feature_vector.dot(v))  # linear term
+            feature_vector1 = copy.copy(feature_vector * feature_freq)
+            # feature_vector *= feature_freq      # multiple in freq of history
+            linear_term += float(feature_vector1.dot(v))  # linear term
 
             # 2: 1-to-n log of sum of exp. of v*f(x,y') for all y' in Y
             first_part_inner = 0.0
@@ -98,11 +100,11 @@ class Gradient(object):
 
                 else:
                     counter_miss_tag += 1
-            normalizer_term += math.log(first_part_inner)*feature_freq  # multiple in freq of history
+            normalizer_term += math.log(first_part_inner) * feature_freq  # multiple in freq of history
 
         print('{}: finished loss step #{}'.format(time.asctime(time.localtime(time.time())), self.index_of_loss))
         self.index_of_loss += 1
-        return normalizer_term + self.lamda*norm_l2 - linear_term
+        return normalizer_term + self.lamda * norm_l2 - linear_term
 
     def gradient_descent(self, flag=False):
         """

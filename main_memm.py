@@ -1,5 +1,3 @@
-import os
-
 from MEMM_try import MEMM
 from viterbi_ML import viterbi
 from evaluate import Evaluate
@@ -8,10 +6,10 @@ from sklearn.model_selection import KFold
 from gradient_try import Gradient
 import logging
 from datetime import datetime
+# from test import Gradient
 
 # open log connection
-# C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
-directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
+directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -86,8 +84,9 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
                                                             features_combination))
         logging.info('{}: Start gradient for features : {}'.format(time.asctime(time.localtime(time.time())),
                                                                    features_combination))
-        gradient_class = Gradient(memm=memm_class, lamda=lamda)
+        gradient_class = Gradient(memm_class, lamda)
         gradient_result = gradient_class.gradient_descent()
+        # gradient_result = gradient_class.gradientDescent()
 
         print('{}: Finish gradient for features : {} and lambda: {}'.format(time.asctime(time.localtime(time.time())),
                                                                             features_combination, lamda))
@@ -100,9 +99,9 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         viterbi_class = viterbi(memm_class, data_file=test_file_to_use, w=weights)
         viterbi_result = viterbi_class.viterbi_all_data
 
-        write_file_name = datetime.now().strftime(directory + 'file_results\\result_MEMM_' + test_type +
+        write_file_name = datetime.now().strftime(directory + 'file_results/result_MEMM_' + test_type +
                                                   '%d_%m_%Y_%H_%M.csv')
-        confusion_file_name = datetime.now().strftime(directory + 'confusion_files\\CM_MEMM_' + test_type +
+        confusion_file_name = datetime.now().strftime(directory + 'confusion_files/CM_MEMM_' + test_type +
                                                       '%d_%m_%Y_%H_%M.xls')
 
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
@@ -131,19 +130,19 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + 'data\\train.wtag'
-    test_file = directory + 'data\\test.wtag'
-    comp_file = directory + 'data\\comp.words'
-    cv = True
+    train_file = directory + 'data/train.wtag'
+    test_file = directory + 'data/test.wtag'
+    comp_file = directory + 'data/comp.words'
+    cv = False
     if cv:
         cross_validation(train_file)
     else:
-        feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+        feature_type_dict = {'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
                                               'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
                                               'feature_110','feature_111']]}
-                             #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+                             # 'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
-        lamda = 1.0
+        lamda = 1000.0
         for feature_type_name, feature_type_list in feature_type_dict.items():
             main(train_file, test_file, 'test', feature_type_list, lamda)
 
