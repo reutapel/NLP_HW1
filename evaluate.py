@@ -126,6 +126,16 @@ class Evaluate:
         for key in keys_set:
             self.unseen_confusion_matrix.setdefault(key, 0)
 
+        miss_seen = miss - miss_unseen
+        hit_seen = hit - hit_unseen
+        accuracy = 0
+        if miss_seen + hit_seen > 0:
+            accuracy = 100 * float(hit_seen) / float(miss_seen + hit_seen)
+        print("Seen Confusion")
+        print('Misses: {0}, Hits: {1}'.format(miss_seen, hit_seen))
+        print('Model Accuracy: {:.2f}%'.format(accuracy))
+        self.eval_res.update({'seen words': {'miss': miss_seen, 'hit': hit_seen, 'accuracy': accuracy}})
+
         return \
             {
                 'Missse': miss,
