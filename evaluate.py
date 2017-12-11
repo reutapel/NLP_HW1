@@ -341,9 +341,10 @@ class Evaluate:
             self.misses_matrix.setdefault(confusion_matrix_key, 0)
         return
 
-    def create_summary_file(self, lamda, model_features, test_file, train_file, summary_file_name):
+    def create_summary_file(self, lamda, model_features, test_file, train_file, summary_file_name, weight_file_name):
         """
         this method is creating a summary file of the run
+        :param weight_file_name: the location of the weights vector file
         :param model_features: the features that where used in this model
         :param lamda: lambda value
         :param test_file: test data location
@@ -361,6 +362,7 @@ class Evaluate:
             summary.writerow(['Model lambda:', lamda])
             summary.writerow(['Predicted doc:', self.write_file_name])
             summary.writerow(['Confusion matrix:', self.confusion_file_name])
+            summary.writerow(['Weight file name:', weight_file_name])
             for eval_type, eval_res in self.eval_res.items():
                 summary.writerow(['{} Results:'.format(eval_type)])
                 summary.writerow(['Misses: {} '.format(eval_res['miss']), 'Hits: {}'.format(eval_res['hit'])])

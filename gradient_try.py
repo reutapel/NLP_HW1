@@ -25,6 +25,7 @@ class Gradient(object):
         self.iteration_counter = 0
         self.index_of_loss = 1
         self.index_gradient = 1
+        self.file_name = None
 
     def gradient(self, v):
         """
@@ -104,25 +105,21 @@ class Gradient(object):
         self.index_of_loss += 1
         return normalizer_term + self.lambda_value * norm_l2 - linear_term
 
-    def gradient_descent(self, flag=False):
+    def gradient_descent(self, file_name=None):
         """
         this method learns the weight vector from the training data
         it performs gradient descent with minus sign which is equivalent to gradient ascent
-        :param flag: weather we want to retrain the weight vector
+        :param file_name: wheather we want to retain the weight vector
         :return: weight vector
         """
-        file_name = os.path.join('resources', 'w_vec.pkl')
-        if os.path.isfile(file_name):
-            if not flag:
-                old_weight_vec = pickle.load(open(file_name, 'rb'))
-                old_file_name = "{1}_{0.day}_{0.month}_{0.year}_{0.hour}_{0.minute}_{0.second}".format(datetime.now(),
-                                                                                                       file_name)
-                pickle.dump(old_weight_vec, open(old_file_name, 'wb'))
-            else:
-                return pickle.load(open(file_name, 'rb'))
+        if file_name and os.path.isfile(file_name):
+            self.file_name = file_name
+            return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.v_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 500, 'ftol': 1e2*np.finfo(float).eps})
+                          options={'disp': True, 'maxiter': 500, 'ftol': 1e7*np.finfo(float).eps})
 
         print('finished gradient. res: {0}'.format(result.x))
-        pickle.dump(result, open(file_name, 'wb'))
+        file_name = "w_vec_{0.day}_{0.month}_{0.year}_{0.hour}_{0.minute}_{0.second}.pkl".format(datetime.now())
+        self.file_name = os.path.join('resources', file_name)
+        pickle.dump(result, open(self.file_name, 'wb'))
         return result

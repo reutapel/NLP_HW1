@@ -22,11 +22,11 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [10.0,100.0]
+    lambda_list = [10.0, 100.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
         logging.info('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
-                                                                          lamda))
+                                                                         lamda))
         print('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())), lamda))
         k = 0
 
@@ -53,7 +53,7 @@ def cross_validation(train_file_for_cv):
                                   'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109'],
                                  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
                                   'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111']]}
-                #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+            # 'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
                 logging.info('{}: Start running fold number {} for lambda: {}'.
@@ -123,7 +123,7 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         summary_file_name = '{0}analysis/summary_{1}_{2.day}_{2.month}_{2.year}_{2.hour}_{2.minute}.csv' \
             .format(directory, test_type, datetime.now())
         evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use,
-                                           summary_file_name)
+                                           summary_file_name,gradient_class.file_name)
 
         logging.info(
             '{}: Following Evaluation results for features {}'.format(time.asctime(time.localtime(time.time())),
@@ -144,16 +144,17 @@ if __name__ == "__main__":
     if cv:
         cross_validation(train_file)
     else:
-        feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                              'feature_110','feature_111'],
-                                               ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107'],
-                                               ['feature_100', 'feature_101','feature_102', 'feature_103','feature_104',
-                                                'feature_105', 'feature_106', 'feature_107','feature_108', 'feature_109'],
-                                               ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
-                             #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+        feature_type_dict = {
+            'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                              'feature_110', 'feature_111'],
+                             ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107'],
+                             ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109'],
+                             ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111']],
+            'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda = 1.0
         for feature_type_name, feature_type_list in feature_type_dict.items():

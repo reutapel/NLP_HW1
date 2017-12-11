@@ -1,6 +1,7 @@
 import csv
 import pickle
 import numpy as np
+from datetime import  datetime
 import os
 
 
@@ -18,10 +19,10 @@ class Analysis:
         this method gets the weight vector, and checking which entries smaller than epsilon
         :return: redundant features
         """
-        weight = pickle.load(open(os.path.join('resources', 'w_vec.pkl'), 'rb'))
+        weight = pickle.load(open(os.path.join('resources', 'w_vec.pkl_11_12_2017_11_42_44'), 'rb'))
         features_vector_mapping = {}
         features_vector_mapping_file = csv.reader(open(
-            os.path.join('dict',  'feature_100_feature_103_feature_104_features_vector_mapping.csv'), 'r'))
+            os.path.join('dict',  'feature_100_feature_101_feature_102_feature_103_feature_104_feature_105_feature_106_feature_107_feature_108_feature_109_feature_110_feature_111_features_vector_mapping.csv'), 'r'))
         for row in features_vector_mapping_file:
             if len(row) != 0:
                 key, val = row
@@ -34,7 +35,12 @@ class Analysis:
         for feature in candidate_for_drop:
             print(feature)
 
-        large_weights = [(features_vector_mapping[index], value) for index, value in enumerate(weight.x) if value > 1]
+        large_weights = [[features_vector_mapping[index], value] for index, value in enumerate(weight.x) if abs(value) > 1]
+        analysis_file_name = os.path.join('analysis', 'large_weight_vec.csv')
+        with open(analysis_file_name, "w") as summary_file:
+            analyze = csv.writer(summary_file)
+            for row in large_weights:
+                analyze.writerow(row)
         return candidate_for_drop, large_weights
 
 
