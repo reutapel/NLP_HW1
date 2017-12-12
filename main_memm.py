@@ -136,20 +136,33 @@ if __name__ == "__main__":
     train_file = directory + 'data\\train.wtag'
     test_file = directory + 'data\\test.wtag'
     comp_file = directory + 'data\\comp.words'
-    cv = True
+    comp = False
+    cv = False
     if cv:
         cross_validation(train_file)
     else:
-        feature_type_dict = { 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
-                             #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+        feature_type_dict = {
+            'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                              'feature_110', 'feature_111'],
+                             ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107'],
+                             ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109'],
+                             ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111']],
+            'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda = 2.0
-        for feature_type_name, feature_type_list in feature_type_dict.items():
-            main(train_file, test_file, 'test', feature_type_list, lamda)
-
+        if not comp:
+            for feature_type_name, feature_type_list in feature_type_dict.items():
+                main(train_file, test_file, 'test', feature_type_list, lamda, comp)
+        else:
+            for feature_type_name, feature_type_list in feature_type_dict.items():
+                main(comp_file, test_file, 'test', feature_type_list, lamda, comp)
         run_time = (time.time() - start_time) / 60.0
         print("{}: Finish running with lamda: {}. Run time is: {} minutes".
               format(time.asctime(time.localtime(time.time())), lamda, run_time))
         logging.info('{}: Finish running with lambda:{} . Run time is: {} minutes'.
                      format(time.asctime(time.localtime(time.time())), lamda, run_time))
+
