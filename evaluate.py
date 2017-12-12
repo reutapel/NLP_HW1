@@ -10,9 +10,10 @@ class Evaluate:
     """
 
     def __init__(self, model, data_file, viterbi_result, write_file_name,
-                 confusion_file_name):
+                 confusion_file_name, comp=False, comp_file_name=None):
         """
 
+        :param comp: if this run is for competition
         :param model: MEMM model object
         :param data_file: test data file
         :param viterbi_result: results of the viterbi results
@@ -20,9 +21,10 @@ class Evaluate:
         :param write_file_name: where to save the Viterbi results
         :param confusion_file_name: where to save the confusion matrix
         """
+        self.most_misses_tags = {}
         self.data_file_name = data_file
         self.predict_dict, self.viterbi_unseen_words = viterbi_result
-        self.viterbi_unseen_words = [list(cord) for cord in set(tuple(cord) for cord in self.viterbi_unseen_words)]
+        self.viterbi_unseen_words = [list(loc) for loc in set(tuple(loc) for loc in self.viterbi_unseen_words)]
         self.model = model
         self.write_file_name = write_file_name
         self.confusion_file_name = confusion_file_name
@@ -35,7 +37,8 @@ class Evaluate:
         self.eval_res.update()
         self.k = 10  # number of words in the confusion matrix
         self.unseen_tags_set = set()
-        self.word_results_dictionary = self.eval_test_results()
+        if not comp:
+            self.word_results_dictionary = self.eval_test_results()
 
     def run(self):
         self.write_result_doc()
@@ -156,8 +159,11 @@ class Evaluate:
                 sentence_len = len(sequence_list)
                 for word_index, word_tag_string in enumerate(sequence_list):
                     sep = ' '
-                    if word_index+1 == sentence_len and sentence_index+1 < lines_count:  # if EOL but not EOF, add \n
-                        sep = '\n'
+                    if word_index+1 == sentence_len:    # EOL
+                        if sentence_index+1 < lines_count:  # if EOL but not EOF, add \n
+                            sep = '\n'
+                        else:
+                            sep = '\0'
                     f.write("{0}{1}".format(word_tag_string, sep))
         return
 
@@ -320,6 +326,7 @@ class Evaluate:
         top_k_confusion_matrix = {}
         tags_keys = set()
         for key, val in top_tags_list:
+            self.most_misses_tags.update({key: val})
             gold, predict = key.split('_')
             tag_set.update((gold, predict))
         tag_set = sorted(tag_set)
@@ -351,7 +358,8 @@ class Evaluate:
             self.misses_matrix.setdefault(confusion_matrix_key, 0)
         return
 
-    def create_summary_file(self, lamda, model_features, test_file, train_file, summary_file_name, weight_file_name):
+    def create_summary_file(self, lamda, model_features, test_file, train_file,
+                            summary_file_name, weight_file_name, comp):
         """
         this method is creating a summary file of the run
         :param weight_file_name: the location of the weights vector file
@@ -371,12 +379,18 @@ class Evaluate:
             summary.writerow(['Model train file:', train_file])
             summary.writerow(['Model lambda:', lamda])
             summary.writerow(['Predicted doc:', self.write_file_name])
-            summary.writerow(['Confusion matrix:', self.confusion_file_name])
             summary.writerow(['Weight file name:', weight_file_name])
-            for eval_type, eval_res in self.eval_res.items():
-                summary.writerow(['{} Results:'.format(eval_type)])
-                summary.writerow(['Misses: {} '.format(eval_res['miss']), 'Hits: {}'.format(eval_res['hit'])])
-                summary.writerow(['Model Accuracy: {:.2f}%'.format(eval_res['accuracy'])])
+            if not comp:
+                summary.writerow(['Confusion matrix:', self.confusion_file_name])
+                for eval_type, eval_res in self.eval_res.items():
+                    summary.writerow(['{} Results:'.format(eval_type)])
+                    summary.writerow(['Misses: {} '.format(eval_res['miss']), 'Hits: {}'.format(eval_res['hit'])])
+                    summary.writerow(['Model Accuracy: {:.2f}%'.format(eval_res['accuracy'])])
+                summary.writerow(['Most missed Tags combinations:'])
+                for tag_name, miss_val in self.most_misses_tags.items():
+                    gold, predicted = tag_name.split('_')
+                    summary.writerow(['real tag: {}'.format(gold),
+                                      'predicted tag: {}'.format(predicted), "count: {}".format(miss_val)])
         return
 
 
