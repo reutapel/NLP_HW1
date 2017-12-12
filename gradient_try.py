@@ -122,7 +122,7 @@ class Gradient(object):
             else:
                 return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.w_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 500, 'ftol': 2.2204460492503131e-14})
+                          options={'disp': True, 'maxiter': 270, 'ftol': 2.2204460492503131e-14})
 
         print('finished gradient. res: {0}'.format(result.x))
         pickle.dump(result, open(file_name, 'wb'))

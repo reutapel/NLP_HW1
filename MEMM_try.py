@@ -31,9 +31,11 @@ class MEMM:
 
         self.features_path_string = ''
         for feature in features_combination:
-            self.features_path_string += feature + '_'
+            self.features_path_string += feature + '___'
 
-        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
+        #self.features_path_string += 'Viterbi_common_tags_debug_'
+
+        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -870,7 +872,7 @@ class MEMM:
                     indexes_vector[feature_idx] = 1
 
         if 'feature_111' in self.features_combination:
-            # feature_111 of current word is number instances
+            # feature_111 of current word contains number instances
             if any(char.isdigit() for char in current_word) and not current_word.isdigit():
                 feature_111_key = 'f111' + '_' + current_tag
                 if feature_111_key in self.feature_111:
