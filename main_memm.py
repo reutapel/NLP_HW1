@@ -114,6 +114,8 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
                                   confusion_file_name, comp=comp)
         if not comp:
             word_results_dictionary = evaluate_class.run()
+        if comp:
+            evaluate_class.write_result_doc()
         logging.info('{}: The model hyper parameters: \n lambda:{} \n test file: {} \n train file: {}'
                      .format(time.asctime(time.localtime(time.time())), lamda, test_file_to_use, train_file_to_use))
         logging.info('{}: Related results files are: \n {} \n {}'.
