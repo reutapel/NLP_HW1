@@ -116,7 +116,7 @@ class Gradient(object):
             self.file_name = file_name
             return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.v_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 500, 'ftol': 1e7*np.finfo(float).eps})
+                          options={'disp': True, 'maxiter': 100, 'ftol': 1e7*np.finfo(float).eps})
 
         print('finished gradient. res: {0}'.format(result.x))
         file_name = "w_vec_{0.day}_{0.month}_{0.year}_{0.hour}_{0.minute}_{0.second}.pkl".format(datetime.now())

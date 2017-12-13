@@ -23,17 +23,18 @@ class viterbi(object):
         self.predict_file = data_file
         self.word_tag_dict = model.word_tag_dict
         self.history_tag_feature_vector = model.history_tag_feature_vector_denominator
-        most_common_tags_to_use = copy.copy(model.most_common_tags)
-        if 'DT' in most_common_tags_to_use:
-            most_common_tags_to_use.remove('DT')
-        if 'IN' in most_common_tags_to_use:
-            most_common_tags_to_use.remove('IN')
-        if ',' in most_common_tags_to_use:
-            most_common_tags_to_use.remove(',')
-        if '.' in most_common_tags_to_use:
-            most_common_tags_to_use.remove('.')
-        print("most common tags: {}".format(most_common_tags_to_use))
-        self.most_common_tags = most_common_tags_to_use[:5]
+        # most_common_tags_to_use = copy.copy(model.most_common_tags)
+        # if 'DT' in most_common_tags_to_use:
+        #     most_common_tags_to_use.remove('DT')
+        # if 'IN' in most_common_tags_to_use:
+        #     most_common_tags_to_use.remove('IN')
+        # if '.' in most_common_tags_to_use:
+        #     most_common_tags_to_use.remove('.')
+        # if ',' in most_common_tags_to_use:
+        #     most_common_tags_to_use.remove(',')
+        # self.most_common_tags = most_common_tags_to_use[:5]
+        self.most_common_tags = ['CD', 'JJ', 'NN', 'NNP', 'NNS']
+        print('most common tags are: {}'.format(self.most_common_tags))
         # all the words that has not seen in the train, but seen in the test in the format: [sen_index, word_index]
         self.unseen_words = []
 

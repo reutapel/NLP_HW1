@@ -31,7 +31,7 @@ class MEMM:
 
         self.features_path_string = ''
         for feature in features_combination:
-            self.features_path_string += feature + '_'
+            self.features_path_string += feature + '__'
 
         self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
 
@@ -627,7 +627,7 @@ class MEMM:
                     # debug last sentence out of range index of last plus one word
                     # if word_in_seq_index == len(word_tag_list)-1:
                     #     print(word_in_seq_index)
-
+                    print('word_tag_tuple = {}'.format(word_tag_tuple))
                     current_word = word_tag_tuple[0]
                     current_tag = word_tag_tuple[1]
 
