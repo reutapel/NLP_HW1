@@ -6,6 +6,7 @@ from scipy.optimize import minimize
 import pickle
 import time
 import os
+import copy
 
 # todo: change code
 

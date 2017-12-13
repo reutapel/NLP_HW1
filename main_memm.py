@@ -11,7 +11,7 @@ from datetime import datetime
 
 # open log connection
 # C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
-directory = 'C:\\Users\\RomG\\PycharmProjects\\NLP_HW1\\'
+directory = 'C:\\Users\\ssheiba\\Desktop\\MASTER\\NLP\\HW1\\NLP_HW1\\'
 LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_MAIN_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
@@ -22,11 +22,11 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [10.0, 100.0]
+    lambda_list = [2.0, 0.8, 6.0 , 10.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
         logging.info('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
-                                                                         lamda))
+                                                                          lamda))
         print('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())), lamda))
         k = 0
 
@@ -45,15 +45,8 @@ def cross_validation(train_file_for_cv):
 
             feature_type_dict_cv = {
                 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                  'feature_110', 'feature_111'],
-                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                  'feature_105', 'feature_106', 'feature_107'],
-                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109'],
-                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                  'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111']]}
-            # 'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+                                              'feature_105', 'feature_106', 'feature_107','feature_108','feature_110','feature_111']]}
+                #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
                 logging.info('{}: Start running fold number {} for lambda: {}'.
@@ -140,9 +133,9 @@ if __name__ == "__main__":
     start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
-    train_file = directory + os.path.join('data', 'train.wtag')
-    test_file = directory + os.path.join('data', 'test.wtag')
-    comp_file = directory + os.path.join('data', 'comp.words')
+    train_file = directory + 'data\\train.wtag'
+    test_file = directory + 'data\\test.wtag'
+    comp_file = directory + 'data\\comp.words'
     comp = False
     cv = False
     if cv:
@@ -172,3 +165,4 @@ if __name__ == "__main__":
               format(time.asctime(time.localtime(time.time())), lamda, run_time))
         logging.info('{}: Finish running with lambda:{} . Run time is: {} minutes'.
                      format(time.asctime(time.localtime(time.time())), lamda, run_time))
+
