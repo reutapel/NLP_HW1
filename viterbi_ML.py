@@ -42,8 +42,9 @@ class viterbi(object):
         print('most common tags are: {}'.format(self.most_common_tags))
         # all the words that has not seen in the train, but seen in the test in the format: [sen_index, word_index]
         self.unseen_words_indexes = []
-        self.unseen_words = []
+        self.unseen_words = {}
         self.transition_tag_dict = model.transition_tag_dict
+        self.verb_tags_list = ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
 
     @property
     def viterbi_all_data(self):
@@ -65,8 +66,11 @@ class viterbi(object):
                 seq_word_tag_predict = [None] * len(word_tag_list)
                 for idx_tag, tag in viterbi_results.items():
                     word = word_tag_list[idx_tag].split('_')[0]
-                    prediction = str(word + '_' + str(tag))
+                    prediction = word + '_' + tag
                     seq_word_tag_predict[idx_tag] = prediction
+                    if [sentence_index, idx_tag] in self.unseen_words_indexes:
+                        self.unseen_words[(sentence_index, idx_tag)] = self.unseen_words[(sentence_index, idx_tag)] +\
+                                                                       '_' + tag
 
                 predict_dict[sentence_index] = seq_word_tag_predict
 
@@ -117,7 +121,7 @@ class viterbi(object):
             current_word_possible_tags, unseen_word, _ = self.possible_tags(current_word)
             if unseen_word:  # never the seen the word in the train set
                 self.unseen_words_indexes.append([sentence_index, k - 1])  # insert the sen_index and the word_index
-                self.unseen_words.append(word_tag_list[k - 1])
+                self.unseen_words[(sentence_index, k - 1)] = word_tag_list[k - 1]
             for u in self.possible_tags(second_word)[0]:
                 for v in current_word_possible_tags:
                     calc_max_pi = float("-inf")
@@ -170,28 +174,161 @@ class viterbi(object):
 
     def possible_tags(self, word):
         unseen_word = False
-        lower_case = False
         if word == '*':
             return [['*'], unseen_word]
         else:
             # if we never see the current word in the train
             if word not in self.word_tag_dict:
+                unseen_word = True
                 if word.lower() in self.word_tag_dict:  # if the word in unseen, but the lower case of the word is seen
                     tags_list = list(self.word_tag_dict.get(word.lower()).keys())
                     # drop the COUNT cell
                     tags_list = tags_list[1:]
-                    lower_case = True
-                    print('the word {} is unseen but the word {} is seen'. format(word, word.lower()))
-                else:  # the word and the lower case of the word are unseen
-                    # tags_list = self.most_common_tags
-                    tags_list = ['UNK']  # special tag for unknown words
-                    unseen_word = True
-            else:
+                    print('use lower case for word {}'.format(word))
+                    # print('the word {} is unseen but the word {} is seen'. format(word, word.lower()))
+                # word ends with s
+                elif word[-1:] == 's':
+                    tags_list = self.find_tags_for_unseen_plural_nouns(word)
+                    print('use s case for word {}'.format(word))
+                # word ends with d
+                elif word[-1:] == 'd':
+                    tags_list = self.find_tags_for_unseen_past_verbs(word)
+                    print('use d case for word {}'.format(word))
+                # word ends with ing
+                elif word[-3:] == 'ing':
+                    tags_list = self.find_tags_for_unseen_VBG(word)
+                    print('use ing case for word {}'.format(word))
+                # word ends with ing
+                elif word[-1:] == 'n':
+                    tags_list = self.find_tags_for_unseen_VBN(word)
+                    print('use n case for word {}'.format(word))
+                # word contains upper instances or only upper
+                elif not word.islower() and not word.isupper() or word.isupper():
+                    tags_list = ['NN', 'NNP']
+                    print('use word contains upper instances or only upper case for word {}'.format(word))
+                # word contains number instances or word is a number
+                elif any(char.isdigit() for char in word) and not word.isdigit() or word.isdigit():
+                    tags_list = ['CD']
+                    print('use word contains number instances or word is a number case for word {}'.format(word))
+                else:
+                    tags_list = self.find_tags_for_unseen_singular_nouns(word)
+                    print('use single nouns case for word {}'.format(word))
+            else:  # word was seen in train - take the tags seen for it in the train
                 tags_list = list(self.word_tag_dict.get(word).keys())
                 # drop the COUNT cell
                 tags_list = tags_list[1:]
 
-            return [tags_list, unseen_word, lower_case]
+            return [tags_list, unseen_word]
+
+    # check if the singular form of the word is seen. return UNK if not
+    def find_tags_for_unseen_plural_nouns(self, word):
+        tags_list = ['UNK']
+        no_s_word = word[:len(word)-1].lower()
+        if no_s_word in self.word_tag_dict:  # check words like boat and boats
+            tags_list = list(self.word_tag_dict.get(no_s_word).keys())
+            tags_list = tags_list[1:]
+        elif word[-2:] == 'es':  # check words like bus and buses
+            no_es_word = word[:len(word) - 2]
+            if no_es_word in self.word_tag_dict:
+                tags_list = list(self.word_tag_dict.get(no_es_word).keys())
+                tags_list = tags_list[1:]
+        elif word[-2:] == 'ies':  # check words like penny and pennies
+            no_ies_word = word[:len(word) - 3]
+            if no_ies_word in self.word_tag_dict:
+                tags_list = list(self.word_tag_dict.get(no_ies_word).keys())
+                tags_list = tags_list[1:]
+
+        if 'NN' in tags_list:  # add VBZ for verbs like wish-wishes
+            tags_list = ['NNS', 'VBZ']
+        elif 'NNP' in tags_list:
+            tags_list = ['NNPS', 'VBZ']
+        elif any(i in tags_list for i in self.verb_tags_list):  # for verbs like wish-wishes
+            tags_list = ['VBZ']
+
+        return tags_list
+
+    # check if the plural form of the word is seen. return UNK if not
+    def find_tags_for_unseen_singular_nouns(self, word):
+        tags_list = ['UNK']
+        s_word = word.lower() + 's'
+        es_word = word.lower() + 'es'
+        ies_word = word.lower() + 'ies'
+        if s_word in self.word_tag_dict:  # check words like boat and boats
+            tags_list = list(self.word_tag_dict.get(s_word).keys())
+        elif es_word in self.word_tag_dict:  # check words like boat and boats
+            tags_list = list(self.word_tag_dict.get(es_word).keys())
+        elif ies_word in self.word_tag_dict:  # check words like boat and boats
+            tags_list = list(self.word_tag_dict.get(ies_word).keys())
+
+        if 'NNS' in tags_list:  # add VB for verbs like wish-wishes
+            tags_list = ['NN', 'VB']
+        elif 'NNPS' in tags_list:
+            tags_list = ['NNP', 'VB']
+        elif any(i in tags_list for i in self.verb_tags_list):
+            tags_list = ['VB', 'NNP']
+
+        return tags_list
+
+    # check if the present form of the past verb is seen. return UNK if not
+    def find_tags_for_unseen_past_verbs(self, word):
+        tags_list = ['UNK']
+        no_d_word = word[:len(word)-1].lower()
+        if no_d_word in self.word_tag_dict:  # check words like bake and baked
+            tags_list = list(self.word_tag_dict.get(no_d_word).keys())
+        elif word[-2:] == 'ed':
+            no_ed_word = word[:len(word)-2]
+            if no_ed_word in self.word_tag_dict:  # check words like work and worked
+                tags_list = list(self.word_tag_dict.get(no_ed_word).keys())
+        elif word[-3:] == 'ied':
+            no_ied_y_word = word[:len(word) - 3] + 'y'
+            if no_ied_y_word in self.word_tag_dict:  # check words like apply and applied
+                tags_list = list(self.word_tag_dict.get(no_ied_y_word).keys())
+
+        if any(i in tags_list for i in self.verb_tags_list):
+            tags_list = ['VBN', 'VBD', 'VB', 'JJ']  # add JJ for words like unresolved
+
+        return tags_list
+
+    # check if the no ing form of the verb is seen. return UNK if not
+    def find_tags_for_unseen_VBG(self, word):
+        tags_list = ['UNK']
+        no_ing_word = word[:len(word)-3].lower()
+        no_ing_e_word = word[:len(word)-3].lower() + 'e'  # for verbs like write and writing
+        no_ing_ie_word = word[:len(word)-4].lower() + 'ie'  # for verbs like die and dying
+        no_double_last_letter = word[:len(word)-4].lower()  # for verbs like bag and bagging
+        if word[-4:] == 'ying':
+            if no_ing_ie_word in self.word_tag_dict:  # for verbs like die and dying
+                tags_list = list(self.word_tag_dict.get(no_ing_ie_word).keys())
+        elif word[-4] == word[-5]:
+            if no_double_last_letter in self.word_tag_dict:  # for verbs like bag and bagging
+                tags_list = list(self.word_tag_dict.get(no_double_last_letter).keys())
+        elif no_ing_word in self.word_tag_dict:  # check words like read and reading
+            tags_list = list(self.word_tag_dict.get(no_ing_word).keys())
+        elif no_ing_e_word in self.word_tag_dict:  # for verbs like write and writing
+            tags_list = list(self.word_tag_dict.get(no_ing_e_word).keys())
+
+        if any(i in tags_list for i in self.verb_tags_list):
+            tags_list = ['VBG']
+
+        return tags_list
+
+    def find_tags_for_unseen_VBN(self, word):
+        tags_list = ['UNK']
+        no_n_word = word[:len(word)-1].lower()
+        no_en_word = word[:len(word) - 2].lower()
+        no_double_last_letter = word[:len(word) - 3].lower()
+        if no_n_word in self.word_tag_dict:  # check words like know and known
+            tags_list = list(self.word_tag_dict.get(no_n_word).keys())
+        elif no_en_word in self.word_tag_dict:  # for verbs like be and been
+            tags_list = list(self.word_tag_dict.get(no_en_word).keys())
+        elif word[-3] == word[-4]:
+            if no_double_last_letter in self.word_tag_dict:  # for verbs like forgot and forgotten
+                tags_list = list(self.word_tag_dict.get(no_double_last_letter).keys())
+
+        if any(i in tags_list for i in self.verb_tags_list):
+            tags_list = ['VBN']
+
+        return tags_list
 
     # calculate q for MEMM model
     def calc_q(self, v, second_tag, first_tag, second_word, plus_one_word, current_word, current_word_possible_tags):
