@@ -75,10 +75,6 @@ class viterbi(object):
                 predict_dict[sentence_index] = seq_word_tag_predict
 
                 sentence_index += 1
-            print('{}: prediction for all sentences {}'.format((time.asctime(time.localtime(time.time()))),
-                                                              predict_dict))
-            logging.info('{}: prediction for all sentences {}'.format((time.asctime(time.localtime(time.time()))),
-                                                                     predict_dict))
 
         # save the unseen words to file
         unseen_file_name = os.path.join('analysis', 'unseen_words.csv')
@@ -118,7 +114,7 @@ class viterbi(object):
             else:  # word in position n, no word in k+1
                 plus_one_word = '*'  # word in position k+1
             current_word = word_tag_list[k - 1].split('_')[0]
-            current_word_possible_tags, unseen_word, _ = self.possible_tags(current_word)
+            current_word_possible_tags, unseen_word = self.possible_tags(current_word)
             if unseen_word:  # never the seen the word in the train set
                 self.unseen_words_indexes.append([sentence_index, k - 1])  # insert the sen_index and the word_index
                 self.unseen_words[(sentence_index, k - 1)] = word_tag_list[k - 1]
@@ -213,6 +209,10 @@ class viterbi(object):
                 else:
                     tags_list = self.find_tags_for_unseen_singular_nouns(word)
                     print('use single nouns case for word {}'.format(word))
+                if tags_list == ['UNK']:
+                    tags_list = self.find_tags_for_unseen_singular_nouns(word)
+                    print('use single nouns case for word {}'.format(word))
+
             else:  # word was seen in train - take the tags seen for it in the train
                 tags_list = list(self.word_tag_dict.get(word).keys())
                 # drop the COUNT cell
@@ -244,6 +244,8 @@ class viterbi(object):
             tags_list = ['NNPS', 'VBZ']
         elif any(i in tags_list for i in self.verb_tags_list):  # for verbs like wish-wishes
             tags_list = ['VBZ']
+        else:
+            tags_list = ['UNK']
 
         return tags_list
 
@@ -266,6 +268,8 @@ class viterbi(object):
             tags_list = ['NNP', 'VB']
         elif any(i in tags_list for i in self.verb_tags_list):
             tags_list = ['VB', 'NNP']
+        else:
+            tags_list = ['UNK']
 
         return tags_list
 
@@ -286,6 +290,8 @@ class viterbi(object):
 
         if any(i in tags_list for i in self.verb_tags_list):
             tags_list = ['VBN', 'VBD', 'VB', 'JJ']  # add JJ for words like unresolved
+        else:
+            tags_list = ['UNK']
 
         return tags_list
 
@@ -309,6 +315,8 @@ class viterbi(object):
 
         if any(i in tags_list for i in self.verb_tags_list):
             tags_list = ['VBG']
+        else:
+            tags_list = ['UNK']
 
         return tags_list
 
@@ -327,6 +335,8 @@ class viterbi(object):
 
         if any(i in tags_list for i in self.verb_tags_list):
             tags_list = ['VBN']
+        else:
+            tags_list = ['UNK']
 
         return tags_list
 
