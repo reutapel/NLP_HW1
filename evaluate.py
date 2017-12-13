@@ -351,7 +351,7 @@ class Evaluate:
 
         keys = "{{'{tag_1}_{tag_1}','{tag_1}_{tag_2}','{tag_2}_{tag_1}','{tag_2}_{tag_2}'}}".format(tag_1=gold,
                                                                                                     tag_2=predict)
-        return eval(json.dumps(keys))
+        return eval(eval(json.dumps(keys)))
 
     def add_missing_tags(self, gold_tag, predict_tag):
         res = self.get_all_possible_tags(gold_tag, predict_tag)
