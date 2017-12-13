@@ -20,6 +20,7 @@ class MEMM:
 
         self.tags_dict = {}
         self.word_tag_dict = {}
+        self.transition_tag_dict = {}
         self.feature_count = {}
         self.most_common_tags = []
         self.directory = directory
@@ -147,6 +148,18 @@ class MEMM:
                         self.tags_dict[word_tag_tuple[1]] += 1
                     else:
                         self.tags_dict[word_tag_tuple[1]] = 1
+
+                    # count the thirs tag freq for each tag couples
+                    u_v = first_tag + '_' + second_tag
+                    if u_v in self.transition_tag_dict:
+                        if word_tag_tuple[1] in self.transition_tag_dict[u_v]:
+                            self.transition_tag_dict[u_v][word_tag_tuple[1]] += 1
+                        else:
+                            self.transition_tag_dict[u_v][word_tag_tuple[1]] = 1
+                    else:
+                        self.transition_tag_dict[u_v] = {}
+                        self.transition_tag_dict[u_v][word_tag_tuple[1]] = 1
+
 
                     # count number of all tags seen in train for each word
                     if word_tag_tuple[0] in self.word_tag_dict:
@@ -286,6 +299,14 @@ class MEMM:
 
         self.most_common_tags = list(reversed(sorted(self.tags_dict, key=self.tags_dict.get)))
 
+        # preparing tags order for each tag bigram, for viterbi unseen word HMM like transition prediction
+        print('preparing tags order for each tag bigram, for viterbi unseen word HMM like transition prediction')
+        logging.info('preparing tags order for each tag bigram, for viterbi unseen word HMM like transition prediction')
+
+        for u_v, w_options in self.transition_tag_dict.items():
+            top_tags_for_u_v = list(reversed(sorted(w_options, key=w_options.get)))
+            self.transition_tag_dict[u_v]['TOP'] = top_tags_for_u_v
+
         print('{}: saving dictionaries'.format(time.asctime(time.localtime(time.time()))))
         logging.info('{}: saving dictionaries'.format(time.asctime(time.localtime(time.time()))))
 
@@ -293,6 +314,12 @@ class MEMM:
         w = csv.writer(open(self.dict_path + 'tags_dict' + '.csv', "w"))
         for key, val in self.tags_dict.items():
             w.writerow([key, val])
+
+        logging.info('saving transition_tag_dict')
+        w = csv.writer(open( self.dict_path + ' transition_tag_dict' + '.csv', "w"))
+        for key, val in self.transition_tag_dict.items():
+            w.writerow([key, val])
+        print('{}: finished saving transition_tag_dict'.format(time.asctime(time.localtime(time.time()))))
 
         w = csv.writer(open(self.dict_path + 'most_common_tags' + '.csv', "w"))
         w.writerow(self.most_common_tags)
@@ -627,7 +654,7 @@ class MEMM:
                     # debug last sentence out of range index of last plus one word
                     # if word_in_seq_index == len(word_tag_list)-1:
                     #     print(word_in_seq_index)
-                    print('word_tag_tuple = {}'.format(word_tag_tuple))
+
                     current_word = word_tag_tuple[0]
                     current_tag = word_tag_tuple[1]
 
@@ -870,7 +897,7 @@ class MEMM:
                     indexes_vector[feature_idx] = 1
 
         if 'feature_111' in self.features_combination:
-            # feature_111 of current word is number instances
+            # feature_111 of current word contains number instances
             if any(char.isdigit() for char in current_word) and not current_word.isdigit():
                 feature_111_key = 'f111' + '_' + current_tag
                 if feature_111_key in self.feature_111:
