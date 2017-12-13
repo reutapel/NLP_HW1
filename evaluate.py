@@ -1,5 +1,7 @@
 import csv
+import json
 
+import itertools
 import xlwt
 from datetime import datetime
 
@@ -163,7 +165,7 @@ class Evaluate:
                         if sentence_index+1 < lines_count:  # if EOL but not EOF, add \n
                             sep = '\n'
                         else:
-                            sep = '\0'
+                            sep = ''
                     f.write("{0}{1}".format(word_tag_string, sep))
         return
 
@@ -347,8 +349,9 @@ class Evaluate:
         :param predict: second tag
         :return:  a set of tags
         """
-        keys = eval("{{'{tag_1}_{tag_1}','{tag_1}_{tag_2}','{tag_2}_{tag_1}','{tag_2}_{tag_2}'}}"
-                    .format(tag_1=gold, tag_2=predict))
+        keys = []
+        for tag_1,tag_2 in itertools.product([gold, predict],repeat=2):
+            keys.append("{}_{}".format(tag_1, tag_2))
         return keys
 
     def add_missing_tags(self, gold_tag, predict_tag):
