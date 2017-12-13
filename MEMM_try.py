@@ -149,7 +149,7 @@ class MEMM:
                     else:
                         self.tags_dict[word_tag_tuple[1]] = 1
 
-                    # count the thirs tag freq for each tag couples
+                    # count the third tag freq for each tag couples
                     u_v = first_tag + '_' + second_tag
                     if u_v in self.transition_tag_dict:
                         if word_tag_tuple[1] in self.transition_tag_dict[u_v]:
@@ -159,6 +159,16 @@ class MEMM:
                     else:
                         self.transition_tag_dict[u_v] = {}
                         self.transition_tag_dict[u_v][word_tag_tuple[1]] = 1
+
+                    # count the second tag freq for each tag
+                    if second_tag in self.transition_tag_dict:
+                        if word_tag_tuple[1] in self.transition_tag_dict[second_tag]:
+                            self.transition_tag_dict[second_tag][word_tag_tuple[1]] += 1
+                        else:
+                            self.transition_tag_dict[second_tag][word_tag_tuple[1]] = 1
+                    else:
+                        self.transition_tag_dict[second_tag] = {}
+                        self.transition_tag_dict[second_tag][word_tag_tuple[1]] = 1
 
 
                     # count number of all tags seen in train for each word
@@ -369,49 +379,49 @@ class MEMM:
 
         if 'feature_105' in self.features_combination:
             logging.info('saving feature_105')
-            w = csv.writer(open( self.dict_path + 'feature_105' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_105' + '.csv', "w"))
             for key, val in self.feature_105.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_105'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_106' in self.features_combination:
             logging.info('saving feature_106')
-            w = csv.writer(open( self.dict_path + 'feature_106' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_106' + '.csv', "w"))
             for key, val in self.feature_106.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_106'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_107' in self.features_combination:
             logging.info('saving feature_107')
-            w = csv.writer(open( self.dict_path + 'feature_107' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_107' + '.csv', "w"))
             for key, val in self.feature_107.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_107'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_108' in self.features_combination:
             logging.info('saving feature_108')
-            w = csv.writer(open( self.dict_path + 'feature_108' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_108' + '.csv', "w"))
             for key, val in self.feature_108.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_108'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_109' in self.features_combination:
             logging.info('saving feature_109')
-            w = csv.writer(open( self.dict_path + 'feature_109' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_109' + '.csv', "w"))
             for key, val in self.feature_109.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_109'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_110' in self.features_combination:
             logging.info('saving feature_110')
-            w = csv.writer(open( self.dict_path + 'feature_110' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_110' + '.csv', "w"))
             for key, val in self.feature_110.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_110'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_111' in self.features_combination:
             logging.info('saving feature_111')
-            w = csv.writer(open( self.dict_path + 'feature_111' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_111' + '.csv', "w"))
             for key, val in self.feature_111.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_111'.format(time.asctime(time.localtime(time.time()))))

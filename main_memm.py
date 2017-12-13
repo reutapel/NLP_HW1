@@ -12,7 +12,7 @@ from datetime import datetime
 
 # open log connection
 directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
-LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_CV100_075_%d_%m_%Y_%H_%M.log')
+LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_check_unseen_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
 
@@ -57,7 +57,7 @@ def cross_validation(train_file_for_cv):
                              format(time.asctime(time.localtime(time.time())), k, lamda))
                 print('{}: Start running fold number {} for lambda: {}'
                       .format(time.asctime(time.localtime(time.time())), k, lamda))
-                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda)
+                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda, comp=False)
 
             run_time_cv = (time.time() - CV_start_time) / 60.0
             print("{}: Finish running iteration {} of 10-fold CV for lambda: {}. Run time is: {} minutes".
@@ -124,9 +124,8 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use,
                                            summary_file_name, gradient_class.file_name, comp)
 
-        logging.info(
-            '{}: Following Evaluation results for features {}'.format(time.asctime(time.localtime(time.time())),
-                                                                      features_combination))
+        logging.info('{}: Following Evaluation results for features {}'.
+                     format(time.asctime(time.localtime(time.time())), features_combination))
         if not comp:
             logging.info('{}: Evaluation results are: \n {} \n'.format(time.asctime(time.localtime(time.time())),
                                                                        word_results_dictionary))
@@ -140,20 +139,23 @@ if __name__ == "__main__":
     train_file = directory + 'data/train.wtag'
     test_file = directory + 'data/test.wtag'
     comp_file = directory + 'data/comp.words'
-    cv = True
+    cv = False
+    comp = False
     if cv:
         cross_validation(train_file)
     else:
-        feature_type_dict = {'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                              'feature_110','feature_111']],
-                                              #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              # 'feature_105', 'feature_106', 'feature_107'],
-                                              #  ['feature_100', 'feature_101','feature_102', 'feature_103','feature_104',
-                                              #   'feature_105', 'feature_106', 'feature_107','feature_108', 'feature_109'],
-                                              #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              # 'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
-                             'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+        # feature_type_dict = {'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+        #                                       'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+        #                                       'feature_110','feature_111']],
+        #                                       #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+        #                                       # 'feature_105', 'feature_106', 'feature_107'],
+        #                                       #  ['feature_100', 'feature_101','feature_102', 'feature_103','feature_104',
+        #                                       #   'feature_105', 'feature_106', 'feature_107','feature_108', 'feature_109'],
+        #                                       #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+        #                                       # 'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
+        #                      'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+
+        feature_type_dict = {'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda = 2.0
         if not comp:

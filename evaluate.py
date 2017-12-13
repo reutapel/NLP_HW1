@@ -347,6 +347,7 @@ class Evaluate:
         :param predict: second tag
         :return:  a set of tags
         """
+
         keys = eval("{{'{tag_1}_{tag_1}','{tag_1}_{tag_2}','{tag_2}_{tag_1}','{tag_2}_{tag_2}'}}"
                     .format(tag_1=gold, tag_2=predict))
         return keys
