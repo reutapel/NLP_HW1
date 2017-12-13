@@ -3,6 +3,11 @@ import pickle
 import numpy as np
 from datetime import  datetime
 import os
+import tkinter as tk
+from tkinter import filedialog
+import matplotlib.pyplot as plt
+
+
 
 
 class Analysis:
@@ -14,12 +19,14 @@ class Analysis:
     def __init__(self):
         self.epsilon = 0
 
-    def check_redundant_classifier_entries(self):
+    def check_redundant_classifier_entries(self, file_name=None):
         """
         this method gets the weight vector, and checking which entries smaller than epsilon
         :return: redundant features
         """
-        weight = pickle.load(open(os.path.join('resources', 'w_vec.pkl_11_12_2017_11_42_44'), 'rb'))
+        if not file_name:
+            file_name = os.path.join('resources', 'w_vec.pkl_11_12_2017_11_42_44')
+        weight = pickle.load(open(file_name, 'rb'))
         features_vector_mapping = {}
         features_vector_mapping_file = csv.reader(open(
             os.path.join('dict',  'feature_100_feature_101_feature_102_feature_103_feature_104_feature_105_feature_106_feature_107_feature_108_feature_109_feature_110_feature_111_features_vector_mapping.csv'), 'r'))
@@ -43,7 +50,39 @@ class Analysis:
                 analyze.writerow(row)
         return candidate_for_drop, large_weights
 
+    def create_graph(self,file_name):
+        """
+
+        :param file_name:
+        :return:
+        """
+        data = pickle.load(open(file_name, 'rb'))
+        gradient = [val[0] for key, val in data.items()]
+        loss = [val[1] for key, val in data.items()]
+        fig, ax1 = plt.subplots()
+
+        grad = ax1.plot(range(len(data)), gradient, '-ob', label='gradient')
+        ax1.set_ylabel('gradient', color='b')
+        ax1.tick_params('y', colors='b')
+        ax2 = ax1.twinx()
+        loss = ax2.plot(range(len(data)), loss, '-or', label='loss')
+        ax2.set_ylabel('loss', color='r')
+        ax2.tick_params('y', colors='r')
+        ax1.set_title('gradient loss graph')
+        lines = grad + loss
+        lbls = [l.get_label() for l in lines]
+        ax1.legend(lines, lbls, loc=0)
+        plt.show()
+
 
 if __name__ == '__main__':
     analysis = Analysis()
-    analysis.check_redundant_classifier_entries()
+    root = tk.Tk()
+    root.withdraw()
+    # file_path = filedialog.askopenfilename()
+    # analysis.check_redundant_classifier_entries(file_path)
+    file_path = filedialog.askopenfilename()
+    analysis.create_graph(file_path)
+
+
+

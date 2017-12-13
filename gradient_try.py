@@ -25,6 +25,7 @@ class Gradient(object):
         self.index_of_loss = 1
         self.index_gradient = 1
         self.file_name = None
+        self.hist_name = None
         self.gradient_per_itter = []
         self.loss_per_itter = []
 
@@ -128,5 +129,6 @@ class Gradient(object):
         pickle.dump(result, open(self.file_name, 'wb'))
         hist_dict = {key: (grad, loss) for key, (grad, loss)
                      in enumerate(zip(self.gradient_per_itter, self.loss_per_itter))}
-        pickle.dump(hist_dict, open(hist_name, 'wb'))
+        self.hist_name = os.path.join('resources', hist_name)
+        pickle.dump(hist_dict, open(self.hist_name, 'wb'))
         return result
