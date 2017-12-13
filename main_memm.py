@@ -8,6 +8,7 @@ from sklearn.model_selection import KFold
 from gradient_try import Gradient
 import logging
 from datetime import datetime
+# from test import Gradient
 
 # open log connection
 # C:\Users\ssheiba\Desktop\MASTER\NLP\HW1\NLP_HW1
@@ -56,7 +57,7 @@ def cross_validation(train_file_for_cv):
                              format(time.asctime(time.localtime(time.time())), k, lamda))
                 print('{}: Start running fold number {} for lambda: {}'
                       .format(time.asctime(time.localtime(time.time())), k, lamda))
-                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda, comp)
+                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda, comp=False)
 
             run_time_cv = (time.time() - CV_start_time) / 60.0
             print("{}: Finish running iteration {} of 10-fold CV for lambda: {}. Run time is: {} minutes".
@@ -101,10 +102,11 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         print('{}: Start viterbi'.format((time.asctime(time.localtime(time.time())))))
         viterbi_class = viterbi(memm_class, data_file=test_file_to_use, w=weights)
         viterbi_result = viterbi_class.viterbi_all_data
+        print('{}: Finish viterbi'.format((time.asctime(time.localtime(time.time())))))
 
-        write_file_name = datetime.now().strftime(directory + 'file_results\\result_MEMM_' + test_type +
+        write_file_name = datetime.now().strftime(directory + 'file_results/result_MEMM_most_common_tags_' + test_type +
                                                   '%d_%m_%Y_%H_%M.csv')
-        confusion_file_name = datetime.now().strftime(directory + 'confusion_files\\CM_MEMM_' + test_type +
+        confusion_file_name = datetime.now().strftime(directory + 'confusion_files/CM_MEMM_most_common_tags_' + test_type +
                                                       '%d_%m_%Y_%H_%M.xls')
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
                                   confusion_file_name, comp=comp)
@@ -123,9 +125,8 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         evaluate_class.create_summary_file(lamda, features_combination, test_file_to_use, train_file_to_use,
                                            summary_file_name, gradient_class.file_name, comp)
 
-        logging.info(
-            '{}: Following Evaluation results for features {}'.format(time.asctime(time.localtime(time.time())),
-                                                                      features_combination))
+        logging.info('{}: Following Evaluation results for features {}'.
+                     format(time.asctime(time.localtime(time.time())), features_combination))
         if not comp:
             logging.info('{}: Evaluation results are: \n {} \n'.format(time.asctime(time.localtime(time.time())),
                                                                        word_results_dictionary))

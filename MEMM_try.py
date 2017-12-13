@@ -32,11 +32,9 @@ class MEMM:
 
         self.features_path_string = ''
         for feature in features_combination:
-            self.features_path_string += feature + '___'
+            self.features_path_string += feature + '__'
 
-        #self.features_path_string += 'Viterbi_common_tags_debug_'
-
-        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
+        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -53,6 +51,7 @@ class MEMM:
         self.feature_109 = {}
         self.feature_110 = {}
         self.feature_111 = {}
+        self.feature_112 = {}
 
         # the dictionary that will hold all indexes for all the instances of the features
         self.features_vector = {}
@@ -151,7 +150,7 @@ class MEMM:
                     else:
                         self.tags_dict[word_tag_tuple[1]] = 1
 
-                    # count the thirs tag freq for each tag couples
+                    # count the third tag freq for each tag couples
                     u_v = first_tag + '_' + second_tag
                     if u_v in self.transition_tag_dict:
                         if word_tag_tuple[1] in self.transition_tag_dict[u_v]:
@@ -161,6 +160,16 @@ class MEMM:
                     else:
                         self.transition_tag_dict[u_v] = {}
                         self.transition_tag_dict[u_v][word_tag_tuple[1]] = 1
+
+                    # count the second tag freq for each tag
+                    if second_tag in self.transition_tag_dict:
+                        if word_tag_tuple[1] in self.transition_tag_dict[second_tag]:
+                            self.transition_tag_dict[second_tag][word_tag_tuple[1]] += 1
+                        else:
+                            self.transition_tag_dict[second_tag][word_tag_tuple[1]] = 1
+                    else:
+                        self.transition_tag_dict[second_tag] = {}
+                        self.transition_tag_dict[second_tag][word_tag_tuple[1]] = 1
 
 
                     # count number of all tags seen in train for each word
@@ -288,6 +297,14 @@ class MEMM:
                             else:
                                 self.feature_111[feature_111_key] = 1
 
+                    if 'feature_112' in self.features_combination:
+                        # build feature_112 the length of the word
+                        feature_112_key = 'f112' + '_' + str(len(current_tag))
+                        if feature_112_key in self.feature_112:
+                            self.feature_112[feature_112_key] += 1
+                        else:
+                            self.feature_112[feature_112_key] = 1
+
                     # update tags and word
                     first_tag = second_tag
                     second_tag = current_tag
@@ -298,7 +315,6 @@ class MEMM:
                                                             time.time()-start_time))
         logging.info('{}: finished building features in : {}'.format(time.asctime(time.localtime(time.time())),
                                                             time.time()-start_time))
-
 
         self.most_common_tags = list(reversed(sorted(self.tags_dict, key=self.tags_dict.get)))
 
@@ -372,52 +388,60 @@ class MEMM:
 
         if 'feature_105' in self.features_combination:
             logging.info('saving feature_105')
-            w = csv.writer(open( self.dict_path + 'feature_105' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_105' + '.csv', "w"))
             for key, val in self.feature_105.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_105'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_106' in self.features_combination:
             logging.info('saving feature_106')
-            w = csv.writer(open( self.dict_path + 'feature_106' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_106' + '.csv', "w"))
             for key, val in self.feature_106.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_106'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_107' in self.features_combination:
             logging.info('saving feature_107')
-            w = csv.writer(open( self.dict_path + 'feature_107' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_107' + '.csv', "w"))
             for key, val in self.feature_107.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_107'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_108' in self.features_combination:
             logging.info('saving feature_108')
-            w = csv.writer(open( self.dict_path + 'feature_108' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_108' + '.csv', "w"))
             for key, val in self.feature_108.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_108'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_109' in self.features_combination:
             logging.info('saving feature_109')
-            w = csv.writer(open( self.dict_path + 'feature_109' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_109' + '.csv', "w"))
             for key, val in self.feature_109.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_109'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_110' in self.features_combination:
             logging.info('saving feature_110')
-            w = csv.writer(open( self.dict_path + 'feature_110' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_110' + '.csv', "w"))
             for key, val in self.feature_110.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_110'.format(time.asctime(time.localtime(time.time()))))
 
         if 'feature_111' in self.features_combination:
             logging.info('saving feature_111')
-            w = csv.writer(open( self.dict_path + 'feature_111' + '.csv', "w"))
+            w = csv.writer(open(self.dict_path + 'feature_111' + '.csv', "w"))
             for key, val in self.feature_111.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_111'.format(time.asctime(time.localtime(time.time()))))
+
+        if 'feature_112' in self.features_combination:
+            logging.info('saving feature_112')
+            w = csv.writer(open(self.dict_path + 'feature_112' + '.csv', "w"))
+            for key, val in self.feature_112.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_112'.format(time.asctime(time.localtime(time.time()))))
+
         return
 
     def build_features_vector(self):
@@ -591,6 +615,21 @@ class MEMM:
                 time.asctime(time.localtime(time.time())),
                 feature_instances))
             logging.info('{}: size of feature_111 - current word contains number is: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            feature_instances = 0
+
+        if 'feature_112' in self.features_combination:
+            # create twelve type of feature in features_vector which is the length of the current word
+            for current_word_length in self.feature_112.keys():
+                self.features_vector[current_word_length] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = current_word_length
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_112 - current word contains number is: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            logging.info('{}: size of feature_112 - current word contains number is: {}'.format(
                 time.asctime(time.localtime(time.time())),
                 feature_instances))
             feature_instances = 0
@@ -907,7 +946,12 @@ class MEMM:
                     feature_idx = self.features_vector[feature_111_key]
                     indexes_vector[feature_idx] = 1
 
-
+        if 'feature_112' in self.features_combination:
+            # feature_112 of current word length
+            feature_112_key = 'f112' + '_' + str(len(current_tag))
+            if feature_112_key in self.feature_111:
+                feature_idx = self.features_vector[feature_112_key]
+                indexes_vector[feature_idx] = 1
 
         # efficient representation for sparse vectors that main entrances are zero
         indexes_vector_zip = csr_matrix(indexes_vector)

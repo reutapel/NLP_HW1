@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="dd71efb0-110a-413c-8b64-a9ca7bd3a4e0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MEMM_try.py" afterPath="$PROJECT_DIR$/MEMM_try.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradient_try.py" afterPath="$PROJECT_DIR$/gradient_try.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main_memm.py" afterPath="$PROJECT_DIR$/main_memm.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test2.py" afterPath="$PROJECT_DIR$/test2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/viterbi_ML.py" afterPath="$PROJECT_DIR$/viterbi_ML.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,35 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main_memm.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main_memm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_memm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="137" column="29" lean-forward="true" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="71" column="42" lean-forward="false" selection-start-line="71" selection-start-column="33" selection-end-line="71" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MEMM_g.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/F8ABAD0E-F146-405D-AFDE-EA034E316210/MEMM_g.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="386" column="44" lean-forward="false" selection-start-line="386" selection-start-column="8" selection-end-line="386" selection-end-column="44" />
+            <state relative-caret-position="-308">
+              <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -53,30 +29,35 @@
       <file leaf-file-name="evaluate.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evaluate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="907">
-              <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MEMM_try.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MEMM_try.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="398" column="19" lean-forward="false" selection-start-line="398" selection-start-column="8" selection-end-line="398" selection-end-column="19" />
+            <state relative-caret-position="-3305">
+              <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <marker date="1513175512000" expanded="true" signature="15416:15673" ph="..." />
+                <marker date="1513175512000" expanded="true" signature="15521:15658" ph="..." />
+                <marker date="1513175512000" expanded="true" signature="15835:16264" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                <marker date="1513175512000" expanded="true" signature="17032:17314" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="viterbi_ML.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="analysis.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/analysis.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="214">
+              <caret line="45" column="8" lean-forward="false" selection-start-line="45" selection-start-column="8" selection-end-line="45" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="viterbi_ML.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/viterbi_ML.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+            <state relative-caret-position="276">
+              <caret line="249" column="40" lean-forward="true" selection-start-line="249" selection-start-column="40" selection-end-line="249" selection-end-column="40" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -84,13 +65,47 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="138">
+              <caret line="94" column="24" lean-forward="false" selection-start-line="94" selection-start-column="24" selection-end-line="94" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="119" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="gradient_try.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gradient_try.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="123" column="21" lean-forward="false" selection-start-line="123" selection-start-column="21" selection-end-line="123" selection-end-column="21" />
+            <state relative-caret-position="819">
+              <caret line="129" column="55" lean-forward="false" selection-start-line="129" selection-start-column="55" selection-end-line="129" selection-end-column="55" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MEMM_try.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MEMM_try.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="51" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -107,40 +122,43 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>is_tags_conf</find>
-      <find>write_confusion_doc</find>
-      <find>xlwt</find>
-      <find>features_combination_list</find>
-      <find>test</find>
-      <find>directory</find>
-      <find>history_tag_feature_vector</find>
-      <find>+= 1</find>
-      <find>word_ta</find>
-      <find>dict_path</find>
-      <find>dire</find>
-      <find>pi</find>
-      <find>COUNT</find>
+      <find>test_type</find>
       <find>lamda</find>
-      <find>workin</find>
-      <find>prin</find>
-      <find>]</find>
+      <find>lam</find>
+      <find>word_results_dictionary</find>
+      <find>possible_tags</find>
+      <find>calc_q</find>
       <find>number_of_tags</find>
-      <find>tags_indeces_dict</find>
-      <find>#</find>
-      <find>most_comm</find>
-      <find>'#'</find>
-      <find>'#</find>
-      <find>word_tag_dict</find>
-      <find>ftol</find>
-      <find>feature_vec_type_counter</find>
-      <find>self.feature_vec_type_counter['All']</find>
-      <find>features_ve</find>
-      <find>At iter</find>
-      <find>args</find>
+      <find>TOP</find>
+      <find>w_options</find>
+      <find>transition_tag_dict</find>
+      <find>first_tag</find>
+      <find>tran</find>
+      <find>unseen</find>
+      <find>unseen_words</find>
+      <find>indeces</find>
+      <find>viterbi_unseen_words</find>
+      <find>anal</find>
+      <find>trans</find>
+      <find>prediction</find>
+      <find>prediction for</find>
+      <find>top</find>
+      <find>suff</find>
+      <find>suffix</find>
+      <find>get_all_possible_tags</find>
+      <find>unseen_words_indexes</find>
+      <find>feature_112</find>
+      <find>save</find>
+      <find>sav</find>
+      <find>lower</find>
+      <find>invalidChars</find>
     </findStrings>
     <replaceStrings>
       <replace>e_w_dot_history_tag_dict</replace>
       <replace>'*'</replace>
+      <replace>unseen_words_indeces</replace>
+      <replace>self.number_of_tags</replace>
+      <replace>indexes</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -153,12 +171,13 @@
         <option value="$PROJECT_DIR$/Print_and_save_results.py" />
         <option value="$PROJECT_DIR$/eval_guy.py" />
         <option value="$PROJECT_DIR$/gradient_guy.py" />
-        <option value="$PROJECT_DIR$/evaluate.py" />
-        <option value="$PROJECT_DIR$/viterbi_ML.py" />
-        <option value="$PROJECT_DIR$/MEMM_try.py" />
-        <option value="$PROJECT_DIR$/gradient_try.py" />
-        <option value="$PROJECT_DIR$/main_memm.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/evaluate.py" />
+        <option value="$PROJECT_DIR$/gradient_try.py" />
+        <option value="$PROJECT_DIR$/MEMM_try.py" />
+        <option value="$PROJECT_DIR$/main_memm.py" />
+        <option value="$PROJECT_DIR$/test2.py" />
+        <option value="$PROJECT_DIR$/viterbi_ML.py" />
       </list>
     </option>
   </component>
@@ -183,8 +202,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -192,15 +209,12 @@
               <item name="NLP_HW1" type="b2602c69:ProjectViewProjectNode" />
               <item name="NLP_HW1" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="NLP_HW1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NLP_HW1" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -221,8 +235,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/MEMM_try.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/main_memm.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/evaluate.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -365,6 +378,23 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
+    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="NLP_HW1" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <configuration name="viterbi_ML" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -382,16 +412,18 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Python.viterbi_ML" />
       <item index="1" class="java.lang.String" itemvalue="Python.main_memm" />
       <item index="2" class="java.lang.String" itemvalue="Python.test" />
+      <item index="3" class="java.lang.String" itemvalue="Python.test2" />
     </list>
     <recent_temporary>
-      <list size="3">
+      <list size="4">
         <item index="0" class="java.lang.String" itemvalue="Python.main_memm" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.viterbi_ML" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test2" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test" />
+        <item index="3" class="java.lang.String" itemvalue="Python.viterbi_ML" />
       </list>
     </recent_temporary>
   </component>
@@ -490,7 +522,49 @@
       <option name="project" value="LOCAL" />
       <updated>1512840687634</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Gradient: add copy feature_vector">
+      <created>1512917728313</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1512917728313</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Viterbi: change most common tags for unseen words">
+      <created>1513148013760</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1513148013760</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Viterbi: change most common tags for unseen words to UNK and then get the tag with the higher probability with the tags before">
+      <created>1513163045500</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1513163045500</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Viterbi: add conditions to tags for unseen words based on domain knowledge">
+      <created>1513170276376</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1513170276376</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Viterbi: add conditions to tags for unseen words based on domain knowledge">
+      <created>1513175507626</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1513175507626</updated>
+    </task>
+    <task id="LOCAL-00018" summary="MEMM: add feature of the length of the word">
+      <created>1513183363575</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1513183363575</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TodoView">
@@ -506,12 +580,12 @@
     <frame x="0" y="23" width="1440" height="801" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18597998" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1881259" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -542,7 +616,12 @@
     <MESSAGE value="viterbi: add the freq in the feature vector" />
     <MESSAGE value="viterbi: change # to * for the words in the position -1 and -2" />
     <MESSAGE value="viterbi: add copy() when assign most_common_tags to viterbi varibles" />
-    <option name="LAST_COMMIT_MESSAGE" value="viterbi: add copy() when assign most_common_tags to viterbi varibles" />
+    <MESSAGE value="Gradient: add copy feature_vector" />
+    <MESSAGE value="Viterbi: change most common tags for unseen words" />
+    <MESSAGE value="Viterbi: change most common tags for unseen words to UNK and then get the tag with the higher probability with the tags before" />
+    <MESSAGE value="Viterbi: add conditions to tags for unseen words based on domain knowledge" />
+    <MESSAGE value="MEMM: add feature of the length of the word" />
+    <option name="LAST_COMMIT_MESSAGE" value="MEMM: add feature of the length of the word" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -553,29 +632,28 @@
           <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/gradient_try.py</url>
-          <line>98</line>
-          <option name="timeStamp" value="62" />
+          <url>file://$PROJECT_DIR$/viterbi_ML.py</url>
+          <line>186</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/viterbi_ML.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="63" />
+      <option name="time" value="86" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="sen_word_tag_predict[2]" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/MEMM_try.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="74" column="62" lean-forward="false" selection-start-line="74" selection-start-column="17" selection-end-line="74" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Print_and_save_results.py" />
     <entry file="file://$PROJECT_DIR$/gradient_try.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -601,9 +679,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -642,9 +718,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -683,9 +757,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -724,9 +796,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -765,9 +835,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -849,67 +917,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/analysis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-149">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/F8ABAD0E-F146-405D-AFDE-EA034E316210/MEMM_g.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="386" column="44" lean-forward="false" selection-start-line="386" selection-start-column="8" selection-end-line="386" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MEMM_try.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="398" column="19" lean-forward="false" selection-start-line="398" selection-start-column="8" selection-end-line="398" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/evaluate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="907">
-          <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/scipy/sparse/compressed.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="107">
           <caret line="335" column="0" lean-forward="false" selection-start-line="335" selection-start-column="0" selection-end-line="335" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/viterbi_ML.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="71" column="42" lean-forward="false" selection-start-line="71" selection-start-column="33" selection-end-line="71" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -917,7 +928,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="324" column="22" lean-forward="false" selection-start-line="324" selection-start-column="21" selection-end-line="324" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -925,7 +935,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
           <caret line="2331" column="68" lean-forward="false" selection-start-line="2331" selection-start-column="61" selection-end-line="2331" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -933,26 +942,91 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
           <caret line="35" column="26" lean-forward="false" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="26" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/F8ABAD0E-F146-405D-AFDE-EA034E316210/MEMM_g.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="386" column="44" lean-forward="false" selection-start-line="386" selection-start-column="8" selection-end-line="386" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="45" column="8" lean-forward="false" selection-start-line="45" selection-start-column="8" selection-end-line="45" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/evaluate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3305">
+          <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+          <folding>
+            <marker date="1513175512000" expanded="true" signature="15416:15673" ph="..." />
+            <marker date="1513175512000" expanded="true" signature="15521:15658" ph="..." />
+            <marker date="1513175512000" expanded="true" signature="15835:16264" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1513175512000" expanded="true" signature="17032:17314" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="94" column="24" lean-forward="false" selection-start-line="94" selection-start-column="24" selection-end-line="94" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gradient_try.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="123" column="21" lean-forward="false" selection-start-line="123" selection-start-column="21" selection-end-line="123" selection-end-column="21" />
+        <state relative-caret-position="819">
+          <caret line="129" column="55" lean-forward="false" selection-start-line="129" selection-start-column="55" selection-end-line="129" selection-end-column="55" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="119" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MEMM_try.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main_memm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="137" column="29" lean-forward="true" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
+        <state relative-caret-position="-308">
+          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/viterbi_ML.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="249" column="40" lean-forward="true" selection-start-line="249" selection-start-column="40" selection-end-line="249" selection-end-column="40" />
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
