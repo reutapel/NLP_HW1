@@ -22,7 +22,7 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [2.0, 0.8, 6.0 , 10.0]
+    lambda_list = [2.0, 0.8, 6.0 , 90.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
         logging.info('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
@@ -44,16 +44,19 @@ def cross_validation(train_file_for_cv):
                     file.write(str(sentence) + '\n')
 
             feature_type_dict_cv = {
-                'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                              'feature_105', 'feature_106', 'feature_107','feature_108','feature_110','feature_111']]}
-                #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+                # 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                #                               'feature_105', 'feature_106', 'feature_107','feature_108','feature_110','feature_111'],
+                #                  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                #                   'feature_105', 'feature_106', 'feature_107', 'feature_108','feature_109', 'feature_110',
+                #                   'feature_111']],
+                'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
                 logging.info('{}: Start running fold number {} for lambda: {}'.
                              format(time.asctime(time.localtime(time.time())), k, lamda))
                 print('{}: Start running fold number {} for lambda: {}'
                       .format(time.asctime(time.localtime(time.time())), k, lamda))
-                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda)
+                main(train_file_cv, test_file_cv, 'test_cv_fold_' + str(k), feature_type_list_cv, lamda, comp)
 
             run_time_cv = (time.time() - CV_start_time) / 60.0
             print("{}: Finish running iteration {} of 10-fold CV for lambda: {}. Run time is: {} minutes".
@@ -137,7 +140,7 @@ if __name__ == "__main__":
     test_file = directory + 'data\\test.wtag'
     comp_file = directory + 'data\\comp.words'
     comp = False
-    cv = False
+    cv = True
     if cv:
         cross_validation(train_file)
     else:
