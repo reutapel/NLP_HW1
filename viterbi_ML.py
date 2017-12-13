@@ -55,6 +55,7 @@ class viterbi(object):
         self.upper_case = 0
         self.digit_case = 0
         self.single_case = 0
+        self.unk_case = 0
         self.invalidChars = set(string.punctuation)
 
     @property
@@ -87,14 +88,14 @@ class viterbi(object):
 
                 sentence_index += 1
 
-        print('Unseen cases number: \n lower_case = {}\n plural_case = {}\n d_case = {}\n ing_case = {}\n n_case = {}\n'
-              'upper_case = {}\n digit_case = {}\n single_case = {}'.
+        print('Unseen cases number: \nlower_case = {}\nplural_case = {}\nd_case = {}\ning_case = {}\nn_case = {}\n'
+              'upper_case = {}\ndigit_case = {}\nsingle_case = {}\nunk_case = {}'.
               format(self.lower_case, self.plural_case, self.d_case, self.ing_case, self.n_case, self.upper_case,
-                     self.digit_case, self.single_case))
-        logging.info('Unseen cases number: \n lower_case = {}\n plural_case = {}\n d_case = {}\n ing_case = {}\n'
-                     'n_case = {}\n upper_case = {}\n digit_case = {}\n single_case = {}'.
+                     self.digit_case, self.single_case, self.unk_case))
+        logging.info('Unseen cases number: \nlower_case = {}\nplural_case = {}\nd_case = {}\ning_case = {}\n'
+                     'n_case = {}\n''upper_case = {}\ndigit_case = {}\nsingle_case = {}\nunk_case = {}'.
                      format(self.lower_case, self.plural_case, self.d_case, self.ing_case, self.n_case, self.upper_case,
-                            self.digit_case, self.single_case))
+                            self.digit_case, self.single_case, self.unk_case))
 
         # save the unseen words to file
         unseen_file_name = os.path.join('analysis', 'unseen_words.csv')
@@ -196,6 +197,8 @@ class viterbi(object):
         else:
             # if we never see the current word in the train
             if word not in self.word_tag_dict:
+                if word == 'Marilyn':
+                    reut = 1
                 unseen_word = True
                 if word.lower() in self.word_tag_dict:  # if the word in unseen, but the lower case of the word is seen
                     tags_list = list(self.word_tag_dict.get(word.lower()).keys())
@@ -205,6 +208,19 @@ class viterbi(object):
                         # print('use lower case for word {}'.format(word))
                         self.lower_case += 1
                     # print('the word {} is unseen but the word {} is seen'. format(word, word.lower()))
+                # word contains number instances or word is a number
+                elif any(char.isdigit() for char in word) and not word.isdigit() or word.isdigit():
+                    tags_list = ['CD']
+                    # print('use word contains number instances or word is a number case for word {}'.format(word))
+                    if is_cur_word:
+                        self.digit_case += 1
+                # word contains upper instances or only upper
+                elif (not word.islower() and not word.isupper() or word.isupper())\
+                        and (word not in self.invalidChars and not word.isdigit()):
+                    tags_list = ['NNP']
+                    if is_cur_word:
+                        self.upper_case += 1
+                        # print('use word contains upper instances or only upper case for word {}'.format(word))
                 # word ends with s
                 elif word[-1:] == 's':
                     tags_list = self.find_tags_for_unseen_plural_nouns(word)
@@ -229,19 +245,6 @@ class viterbi(object):
                     if tags_list != ['UNK'] and is_cur_word:
                         self.n_case += 1
                         # print('use n case for word {}'.format(word))
-                # word contains number instances or word is a number
-                elif any(char.isdigit() for char in word) and not word.isdigit() or word.isdigit():
-                    tags_list = ['CD']
-                    # print('use word contains number instances or word is a number case for word {}'.format(word))
-                    if is_cur_word:
-                        self.digit_case += 1
-                # word contains upper instances or only upper
-                elif (not word.islower() and not word.isupper() or word.isupper())\
-                        and (word not in self.invalidChars and not word.isdigit()):
-                    tags_list = ['NN', 'NNP']
-                    if is_cur_word:
-                        self.upper_case += 1
-                        print('use word contains upper instances or only upper case for word {}'.format(word))
                 else:
                     tags_list = self.find_tags_for_unseen_singular_nouns(word)
                     if tags_list != ['UNK'] and is_cur_word:
@@ -257,6 +260,10 @@ class viterbi(object):
                 tags_list = list(self.word_tag_dict.get(word).keys())
                 # drop the COUNT cell
                 tags_list = tags_list[1:]
+
+            if tags_list == ['UNK'] and is_cur_word:
+                print('UNK tag for word: {}'.format(word))
+                self.unk_case += 1
 
             return [tags_list, unseen_word]
 
