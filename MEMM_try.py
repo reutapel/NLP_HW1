@@ -910,7 +910,7 @@ class MEMM:
 
         print('{}: saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))
         logging.info('{}: saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))
-        w = csv.writer(open(self.dict_path + 'history_tag_feature_vector_denominator' + '.csv', "w"))
+        w = csv.writer(open('dict\\history_tag_feature_vector_denominator.csv', "w"))
         for key, val in self.history_tag_feature_vector_denominator.items():
             w.writerow([key, val])
         print('{}: finished saving history_tag_feature_vector_denominator'.format(time.asctime(time.localtime(time.time()))))

@@ -1,9 +1,8 @@
 import csv
-import json
-
 import itertools
-import xlwt
 from datetime import datetime
+
+import xlwt
 
 
 class Evaluate:
@@ -350,7 +349,7 @@ class Evaluate:
         :return:  a set of tags
         """
         keys = []
-        for tag_1,tag_2 in itertools.product([gold, predict],repeat=2):
+        for tag_1, tag_2 in itertools.product([gold, predict], repeat=2):
             keys.append("{}_{}".format(tag_1, tag_2))
         return keys
 
