@@ -1,18 +1,18 @@
 import os
 
 from MEMM_try import MEMM
-from viterbi_ML import viterbi
+# from viterbi_ML import viterbi
 from evaluate import Evaluate
 import time
 from sklearn.model_selection import KFold
 from gradient_try import Gradient
 import logging
 from datetime import datetime
-# from test import Gradient
+from Viterbi_NLP import viterbi
 
 # open log connection
 directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
-LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_check_unseen_%d_%m_%Y_%H_%M.log')
+LOG_FILENAME = datetime.now().strftime(directory + 'logs_MEMM/LogFileMEMM_%d_%m_%Y_%H_%M.log')
 logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
 
 
@@ -22,7 +22,7 @@ def cross_validation(train_file_for_cv):
     train_data = text_file.read().split('\n')
     kf = KFold(n_splits=5, shuffle=True)
 
-    lambda_list = [100.0, 0.75]
+    lambda_list = [10.0, 15.0]
     for lamda in lambda_list:
         CV_start_time = time.time()
         logging.info('{}: Start running 5-fold CV for lambda: {}'.format(time.asctime(time.localtime(time.time())),
@@ -44,12 +44,12 @@ def cross_validation(train_file_for_cv):
                     file.write(str(sentence) + '\n')
 
             feature_type_dict_cv = {
-                'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                  'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
-                                  'feature_110', 'feature_111'],
-                                 ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
-                                  'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111',
-                                  'feature_108']],
+                # 'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                #                   'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                #                   'feature_110', 'feature_111'],
+                #                  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                #                   'feature_105', 'feature_106', 'feature_107', 'feature_110', 'feature_111',
+                #                   'feature_108']],
                 'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
             for feature_type_name_cv, feature_type_list_cv in feature_type_dict_cv.items():
@@ -73,11 +73,12 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
     # start all combination of features
     for features_combination in features_combination_list:
+
         print('{}: Start creating MEMM for features : {}'.format(time.asctime(time.localtime(time.time())),
                                                                  features_combination))
         logging.info('{}: Start creating MEMM for features : {}'.format(time.asctime(time.localtime(time.time())),
                                                                         features_combination))
-
+        train_start_time = time.time()
         memm_class = MEMM(directory, train_file_to_use, features_combination)
 
         logging.info('{}: Finish MEMM for features : {}'.format(time.asctime(time.localtime(time.time())),
@@ -85,27 +86,33 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
         print('{}: Finish MEMM for features : {}'.format(time.asctime(time.localtime(time.time())),
                                                          features_combination))
 
-        print('{}: Start gradient for features : {}'.format(time.asctime(time.localtime(time.time())),
-                                                            features_combination))
-        logging.info('{}: Start gradient for features : {}'.format(time.asctime(time.localtime(time.time())),
-                                                                   features_combination))
+        print('{}: Start gradient for features : {} and lambda: {}'.
+              format(time.asctime(time.localtime(time.time())), features_combination, lamda))
+        logging.info('{}: Start gradient for features : {} and lambda: {}'.
+                     format(time.asctime(time.localtime(time.time())), features_combination, lamda))
         gradient_class = Gradient(model=memm_class, lambda_value=lamda)
         gradient_result = gradient_class.gradient_descent()
 
-        print('{}: Finish gradient for features : {} and lambda: {}'.format(time.asctime(time.localtime(time.time())),
-                                                                            features_combination, lamda))
-        logging.info('{}: Finish gradient for features : {} and lambda: {}'.
-                     format(time.asctime(time.localtime(time.time())), features_combination, lamda))
+        train_run_time = (time.time() - train_start_time) / 60.0
+        print('{}: Finish gradient for features : {} and lambda: {}. run time: {}'.
+              format(time.asctime(time.localtime(time.time())), features_combination, lamda, train_run_time))
+        logging.info('{}: Finish gradient for features : {} and lambda: {}. run time: {}'.
+                     format(time.asctime(time.localtime(time.time())), features_combination, lamda, train_run_time))
+
         weights = gradient_result.x
         #   np.savetxt(gradient_file, weights, delimiter=",")
 
+        viterbi_start_time = time.time()
         print('{}: Start viterbi'.format((time.asctime(time.localtime(time.time())))))
         viterbi_class = viterbi(memm_class, data_file=test_file_to_use, w=weights)
         viterbi_result = viterbi_class.viterbi_all_data
-        print('{}: Finish viterbi'.format((time.asctime(time.localtime(time.time())))))
+        viterbi_run_time = (time.time() - viterbi_start_time) / 60.0
+        print('{}: Finish viterbi. run time: {}'.format((time.asctime(time.localtime(time.time()))), viterbi_run_time))
+        logging.info('{}: Finish viterbi. run time: {}'.format((time.asctime(time.localtime(time.time()))),
+                                                               viterbi_run_time))
 
         write_file_name = datetime.now().strftime(directory + 'file_results/result_MEMM_most_common_tags_' + test_type +
-                                                  '%d_%m_%Y_%H_%M.csv')
+                                                  '%d_%m_%Y_%H_%M.wtag')
         confusion_file_name = datetime.now().strftime(directory + 'confusion_files/CM_MEMM_most_common_tags_' + test_type +
                                                       '%d_%m_%Y_%H_%M.xls')
         evaluate_class = Evaluate(memm_class, test_file_to_use, viterbi_result, write_file_name,
@@ -134,18 +141,18 @@ def main(train_file_to_use, test_file_to_use, test_type, features_combination_li
 
 
 if __name__ == "__main__":
-    start_time = time.time()
     logging.info('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     print('{}: Start running'.format(time.asctime(time.localtime(time.time()))))
     train_file = directory + 'data/train.wtag'
     test_file = directory + 'data/test.wtag'
     comp_file = directory + 'data/comp.words'
-    cv = False
+    cv = True
     comp = False
     if cv:
         cross_validation(train_file)
     else:
-        # feature_type_dict = {'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+        feature_type_dict = {
+        #                   'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
         #                                       'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
         #                                       'feature_110','feature_111']],
         #                                       #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
@@ -154,20 +161,20 @@ if __name__ == "__main__":
         #                                       #   'feature_105', 'feature_106', 'feature_107','feature_108', 'feature_109'],
         #                                       #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
         #                                       # 'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
-        #                      'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+                             'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
-        feature_type_dict = {'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
-
-        lamda = 2.0
-        if not comp:
-            for feature_type_name, feature_type_list in feature_type_dict.items():
-                main(train_file, test_file, 'test', feature_type_list, lamda, comp)
-        else:
-            for feature_type_name, feature_type_list in feature_type_dict.items():
-                main(comp_file, test_file, 'test', feature_type_list, lamda, comp)
-        run_time = (time.time() - start_time) / 60.0
-        print("{}: Finish running with lamda: {}. Run time is: {} minutes".
-              format(time.asctime(time.localtime(time.time())), lamda, run_time))
-        logging.info('{}: Finish running with lambda:{} . Run time is: {} minutes'.
-                     format(time.asctime(time.localtime(time.time())), lamda, run_time))
+        lamda_list = [10.0]
+        for lamda in lamda_list:
+            start_time = time.time()
+            if not comp:
+                for feature_type_name, feature_type_list in feature_type_dict.items():
+                    main(train_file, test_file, 'test', feature_type_list, lamda, comp)
+            else:
+                for feature_type_name, feature_type_list in feature_type_dict.items():
+                    main(comp_file, test_file, 'test', feature_type_list, lamda, comp)
+            run_time = (time.time() - start_time) / 60.0
+            print("{}: Finish running with lamda: {}. Run time is: {} minutes".
+                  format(time.asctime(time.localtime(time.time())), lamda, run_time))
+            logging.info('{}: Finish running with lambda:{} . Run time is: {} minutes'.
+                         format(time.asctime(time.localtime(time.time())), lamda, run_time))
 

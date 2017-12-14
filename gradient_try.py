@@ -117,11 +117,13 @@ class Gradient(object):
         :param file_name: wheather we want to retain the weight vector
         :return: weight vector
         """
+
+        # file_name = 'resources/w_vec_14_12_2017_11_25_9.pkl'
         if file_name and os.path.isfile(file_name):
             self.file_name = file_name
             return pickle.load(open(file_name, 'rb'))
         result = minimize(method='L-BFGS-B', fun=self.loss, x0=self.v_init, jac=self.gradient,
-                          options={'disp': True, 'maxiter': 1, 'ftol': 1e2*np.finfo(float).eps})
+                          options={'disp': True, 'maxiter': 40, 'ftol': 1e2*np.finfo(float).eps})
 
         print('finished gradient. res: {0}'.format(result.x))
         file_name = "w_vec_{0.day}_{0.month}_{0.year}_{0.hour}_{0.minute}_{0.second}.pkl".format(datetime.now())

@@ -6,6 +6,7 @@ import logging
 import copy
 import csv
 import string
+from datetime import datetime
 
 
 # directory = '/Users/reutapel/Documents/Technion/Msc/NLP/hw1/NLP_HW1/'
@@ -57,6 +58,9 @@ class viterbi(object):
         self.single_case = 0
         self.unk_case = 0
         self.invalidChars = set(string.punctuation)
+        file_name = datetime.now().strftime('unseen_words_%d_%m_%Y_%H_%M.csv')
+        logging.info('unseen words file is: {}'.format(file_name))
+        self.unseen_file_name = os.path.join('analysis', file_name)
 
     @property
     def viterbi_all_data(self):
@@ -98,10 +102,11 @@ class viterbi(object):
                             self.digit_case, self.single_case, self.unk_case))
 
         # save the unseen words to file
-        unseen_file_name = os.path.join('analysis', 'unseen_words.csv')
-        unseen_file = csv.writer(open(unseen_file_name, "w"))
+        unseen_file = csv.writer(open(self.unseen_file_name, "w"))
         for key, val in self.unseen_words.items():
             unseen_file.writerow([key, val])
+
+        print('running viterbi_ml with prob and use sen_word_tag_predict')
 
         return predict_dict, self.unseen_words_indexes
 
@@ -197,8 +202,6 @@ class viterbi(object):
         else:
             # if we never see the current word in the train
             if word not in self.word_tag_dict:
-                if word == 'Marilyn':
-                    reut = 1
                 unseen_word = True
                 if word.lower() in self.word_tag_dict:  # if the word in unseen, but the lower case of the word is seen
                     tags_list = list(self.word_tag_dict.get(word.lower()).keys())
@@ -262,8 +265,15 @@ class viterbi(object):
                 tags_list = tags_list[1:]
 
             if tags_list == ['UNK'] and is_cur_word:
-                print('UNK tag for word: {}'.format(word))
+                # print('UNK tag for word: {}'.format(word))
                 self.unk_case += 1
+                # if len(word) > 2:
+                #     if word[-3:] == 'ing':
+                #         tags_list.append('VBG')
+                #     elif word[-1:] == 'd' or word[-2:] == 'ed' or word[-3:] == 'ied':
+                #         tags_list.append('VBN')
+                #         tags_list.append('VBD')
+                #         tags_list.append('VB')
 
             return [tags_list, unseen_word]
 
