@@ -32,9 +32,9 @@ class MEMM:
 
         self.features_path_string = ''
         for feature in features_combination:
-            self.features_path_string += feature + '__'
+            self.features_path_string += feature + '_'
 
-        self.dict_path = os.path.join(directory + 'dict/', self.features_path_string)
+        self.dict_path = os.path.join(directory + 'dict\\', self.features_path_string)
 
         # used features
         self.features_combination = features_combination
@@ -52,6 +52,8 @@ class MEMM:
         self.feature_110 = {}
         self.feature_111 = {}
         self.feature_112 = {}
+        self.feature_113 = {}
+        self.feature_114 = {}
 
         # the dictionary that will hold all indexes for all the instances of the features
         self.features_vector = {}
@@ -273,11 +275,12 @@ class MEMM:
                         # (excluding chars like . , etc.)
                         if not current_word.islower() and not current_word.isupper():
                             if current_word not in self.invalidChars and not current_word.isdigit():
-                                feature_109_key = 'f109' + '_' + current_tag
-                                if feature_109_key in self.feature_109:
-                                    self.feature_109[feature_109_key] += 1
-                                else:
-                                    self.feature_109[feature_109_key] = 1
+                                if any(char.isalpha() for char in current_word):
+                                    feature_109_key = 'f109' + '_' + current_tag
+                                    if feature_109_key in self.feature_109:
+                                        self.feature_109[feature_109_key] += 1
+                                    else:
+                                        self.feature_109[feature_109_key] = 1
 
                     if 'feature_110' in self.features_combination:
                         # build feature_110 of all word which are all numbers
@@ -299,11 +302,30 @@ class MEMM:
 
                     if 'feature_112' in self.features_combination:
                         # build feature_112 the length of the word
-                        feature_112_key = 'f112' + '_' + str(len(current_tag))
+                        feature_112_key = 'f112' + '_' + str(len(current_word)) + current_tag
                         if feature_112_key in self.feature_112:
                             self.feature_112[feature_112_key] += 1
                         else:
                             self.feature_112[feature_112_key] = 1
+
+                    if 'feature_113' in self.features_combination:
+                        # build feature_113 if words contains '-'
+                        if any(char == '-' for char in current_word):
+                            feature_113_key = 'f113' + '_' + current_tag
+                            if feature_113_key in self.feature_113:
+                                self.feature_113[feature_113_key] += 1
+                            else:
+                                self.feature_113[feature_113_key] = 1
+
+                    if 'feature_114' in self.features_combination:
+                        # build feature_114 if words tags equal
+                        if current_word == current_tag:
+                            feature_114_key = 'f114' + '_' + current_tag
+                            if feature_114_key in self.feature_114:
+                                self.feature_114[feature_114_key] += 1
+                            else:
+                                self.feature_114[feature_114_key] = 1
+
 
                     # update tags and word
                     first_tag = second_tag
@@ -441,6 +463,21 @@ class MEMM:
             for key, val in self.feature_112.items():
                 w.writerow([key, val])
             print('{}: finished saving feature_112'.format(time.asctime(time.localtime(time.time()))))
+
+        if 'feature_113' in self.features_combination:
+            logging.info('saving feature_113')
+            w = csv.writer(open(self.dict_path + 'feature_113' + '.csv', "w"))
+            for key, val in self.feature_113.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_113'.format(time.asctime(time.localtime(time.time()))))
+
+        if 'feature_114' in self.features_combination:
+            logging.info('saving feature_114')
+            w = csv.writer(open(self.dict_path + 'feature_114' + '.csv', "w"))
+            for key, val in self.feature_114.items():
+                w.writerow([key, val])
+            print('{}: finished saving feature_114'.format(time.asctime(time.localtime(time.time()))))
+
 
         return
 
@@ -620,16 +657,46 @@ class MEMM:
             feature_instances = 0
 
         if 'feature_112' in self.features_combination:
-            # create twelve type of feature in features_vector which is the length of the current word
-            for current_word_length in self.feature_112.keys():
-                self.features_vector[current_word_length] = features_vector_idx
-                self.features_vector_mapping[features_vector_idx] = current_word_length
+            # create thirteen type of feature in features_vector which is the length of the current word
+            for current_word_length_and_tag in self.feature_112.keys():
+                self.features_vector[current_word_length_and_tag] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = current_word_length_and_tag
                 features_vector_idx += 1
                 feature_instances += 1
-            print('{}: size of feature_112 - current word contains number is: {}'.format(
+            print('{}: size of feature_112 - current word length and its tag is: {}'.format(
                 time.asctime(time.localtime(time.time())),
                 feature_instances))
-            logging.info('{}: size of feature_112 - current word contains number is: {}'.format(
+            logging.info('{}: size of feature_112 - current word length and its tag is: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            feature_instances = 0
+
+        if 'feature_113' in self.features_combination:
+            # create fourteen type of feature in features_vector which is the - in the current word
+            for hyphen in self.feature_113.keys():
+                self.features_vector[hyphen] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = hyphen
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_113 - current word contains hyphen: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            logging.info('{}: size of feature_113 - current word contains hyphen: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            feature_instances = 0
+
+        if 'feature_114' in self.features_combination:
+            # create fifteen type of feature in features_vector which if current word = current tag
+            for equal in self.feature_114.keys():
+                self.features_vector[equal] = features_vector_idx
+                self.features_vector_mapping[features_vector_idx] = equal
+                features_vector_idx += 1
+                feature_instances += 1
+            print('{}: size of feature_114 - current word equals current tag: {}'.format(
+                time.asctime(time.localtime(time.time())),
+                feature_instances))
+            logging.info('{}: size of feature_114 - current word equals current tag: {}'.format(
                 time.asctime(time.localtime(time.time())),
                 feature_instances))
             feature_instances = 0
@@ -925,10 +992,11 @@ class MEMM:
             # feature_109 of current word contains upper instances
             if not current_word.islower() and not current_word.isupper():
                 if current_word not in self.invalidChars and not current_word.isdigit():
-                    feature_109_key = 'f109' + '_' + current_tag
-                    if feature_109_key in self.feature_109:
-                        feature_idx = self.features_vector[feature_109_key]
-                        indexes_vector[feature_idx] = 1
+                    if any(char.isalpha() for char in current_word):
+                        feature_109_key = 'f109' + '_' + current_tag
+                        if feature_109_key in self.feature_109:
+                            feature_idx = self.features_vector[feature_109_key]
+                            indexes_vector[feature_idx] = 1
 
         if 'feature_110' in self.features_combination:
             # feature_110 of current word is number instances
@@ -948,10 +1016,26 @@ class MEMM:
 
         if 'feature_112' in self.features_combination:
             # feature_112 of current word length
-            feature_112_key = 'f112' + '_' + str(len(current_tag))
-            if feature_112_key in self.feature_111:
+            feature_112_key = 'f112' + '_' + str(len(current_word)) + current_tag
+            if feature_112_key in self.feature_112:
                 feature_idx = self.features_vector[feature_112_key]
                 indexes_vector[feature_idx] = 1
+
+        if 'feature_113' in self.features_combination:
+            # feature_113 of current word length
+            if any(char == '-' for char in current_word):
+                feature_113_key = 'f113' + '_' + current_tag
+                if feature_113_key in self.feature_113:
+                    feature_idx = self.features_vector[feature_113_key]
+                    indexes_vector[feature_idx] = 1
+
+        if 'feature_114' in self.features_combination:
+            # feature_114 of current word = tag
+            if current_word == current_tag:
+                feature_114_key = 'f114' + '_' + current_tag
+                if feature_114_key in self.feature_114:
+                    feature_idx = self.features_vector[feature_114_key]
+                    indexes_vector[feature_idx] = 1
 
         # efficient representation for sparse vectors that main entrances are zero
         indexes_vector_zip = csr_matrix(indexes_vector)

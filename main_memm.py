@@ -162,6 +162,11 @@ if __name__ == "__main__":
         #                                       #  ['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
         #                                       # 'feature_105', 'feature_106', 'feature_107','feature_110','feature_111']]}
                              'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
+        feature_type_dict = {
+            'all_features': [['feature_100', 'feature_101', 'feature_102', 'feature_103', 'feature_104',
+                              'feature_105', 'feature_106', 'feature_107', 'feature_108', 'feature_109',
+                              'feature_110', 'feature_111','feature_112','feature_113','feature_114']]}
+            #'basic_model': [['feature_100', 'feature_103', 'feature_104']]}
 
         lamda_list = [10.0]
         for lamda in lamda_list:
